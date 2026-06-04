@@ -940,9 +940,19 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         try {
             const parsed = JSON.parse(importText);
             if (parsed.plants && parsed.potions) {
-                setGameData(parsed); setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
+                // Eski veya eksik JSON yüklemelerine karşı güvenli fallback katmanı
+                const validatedData: GameData = {
+                    ...INITIAL_DATA,
+                    ...parsed,
+                    marketPlants: parsed.marketPlants || [],
+                    marketRecipes: parsed.marketRecipes || []
+                };
+                setGameData(validatedData);
+                setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
                 setGameState(prev => ({ ...prev, day: 1, currentCustomer: null, logs: ['🧙‍♂️ Senaryo yüklendi!'] }));
-            } else setImportStatus('❌ Hata: Gerekli şablon eksik.');
+            } else {
+                setImportStatus('❌ Hata: Gerekli şablon eksik.');
+            }
         } catch(err) { setImportStatus('❌ Geçersiz JSON!'); }
     };
 
@@ -998,6 +1008,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     };
     const handleAddPotionRecipe = (): void => {
         if (!newPotion.id) return;
+        handleTranslateChange('tr', `potion.${newPotion.id}.name`, newPotion.name); // Dil senkronizasyonu
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1029,6 +1040,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 ]
             };
         });
+        setSelectedMarketPlantId(''); // Form sıfırlama
     };
 
     const handleAddMarketRecipe = (): void => {
@@ -1051,6 +1063,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 ]
             };
         });
+        setSelectedMarketPotionId(''); // Form sıfırlama
     };
 
     const handleRemoveMarketPlant = (plantId: string): void => {
@@ -1076,6 +1089,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     // Diyalog Ekleme Mantığı
     const handleAddStoryline = (): void => {
         if(!newStoryline.id) return;
+        handleTranslateChange('tr', `char.${newStoryline.id}`, newStoryline.characterName); // Dil senkronizasyonu
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1087,6 +1101,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     };
     const handleAddNodeToStory = (): void => {
         if(!activeEditorStoryId || !newNode.id) return;
+        handleTranslateChange('tr', `node.${newNode.id}.npcText`, newNode.npcText); // Dil senkronizasyonu
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1115,6 +1130,12 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             rewardPlantCount: newChoice.rewardPlantCount || undefined,
         };
 
+        // Eklenen seçeneğin çevirisini otomatik dil veritabanına ekle
+        const story = gameData.storylines.find(s => s.id === activeEditorStoryId);
+        const node = story?.nodes.find(n => n.id === nodeId);
+        const currentChoiceIndex = node?.choices.length || 0;
+        handleTranslateChange('tr', `choice.${nodeId}.${currentChoiceIndex}`, newChoice.text);
+
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1130,6 +1151,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
         setSelectedNodeId(null);
+        setNewChoice({ text: '', nextNodeId: '', reqPotion: '', reqGold: 0, giveGold: 0, rewardPlantCount: 1, delayDays: 0, autoCreateNode: false }); // Seçim formunu temizle
     };
 
     const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
@@ -1278,7 +1300,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900" value={marketPlantDay} onChange={e => setMarketPlantDay(Number(e.target.value))} />
                                 </div>
                             </div>
-                            <button onClick={handleAddMarketPlant} className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black text-slate-950 font-magic">Bitkiyi Markete Tanımla</button>
+                            <button onClick={handleAddMarketPlant} className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black text-slate-955 font-magic">Bitkiyi Markete Tanımla</button>
                         </div>
 
                         <div className="pt-4 border-t-2 border-slate-900/10">
