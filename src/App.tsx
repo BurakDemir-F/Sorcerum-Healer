@@ -72,6 +72,7 @@ interface MarketPlant {
     stock: number;
     maxStock: number;
     cost: number;
+    availableDay?: number; // Gün bazlı market listelemesi için eklendi
 }
 
 interface MarketRecipe {
@@ -79,6 +80,7 @@ interface MarketRecipe {
     cost: number;
     stock: number;
     maxStock: number;
+    availableDay?: number; // Gün bazlı market listelemesi için eklendi
 }
 
 type Translations = Record<string, Record<string, string>>;
@@ -155,6 +157,7 @@ interface GameHandlers {
     handleRemoveFromCauldron: (idx: number, type: 'plant' | 'potion', id: string) => void;
     handleBrew: () => void;
     handleBuyPlant: (pId: string, cost: number, count: number) => void;
+    handleBuyRecipe: (pId: string, cost: number) => void;
 }
 
 // ============================================================================
@@ -253,13 +256,13 @@ const INITIAL_DATA: GameData = {
         }
     ],
     marketPlants: [
-        { plantId: 'p_demir_ardic', stock: 10, maxStock: 10, cost: 6 },
-        { plantId: 'p_gumus_kok', stock: 3, maxStock: 3, cost: 18 },
-        { plantId: 'p_isildak_otu', stock: 5, maxStock: 5, cost: 10 },
-        { plantId: 'p_kara_kabuk', stock: 8, maxStock: 8, cost: 5 }
+        { plantId: 'p_demir_ardic', stock: 10, maxStock: 10, cost: 6, availableDay: 1 },
+        { plantId: 'p_gumus_kok', stock: 3, maxStock: 3, cost: 18, availableDay: 1 },
+        { plantId: 'p_isildak_otu', stock: 5, maxStock: 5, cost: 10, availableDay: 1 },
+        { plantId: 'p_kara_kabuk', stock: 8, maxStock: 8, cost: 5, availableDay: 1 }
     ],
     marketRecipes: [
-        { potionId: 'pot_alkarisi_savar', cost: 100, stock: 1, maxStock: 1 }
+        { potionId: 'pot_alkarisi_savar', cost: 100, stock: 1, maxStock: 1, availableDay: 1 }
     ],
     translations: {
         tr: {
@@ -417,9 +420,6 @@ function renderPotions(t: (key: string, fallback?: string) => string, playerStat
     );
 }
 
-// ----------------------------------------------------------------------------
-// YENİ METOT: Geliştirici Stüdyosu İçin Sistemdeki Kayıtlı Bitkileri Listeler
-// ----------------------------------------------------------------------------
 function renderStudioPlantsList(gameData: GameData, t: (key: string, fallback?: string) => string): React.JSX.Element {
     return (
         <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4 col-span-1 lg:col-span-2">
@@ -510,7 +510,7 @@ const SidePanel: React.FC<SidePanelProps> = ({ playerState, gameState, gameData,
             <div
                 className="bg-[#2a131b] border-4 border-slate-900 p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex gap-4 items-center text-[#f3e8d2]">
                 <img src="FireBreatherIcon.png" alt="Wizard Advisor"
-                     className="w-16 h-16 rounded-full border-2 border-amber-500 bg-slate-955 object-cover"/>
+                     className="w-16 h-16 rounded-full border-2 border-amber-500 bg-slate-950 object-cover"/>
                 <div>
                     <span className="text-xs font-magic text-amber-500 font-bold block">🧙‍♂️ {t('ui.advisor')}</span>
                     <div
@@ -738,33 +738,89 @@ interface MarketAreaProps {
     gameData: GameData;
     t: (key: string, fallback?: string) => string;
     handlers: GameHandlers;
+    currentDay: number;
+    playerState: PlayerState;
 }
 
-const MarketArea: React.FC<MarketAreaProps> = ({ gameData, t, handlers }) => {
+const MarketArea: React.FC<MarketAreaProps> = ({ gameData, t, handlers, currentDay, playerState }) => {
+    // Girdiğimiz gün bilgisine göre market bitkilerini filtreliyoruz ( availableDay belirtilmemişse 1. gün kabul edilir )
+    const availablePlants = (gameData.marketPlants || []).filter(mp => {
+        const dayReq = mp.availableDay ?? 1;
+        return currentDay >= dayReq;
+    });
+
+    // Girdiğimiz gün bilgisine göre market iksir formüllerini filtreliyoruz
+    const availableRecipes = (gameData.marketRecipes || []).filter(mr => {
+        const dayReq = mr.availableDay ?? 1;
+        return currentDay >= dayReq;
+    });
+
     return (
-        <div className="max-w-3xl mx-auto bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
-            <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌾 {t('ui.market_title')}</h2>
-            <div className="space-y-4">
-                {(gameData.marketPlants || []).map(mp => {
-                    const plant = gameData.plants.find(p => p.id === mp.plantId);
-                    if (!plant) return null;
-                    return (
-                        <div key={mp.plantId} className="relative group bg-amber-100/50 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center cursor-help">
-                            <div className="flex items-center gap-3">
-                                {plant.imageUrl ? <img src={plant.imageUrl} alt={plant.name} className="w-12 h-12 object-contain bg-amber-50 rounded-lg border-2 border-slate-900 p-1" /> : <span className="text-3xl">🌿</span>}
-                                <div>
-                                    <h3 className="text-xl font-bold text-slate-955">{t(`plant.${plant.id}.name`, plant.name)} ({t('ui.stock')}: {mp.stock})</h3>
-                                    <p className="text-sm font-bold text-red-900 font-magic">{mp.cost} {t('ui.gold')}</p>
+        <div className="max-w-4xl mx-auto space-y-8">
+            {/* Şifalı Bitkiler Bölümü */}
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
+                <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌾 {t('ui.market_title')} (Bitkiler)</h2>
+                {availablePlants.length === 0 ? (
+                    <p className="italic text-slate-600 font-bold">Bugün pazar tezgahlarında satılık bitki yok...</p>
+                ) : (
+                    <div className="space-y-4">
+                        {availablePlants.map(mp => {
+                            const plant = gameData.plants.find(p => p.id === mp.plantId);
+                            if (!plant) return null;
+                            return (
+                                <div key={mp.plantId} className="relative group bg-amber-100/50 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center cursor-help">
+                                    <div className="flex items-center gap-3">
+                                        {plant.imageUrl ? <img src={plant.imageUrl} alt={plant.name} className="w-12 h-12 object-contain bg-amber-50 rounded-lg border-2 border-slate-900 p-1" /> : <span className="text-3xl">🌿</span>}
+                                        <div>
+                                            <h3 className="text-xl font-bold text-slate-955">{t(`plant.${plant.id}.name`, plant.name)} ({t('ui.stock')}: {mp.stock})</h3>
+                                            <p className="text-sm font-bold text-red-900 font-magic">{mp.cost} {t('ui.gold')}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => handlers.handleBuyPlant(mp.plantId, mp.cost, 1)} disabled={mp.stock <= 0} className="bg-amber-500 text-slate-955 font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50">1x {t('ui.buy')}</button>
+                                        <button onClick={() => handlers.handleBuyPlant(mp.plantId, mp.cost, 5)} disabled={mp.stock < 5} className="bg-amber-500 text-slate-955 font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50">5x {t('ui.buy')}</button>
+                                    </div>
+                                    <TooltipPlant plantId={mp.plantId} gameData={gameData} t={t} />
                                 </div>
-                            </div>
-                            <div className="flex gap-2">
-                                <button onClick={() => handlers.handleBuyPlant(mp.plantId, mp.cost, 1)} disabled={mp.stock <= 0} className="bg-amber-500 text-slate-955 font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">1x {t('ui.buy')}</button>
-                                <button onClick={() => handlers.handleBuyPlant(mp.plantId, mp.cost, 5)} disabled={mp.stock < 5} className="bg-amber-500 text-slate-955 font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">5x {t('ui.buy')}</button>
-                            </div>
-                            <TooltipPlant plantId={mp.plantId} gameData={gameData} t={t} />
-                        </div>
-                    );
-                })}
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            {/* Formül & Reçete Satış Bölümü */}
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
+                <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📜 Parşömen Satıcısı (İksir Formülleri)</h2>
+                {availableRecipes.length === 0 ? (
+                    <p className="italic text-slate-600 font-bold">Bugün pazar tezgahlarında satılık parşömen yok...</p>
+                ) : (
+                    <div className="space-y-4">
+                        {availableRecipes.map(mr => {
+                            const potion = gameData.potions.find(p => p.id === mr.potionId);
+                            if (!potion) return null;
+                            const alreadyKnown = playerState.knownPotions.includes(mr.potionId);
+                            return (
+                                <div key={mr.potionId} className="relative group bg-purple-100/50 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center cursor-help">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-3xl">📜</span>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-slate-955">{t(`potion.${potion.id}.name`, potion.name)} Formülü</h3>
+                                            <p className="text-sm font-bold text-red-900 font-magic">{mr.cost} {t('ui.gold')}</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => handlers.handleBuyRecipe(mr.potionId, mr.cost)}
+                                        disabled={mr.stock <= 0 || alreadyKnown}
+                                        className="bg-purple-500 text-white font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50"
+                                    >
+                                        {alreadyKnown ? "Biliyorsun" : `${t('ui.buy')}`}
+                                    </button>
+                                    <TooltipPotion potionId={mr.potionId} gameData={gameData} t={t} />
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -829,7 +885,7 @@ const GameClient: React.FC<GameClientProps> = ({ gameData, gameState, playerStat
             <div className="font-parchment text-lg text-slate-800">
                 {activeTab === 'shopArea' && <ShopArea gameState={gameState} playerState={playerState} gameData={gameData} language={language} t={t} handlers={handlers} treatmentBench={treatmentBench} treatmentStatus={treatmentStatus} />}
                 {activeTab === 'alchemyArea' && <AlchemyArea playerState={playerState} gameData={gameData} cauldron={cauldron} brewState={brewState} language={language} t={t} handlers={handlers} />}
-                {activeTab === 'marketArea' && <MarketArea gameData={gameData} t={t} handlers={handlers} />}
+                {activeTab === 'marketArea' && <MarketArea gameData={gameData} t={t} handlers={handlers} currentDay={gameState.day} playerState={playerState} />}
             </div>
         </div>
     );
@@ -859,6 +915,17 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const [importText, setImportText] = useState<string>('');
     const [importStatus, setImportStatus] = useState<string>('');
+
+    // Yeni Market Düzenleyici State Değişkenleri
+    const [selectedMarketPlantId, setSelectedMarketPlantId] = useState<string>('');
+    const [marketPlantCost, setMarketPlantCost] = useState<number>(10);
+    const [marketPlantStock, setMarketPlantStock] = useState<number>(5);
+    const [marketPlantDay, setMarketPlantDay] = useState<number>(1);
+
+    const [selectedMarketPotionId, setSelectedMarketPotionId] = useState<string>('');
+    const [marketPotionCost, setMarketPotionCost] = useState<number>(100);
+    const [marketPotionStock, setMarketPotionStock] = useState<number>(1);
+    const [marketPotionDay, setMarketPotionDay] = useState<number>(1);
 
     // Stüdyo İşlevleri
     const handleExportJSON = (): void => {
@@ -939,6 +1006,71 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
         setNewPotion({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
+    };
+
+    // Market Düzenleme İşlemleri
+    const handleAddMarketPlant = (): void => {
+        if (!selectedMarketPlantId) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            const alreadyExists = (prev.marketPlants || []).some(mp => mp.plantId === selectedMarketPlantId);
+            if (alreadyExists) return prev;
+            return {
+                ...prev,
+                marketPlants: [
+                    ...(prev.marketPlants || []),
+                    {
+                        plantId: selectedMarketPlantId,
+                        cost: Number(marketPlantCost),
+                        stock: Number(marketPlantStock),
+                        maxStock: Number(marketPlantStock),
+                        availableDay: Number(marketPlantDay)
+                    }
+                ]
+            };
+        });
+    };
+
+    const handleAddMarketRecipe = (): void => {
+        if (!selectedMarketPotionId) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            const alreadyExists = (prev.marketRecipes || []).some(mr => mr.potionId === selectedMarketPotionId);
+            if (alreadyExists) return prev;
+            return {
+                ...prev,
+                marketRecipes: [
+                    ...(prev.marketRecipes || []),
+                    {
+                        potionId: selectedMarketPotionId,
+                        cost: Number(marketPotionCost),
+                        stock: Number(marketPotionStock),
+                        maxStock: Number(marketPotionStock),
+                        availableDay: Number(marketPotionDay)
+                    }
+                ]
+            };
+        });
+    };
+
+    const handleRemoveMarketPlant = (plantId: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                marketPlants: (prev.marketPlants || []).filter(mp => mp.plantId !== plantId)
+            };
+        });
+    };
+
+    const handleRemoveMarketRecipe = (potionId: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                marketRecipes: (prev.marketRecipes || []).filter(mr => mr.potionId !== potionId)
+            };
+        });
     };
 
     // Diyalog Ekleme Mantığı
@@ -1100,6 +1232,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 {[
                     { id: 'dataEditor', label: '🌿 Element & Reçete' },
                     { id: 'dialogueEditor', label: '💬 Diyalog Ağacı' },
+                    { id: 'marketEditor', label: '🛒 Market Düzenleyici' }, // Yeni Tab
                     { id: 'translationEditor', label: '🌍 Lokalizasyon' },
                     { id: 'jsonHub', label: '📂 JSON Motoru' }
                 ].map(tab => (
@@ -1111,8 +1244,109 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {renderCreatePlant()}
                     {renderCreatePotion()}
-                    {/* Yeni Eklenen Metot: Sistemdeki Tüm Bitkileri Listeler */}
+                    {/* Sistemdeki Tüm Bitkileri Listeler */}
                     {renderStudioPlantsList(gameData, t)}
+                </div>
+            )}
+
+            {/* YENİ EKLENEN MARKET DÜZENLEYİCİSİ GÖRÜNÜMÜ */}
+            {activeTab === 'marketEditor' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-parchment">
+
+                    {/* PAZAR BİTKİLERİ FORMU & LİSTESİ */}
+                    <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌿 Pazara Bitki Ekle</h2>
+                        <div className="space-y-3">
+                            <div>
+                                <label className="text-xs font-bold block mb-1">Bitki Seçin</label>
+                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={selectedMarketPlantId} onChange={e => setSelectedMarketPlantId(e.target.value)}>
+                                    <option value="">Seçiniz...</option>
+                                    {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
+                                </select>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label className="text-xs font-bold block mb-1">Altın Maliyeti</label>
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={marketPlantCost} onChange={e => setMarketPlantCost(Number(e.target.value))} />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold block mb-1">Stok Miktarı</label>
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={marketPlantStock} onChange={e => setMarketPlantStock(Number(e.target.value))} />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold block mb-1">Açılacağı Gün</label>
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900" value={marketPlantDay} onChange={e => setMarketPlantDay(Number(e.target.value))} />
+                                </div>
+                            </div>
+                            <button onClick={handleAddMarketPlant} className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black text-slate-950 font-magic">Bitkiyi Markete Tanımla</button>
+                        </div>
+
+                        <div className="pt-4 border-t-2 border-slate-900/10">
+                            <h3 className="font-bold font-magic text-slate-900 mb-2">Pazarda Satışta Olan Bitkiler:</h3>
+                            <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                                {(gameData.marketPlants || []).map(mp => {
+                                    const pl = gameData.plants.find(p => p.id === mp.plantId);
+                                    return (
+                                        <div key={mp.plantId} className="flex justify-between items-center bg-amber-50/50 border border-slate-400 p-2 rounded-lg text-sm">
+                                            <div>
+                                                <span className="font-bold text-slate-900">{t(`plant.${mp.plantId}.name`, pl?.name)}</span>
+                                                <span className="text-xs block text-slate-600">💰 {mp.cost} Altın | Stok: {mp.stock} | 📅 {mp.availableDay ?? 1}. Gün</span>
+                                            </div>
+                                            <button onClick={() => handleRemoveMarketPlant(mp.plantId)} className="bg-red-800 text-white text-xs px-2.5 py-1 rounded border-2 border-black font-bold font-magic">Kaldır</button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* PAZAR İKSİR FORMÜLLERİ FORMU & LİSTESİ */}
+                    <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📜 Pazara Formül (Ürün) Ekle</h2>
+                        <div className="space-y-3">
+                            <div>
+                                <label className="text-xs font-bold block mb-1">İksir Seçin</label>
+                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={selectedMarketPotionId} onChange={e => setSelectedMarketPotionId(e.target.value)}>
+                                    <option value="">Seçiniz...</option>
+                                    {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
+                                </select>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label className="text-xs font-bold block mb-1">Formül Fiyatı</label>
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={marketPotionCost} onChange={e => setMarketPotionCost(Number(e.target.value))} />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold block mb-1">Stok Miktarı</label>
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={marketPotionStock} onChange={e => setMarketPotionStock(Number(e.target.value))} />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold block mb-1">Açılacağı Gün</label>
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900" value={marketPotionDay} onChange={e => setMarketPotionDay(Number(e.target.value))} />
+                                </div>
+                            </div>
+                            <button onClick={handleAddMarketRecipe} className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black text-white font-magic">Formülü Markete Tanımla</button>
+                        </div>
+
+                        <div className="pt-4 border-t-2 border-slate-900/10">
+                            <h3 className="font-bold font-magic text-slate-900 mb-2">Pazarda Satışta Olan İksir Formülleri:</h3>
+                            <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                                {(gameData.marketRecipes || []).map(mr => {
+                                    const pot = gameData.potions.find(p => p.id === mr.potionId);
+                                    return (
+                                        <div key={mr.potionId} className="flex justify-between items-center bg-purple-50/50 border border-slate-400 p-2 rounded-lg text-sm">
+                                            <div>
+                                                <span className="font-bold text-purple-900">{t(`potion.${mr.potionId}.name`, pot?.name)} Formülü</span>
+                                                <span className="text-xs block text-slate-600">💰 {mr.cost} Altın | Stok: {mr.stock} | 📅 {mr.availableDay ?? 1}. Gün</span>
+                                            </div>
+                                            <button onClick={() => handleRemoveMarketRecipe(mr.potionId)} className="bg-red-800 text-white text-xs px-2.5 py-1 rounded border-2 border-black font-bold font-magic">Kaldır</button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             )}
 
@@ -1267,7 +1501,8 @@ export default function App(): React.JSX.Element {
             if (!prev) return prev;
             return {
                 ...prev,
-                marketPlants: (prev.marketPlants || []).map(mp => ({ ...mp, stock: mp.maxStock }))
+                marketPlants: (prev.marketPlants || []).map(mp => ({ ...mp, stock: mp.maxStock })),
+                marketRecipes: (prev.marketRecipes || []).map(mr => ({ ...mr, stock: mr.maxStock }))
             };
         });
         setGameState(prev => {
@@ -1425,7 +1660,32 @@ export default function App(): React.JSX.Element {
         });
     };
 
-    const handlers: GameHandlers = { handleEndDay, handleCallCustomer, handleCustomerChoice, handleAddToTreatmentBench, handleRemoveFromTreatmentBench, handleApplyTreatment, handleAddToCauldron, handleRemoveFromCauldron, handleBrew, handleBuyPlant };
+    const handleBuyRecipe = (potionId: string, cost: number): void => {
+        if (playerState.gold < cost) {
+            addLog('❌ Yetersiz altın!');
+            return;
+        }
+        if (playerState.knownPotions.includes(potionId)) {
+            addLog('❌ Bu formülü zaten biliyorsun!');
+            return;
+        }
+        setPlayerState(p => ({
+            ...p,
+            gold: p.gold - cost,
+            knownPotions: [...p.knownPotions, potionId]
+        }));
+        setGameData(d => {
+            if (!d) return d;
+            return {
+                ...d,
+                marketRecipes: (d.marketRecipes || []).map(mr => mr.potionId === potionId ? { ...mr, stock: mr.stock - 1 } : mr)
+            };
+        });
+        const potName = t(`potion.${potionId}.name`);
+        addLog(language === 'en' ? `🛒 Bought ${potName} recipe.` : `🛒 Pazardan ${potName} formülünü satın alıp öğrendin!`);
+    };
+
+    const handlers: GameHandlers = { handleEndDay, handleCallCustomer, handleCustomerChoice, handleAddToTreatmentBench, handleRemoveFromTreatmentBench, handleApplyTreatment, handleAddToCauldron, handleRemoveFromCauldron, handleBrew, handleBuyPlant, handleBuyRecipe };
 
     // Eğer veriler henüz yüklenmediyse kullanıcıya bir yüklenme ekranı gösteriyoruz
     if (isLoading || !gameData) {
