@@ -364,7 +364,7 @@ const TooltipPlant: React.FC<TooltipPlantProps> = ({ plantId, gameData, t }) => 
             <p className="text-slate-400 mb-1">🌿 Nitelikler: {plant.properties.map(p => t(`prop.${p}`, p)).join(', ')}</p>
             <p className="font-bold text-emerald-400">⚡ Giderdiği Semptomlar:</p>
             <div className="flex flex-wrap gap-1 mt-1">
-                {symptoms.length > 0 ? symptoms.map(s => <span key={s} className="bg-emerald-950/80 border border-emerald-500 text-emerald-300 px-1.5 py-0.5 rounded text-[10px]">{t(`symptom.${s}`, s)}</span>)
+                {symptoms.length > 0 ? symptoms.map(s => <span key={s} className="bg-emerald-955/80 border border-emerald-500 text-emerald-300 px-1.5 py-0.5 rounded text-[10px]">{t(`symptom.${s}`, s)}</span>)
                     : <span className="text-slate-500 italic text-[10px]">Herhangi bir semptomu gidermez.</span>}
             </div>
         </div>
@@ -386,7 +386,7 @@ const TooltipPotion: React.FC<TooltipPotionProps> = ({ potionId, gameData, t }) 
             <p className="text-slate-400 mb-1">💰 Satış Değeri: {potion.sellPrice} Altın</p>
             <p className="font-bold text-emerald-400 mb-1">⚡ Tedavi Ettiği Hastalıklar:</p>
             <div className="space-y-1">
-                {getPotionCuresDetails(potionId, gameData, t).map((detail, idx) => <div key={idx} className="bg-purple-950/80 border border-purple-500 text-purple-300 p-1 rounded text-[10px] leading-tight">{detail}</div>)}
+                {getPotionCuresDetails(potionId, gameData, t).map((detail, idx) => <div key={idx} className="bg-purple-955/80 border border-purple-500 text-purple-300 p-1 rounded text-[10px] leading-tight">{detail}</div>)}
             </div>
         </div>
     );
@@ -516,6 +516,17 @@ const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, l
     const customerDisease = activeNode && activeNode.diseaseId ? gameData.diseases.find(d => d.id === activeNode!.diseaseId) : null;
     const charNameTranslated = activeStory ? t(`char.${activeStory.id}`, activeStory.characterName) : '';
 
+    // YENİ/GÜNCEL: Dosya yolu veya linklerin görsel olup olmadığını tespit eden akıllı kontrol
+    const isImageUrl = (url: string): boolean => {
+        if (!url) return false;
+        const normalized = url.toLowerCase().trim();
+        return normalized.startsWith('http') ||
+            normalized.startsWith('/') ||
+            normalized.startsWith('assets/') ||
+            normalized.startsWith('./assets') ||
+            /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
@@ -535,7 +546,7 @@ const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, l
                         <div>
                             <div className="mb-2 text-sm font-bold font-magic text-red-800 uppercase tracking-widest">{charNameTranslated}</div>
                             <div className="flex justify-center mb-6">
-                                {activeStory?.avatarUrl && activeStory.avatarUrl.startsWith('http') ? (
+                                {activeStory?.avatarUrl && isImageUrl(activeStory.avatarUrl) ? (
                                     <div className="w-40 h-40 bg-amber-50 rounded-2xl border-4 border-slate-900 overflow-hidden flex items-center justify-center p-2 shadow-lg animate-idle-float">
                                         <img src={activeStory.avatarUrl} alt={charNameTranslated} className="max-w-full max-h-full object-contain" />
                                     </div>
@@ -969,7 +980,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     // Yeni Market Düzenleyici State Değişkenleri
     const [selectedMarketPlantId, setSelectedMarketPlantId] = useState<string>('');
     const [marketPlantCost, setMarketPlantCost] = useState<number>(10);
-    const [marketPlantStock, setMarketPlantStock] = useState<number>(5);
+    const [marketPlantStock, setMarketMarketPlantStock] = useState<number>(5);
     const [marketPlantDay, setMarketPlantDay] = useState<number>(1);
 
     const [selectedMarketPotionId, setSelectedMarketPotionId] = useState<string>('');
@@ -1899,6 +1910,17 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         );
     };
 
+    // Resim olup olmadığını kontrol eden fonksiyonun aynısı burada da kullanılıyor
+    const isImageUrl = (url: string): boolean => {
+        if (!url) return false;
+        const normalized = url.toLowerCase().trim();
+        return normalized.startsWith('http') ||
+            normalized.startsWith('/') ||
+            normalized.startsWith('assets/') ||
+            normalized.startsWith('./assets') ||
+            /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
+    };
+
     const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
         if (visited.has(nodeId)) return <div className="text-xs text-red-955 font-bold p-2 bg-red-100 rounded border-2">Döngü Tespit Edildi</div>;
         const nextVisited = new Set(visited);
@@ -2037,7 +2059,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 </div>
                                 <div>
                                     <label className="text-xs font-bold block mb-1 text-slate-700">Stok Miktarı</label>
-                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-slate-900" value={marketPlantStock} onChange={e => setMarketPlantStock(Number(e.target.value))} />
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-slate-900" value={marketPlantStock} onChange={e => setMarketMarketPlantStock(Number(e.target.value))} />
                                 </div>
                                 <div>
                                     <label className="text-xs font-bold block mb-1 text-slate-700">Açılacağı Gün</label>
@@ -2157,11 +2179,11 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-xs font-bold block text-slate-700 mb-0.5">Avatar / Görsel URL veya Emoji:</label>
+                                    <label className="text-xs font-bold block text-slate-700 mb-0.5">Avatar / Görsel URL (Örn: /assets/image.png) veya Emoji:</label>
                                     <input
                                         type="text"
                                         className="w-full bg-amber-50 border-2 border-slate-900 rounded p-1 text-sm font-semibold text-slate-900"
-                                        placeholder="👤 veya Görsel Linki"
+                                        placeholder="assets/Baran.png veya 👤"
                                         value={newStoryline.avatarUrl}
                                         onChange={e => setNewStoryline({...newStoryline, avatarUrl: e.target.value})}
                                     />
@@ -2282,7 +2304,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* Bitki */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken Bitki:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.req_plant_placeholder_or_real ?? newChoice.reqPlant ?? ''} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.reqPlant ?? ''} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                                                     </select>
