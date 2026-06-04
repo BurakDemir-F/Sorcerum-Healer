@@ -68,7 +68,7 @@ interface StoryNode {
     dynamicSuccessNodeId?: string;
     dynamicFailNodeId?: string;
     choices: Choice[];
-    day?: number; // <<-- YENİ: Düğüm seviyesinde tetiklenme gün gereksinimi
+    day?: number; // Düğüm seviyesinde tetiklenme gün gereksinimi
 }
 
 interface Storyline {
@@ -95,6 +95,13 @@ interface MarketRecipe {
     availableDay?: number; // Gün bazlı market listelemesi için eklendi
 }
 
+interface IntroPage {
+    id: string;
+    title: string;
+    text: string;
+    imageUrl?: string;
+}
+
 type Translations = Record<string, Record<string, string>>;
 
 interface GameData {
@@ -107,6 +114,7 @@ interface GameData {
     marketPlants: MarketPlant[];
     marketRecipes: MarketRecipe[];
     translations: Translations;
+    introPages: IntroPage[]; // JSON içinde hikaye giriş sayfaları verisi
 }
 
 interface PlayerState {
@@ -276,6 +284,26 @@ const INITIAL_DATA: GameData = {
     marketRecipes: [
         { potionId: 'pot_alkarisi_savar', cost: 100, stock: 1, maxStock: 1, availableDay: 1 }
     ],
+    introPages: [
+        {
+            id: "intro_1",
+            title: "Mirasın Başlangıcı",
+            text: "Dedenden kalan eski, tozlu kulübenin kapısını aralıyorsun. Havada asılı duran kurutulmuş bitki kokuları ve simya kazanından yükselen hafif dumanlar seni çocukluğuna götürüyor. Artık bu vadideki tek umut sensin.",
+            imageUrl: "assets/cabin_intro.png"
+        },
+        {
+            id: "intro_2",
+            title: "Vahşi Ormanın Fısıltıları",
+            text: "Ancak vadi artık eskisi gibi huzurlu değil. Ormandan yükselen kirli büyüler nehir ruhlarını delirtiyor, Alkarıları masum köylülerin rüyalarına musallat oluyor. Şifalı ellerinle doğru bitkileri bir araya getirmeli, her derde deva iksirler kaynatmalısın.",
+            imageUrl: "assets/forest_intro.png"
+        },
+        {
+            id: "intro_3",
+            title: "Tahsildarın Gölgesi",
+            text: "Unutma, bu dünyada hayatta kalmak sadece şifa dağıtmaktan ibaret değil. Her 7 günde bir Tahsildar Kazım kapını çalarak dükkan kirasını (100 Altın) isteyecek. Kasandaki altınları iyi yönet, aksi takdirde dükkanın mühürlenebilir!",
+            imageUrl: "assets/kazim_intro.png"
+        }
+    ],
     translations: {
         tr: {
             "ui.gold": "Altın", "ui.day": "Gün", "ui.rent_debt": "Kira Borcu", "ui.end_day": "Günü Bitir", "ui.call_customer": "Kapıya Bak!",
@@ -298,7 +326,13 @@ const INITIAL_DATA: GameData = {
             "disease.d_alkarisi.name": "Alkarısı Musallatı", "disease.d_kirli_buyu.name": "Kirli Büyü Çürümesi",
             "disease.d_isildak_isirigi.name": "Işıldak Tırmalaması", "disease.d_bataklik_vebasi.name": "Bataklık Çürümesi",
             "prop.Demir Özlü": "Demir Özlü", "prop.Gümüşlü": "Gümüşlü", "prop.Sihirli": "Sihirli",
-            "prop.Tuzlu": "Tuzlu", "prop.Sakinleştirici": "Sakinleştirici"
+            "prop.Tuzlu": "Tuzlu", "prop.Sakinleştirici": "Sakinleştirici",
+            "intro.title.intro_1": "Mirasın Başlangıcı",
+            "intro.text.intro_1": "Dedenden kalan eski, tozlu kulübenin kapısını aralıyorsun. Havada asılı duran kurutulmuş bitki kokuları ve simya kazanından yükselen hafif dumanlar seni çocukluğuna götürüyor. Artık bu vadideki tek umut sensin.",
+            "intro.title.intro_2": "Vahşi Ormanın Fısıltıları",
+            "intro.text.intro_2": "Ancak vadi artık eskisi gibi huzurlu değil. Ormandan yükselen kirli büyüler nehir ruhlarını delirtiyor, Alkarıları masum köylülerin rüyalarına musallat oluyor. Şifalı ellerinle doğru bitkileri bir araya getirmeli, her derde deva iksirler kaynatmalısın.",
+            "intro.title.intro_3": "Tahsildarın Gölgesi",
+            "intro.text.intro_3": "Unutma, bu dünyada hayatta kalmak sadece şifa dağıtmaktan ibaret değil. Her 7 günde bir Tahsildar Kazım kapını çalarak dükkan kirasını (100 Altın) isteyecek. Kasandaki altınları iyi yönet, aksi takdirde dükkanın mühürlenebilir!"
         },
         en: {
             "ui.gold": "Gold", "ui.day": "Day", "ui.rent_debt": "Rent Debt", "ui.end_day": "End Day", "ui.call_customer": "Check Door!",
@@ -311,7 +345,13 @@ const INITIAL_DATA: GameData = {
             "char.story_baran": "Young Druid Baran", "char.story_baran.desc": "An apprentice druid trying to escape auditory whispers, lost in the wildwoods.",
             "char.story_landlord": "Tax Collector Kazim", "char.story_landlord.desc": "The local lord's strict bailiff who extracts tavern rents weekly without mercy.",
             "plant.p_demir_ardic.name": "Iron-Juniper Leaf", "plant.p_gumus_kok.name": "Silver Root",
-            "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion"
+            "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion",
+            "intro.title.intro_1": "Beginning of the Legacy",
+            "intro.text.intro_1": "You open the door of the old, dusty cabin left by your grandfather. The scent of dried herbs and the faint steam rising from the cauldron take you back to your childhood. You are the last hope in this valley now.",
+            "intro.title.intro_2": "Whispers of the Wildwood",
+            "intro.text.intro_2": "But the valley is no longer peaceful. Vile spells rising from the forest drive river spirits mad, and Alkarisi haunt the dreams of innocent villagers. You must combine the right herbs with healing hands and brew potions to cure all ailments.",
+            "intro.title.intro_3": "The Shadow of the Tax Collector",
+            "intro.text.intro_3": "Remember, surviving in this world is not just about healing. Every 7 days, Kazim the Tax Collector will knock on your door to collect rent (100 Gold). Manage your gold wisely, or your shop might be sealed!"
         }
     }
 };
@@ -354,7 +394,7 @@ interface TooltipPlantProps {
     t: (key: string, fallback?: string) => string;
 }
 
-const TooltipPlant: React.FC<TooltipPlantProps> = ({ plantId, gameData, t }) => {
+function TooltipPlant({ plantId, gameData, t }: TooltipPlantProps): React.JSX.Element | null {
     const plant = gameData.plants.find(p => p.id === plantId);
     if (!plant) return null;
     const symptoms = getHerbCuredSymptoms(plantId, gameData);
@@ -369,7 +409,7 @@ const TooltipPlant: React.FC<TooltipPlantProps> = ({ plantId, gameData, t }) => 
             </div>
         </div>
     );
-};
+}
 
 interface TooltipPotionProps {
     potionId: string;
@@ -377,7 +417,7 @@ interface TooltipPotionProps {
     t: (key: string, fallback?: string) => string;
 }
 
-const TooltipPotion: React.FC<TooltipPotionProps> = ({ potionId, gameData, t }) => {
+function TooltipPotion({ potionId, gameData, t }: TooltipPotionProps): React.JSX.Element | null {
     const potion = gameData.potions.find(p => p.id === potionId);
     if (!potion) return null;
     return (
@@ -390,7 +430,7 @@ const TooltipPotion: React.FC<TooltipPotionProps> = ({ potionId, gameData, t }) 
             </div>
         </div>
     );
-};
+}
 
 function renderPlants(t: (key: string, fallback?: string) => string, plantsAlreadyHave: Record<string, number>, gameData: GameData): React.JSX.Element {
     return (
@@ -448,7 +488,7 @@ interface SidePanelProps {
     language: string;
 }
 
-const SidePanel: React.FC<SidePanelProps> = ({ playerState, gameState, gameData, t, language }) => {
+function SidePanel({ playerState, gameState, gameData, t, language }: SidePanelProps): React.JSX.Element {
     const getWizardAdvice = (): string => {
         if (language === 'en') {
             if (playerState.rentDebt > 0) return "Palanka guards are demanding the Bey's protection fee. Watch out!";
@@ -491,7 +531,7 @@ const SidePanel: React.FC<SidePanelProps> = ({ playerState, gameState, gameData,
             </div>
         </div>
     );
-};
+}
 
 // -- SEKMELER (VIEWS) --
 
@@ -506,7 +546,7 @@ interface ShopAreaProps {
     treatmentStatus: TreatmentStatus;
 }
 
-const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, language, t, handlers, treatmentBench, treatmentStatus }) => {
+function ShopArea({ gameState, playerState, gameData, language, t, handlers, treatmentBench, treatmentStatus }: ShopAreaProps): React.JSX.Element {
     let activeNode: StoryNode | null = null;
     let activeStory: Storyline | null = null;
     if (gameState.currentCustomer) {
@@ -516,7 +556,6 @@ const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, l
     const customerDisease = activeNode && activeNode.diseaseId ? gameData.diseases.find(d => d.id === activeNode!.diseaseId) : null;
     const charNameTranslated = activeStory ? t(`char.${activeStory.id}`, activeStory.characterName) : '';
 
-    // YENİ/GÜNCEL: Dosya yolu veya linklerin görsel olup olmadığını tespit eden akıllı kontrol
     const isImageUrl = (url: string): boolean => {
         if (!url) return false;
         const normalized = url.toLowerCase().trim();
@@ -684,7 +723,7 @@ const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, l
             <SidePanel playerState={playerState} gameState={gameState} gameData={gameData} t={t} language={language} />
         </div>
     );
-};
+}
 
 interface AlchemyAreaProps {
     playerState: PlayerState;
@@ -696,7 +735,7 @@ interface AlchemyAreaProps {
     language: string;
 }
 
-const AlchemyArea: React.FC<AlchemyAreaProps> = ({ playerState, gameData, cauldron, brewState, t, handlers, language }) => {
+function AlchemyArea({ playerState, gameData, cauldron, brewState, t, handlers, language }: AlchemyAreaProps): React.JSX.Element {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col h-[530px]">
@@ -756,7 +795,7 @@ const AlchemyArea: React.FC<AlchemyAreaProps> = ({ playerState, gameData, cauldr
             </div>
         </div>
     );
-};
+}
 
 interface MarketAreaProps {
     gameData: GameData;
@@ -766,8 +805,8 @@ interface MarketAreaProps {
     playerState: PlayerState;
 }
 
-const MarketArea: React.FC<MarketAreaProps> = ({ gameData, t, handlers, currentDay, playerState }) => {
-    // Girdiğimiz gün bilgisine göre market bitkilerini filtreliyoruz ( availableDay belirtilmemişse 1. gün kabul edilir )
+function MarketArea({ gameData, t, handlers, currentDay, playerState }: MarketAreaProps): React.JSX.Element {
+    // Girdiğimiz gün bilgisine göre market bitkilerini filtreliyoruz
     const availablePlants = (gameData.marketPlants || []).filter(mp => {
         const dayReq = mp.availableDay ?? 1;
         return currentDay >= dayReq;
@@ -848,7 +887,114 @@ const MarketArea: React.FC<MarketAreaProps> = ({ gameData, t, handlers, currentD
             </div>
         </div>
     );
-};
+}
+
+// ============================================================================
+// HİKAYE GİRİŞ EKRANI (INTRO SCREEN)
+// ============================================================================
+
+interface IntroScreenProps {
+    gameData: GameData;
+    pageIndex: number;
+    setPageIndex: React.Dispatch<React.SetStateAction<number>>;
+    setAppMode: React.Dispatch<React.SetStateAction<string>>;
+    language: string;
+    t: (key: string, fallback?: string) => string;
+}
+
+function IntroScreen({ gameData, pageIndex, setPageIndex, setAppMode, language, t }: IntroScreenProps): React.JSX.Element | null {
+    const pages = gameData.introPages || [];
+    if (pages.length === 0) {
+        setAppMode('client');
+        return null;
+    }
+
+    const currentPage = pages[pageIndex];
+    const isFirstPage = pageIndex === 0;
+    const isLastPage = pageIndex === pages.length - 1;
+
+    const handleNext = () => {
+        if (isLastPage) {
+            setAppMode('client');
+        } else {
+            setPageIndex(prev => prev + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (!isFirstPage) {
+            setPageIndex(prev => prev - 1);
+        }
+    };
+
+    const isImageUrl = (url: string): boolean => {
+        if (!url) return false;
+        const normalized = url.toLowerCase().trim();
+        return normalized.startsWith('http') ||
+            normalized.startsWith('/') ||
+            normalized.startsWith('assets/') ||
+            normalized.startsWith('./assets') ||
+            /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
+    };
+
+    return (
+        <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2] flex items-center justify-center p-4 md:p-8">
+            <div className="max-w-2xl w-full bg-[#2a131b] border-8 border-slate-900 p-8 rounded-3xl shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] space-y-6 relative overflow-hidden font-parchment text-slate-800">
+                <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-amber-500 to-red-800"></div>
+
+                <button
+                    onClick={() => setAppMode('client')}
+                    className="absolute top-4 right-4 bg-red-800 hover:bg-red-700 text-white font-magic font-bold text-xs border-2 border-black px-3 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-transform active:translate-y-0.5"
+                >
+                    {language === 'en' ? 'Skip ➔' : 'Atla ➔'}
+                </button>
+
+                <div className="bg-[#f3e8d2] rounded-2xl p-6 md:p-8 border-4 border-slate-900 shadow-inner flex flex-col items-center space-y-6">
+                    <h2 className="text-3xl font-magic text-red-900 text-center font-bold tracking-wide border-b-2 border-red-900/10 pb-2 w-full">
+                        {t(`intro.title.${currentPage.id}`, currentPage.title)}
+                    </h2>
+
+                    {currentPage.imageUrl && isImageUrl(currentPage.imageUrl) ? (
+                        <div className="w-64 h-48 bg-amber-50 rounded-2xl border-4 border-slate-900 overflow-hidden flex items-center justify-center p-2 shadow-lg animate-idle-float">
+                            <img src={currentPage.imageUrl} alt="Hikaye Görseli" className="max-w-full max-h-full object-contain" />
+                        </div>
+                    ) : (
+                        <div className="w-24 h-24 bg-[#dfd1b3] border-4 border-slate-900 rounded-full flex items-center justify-center text-5xl shadow-md animate-idle-float">
+                            📖
+                        </div>
+                    )}
+
+                    <p className="text-xl text-slate-900 font-semibold text-center italic leading-relaxed font-parchment max-w-lg">
+                        {t(`intro.text.${currentPage.id}`, currentPage.text)}
+                    </p>
+
+                    <div className="text-xs font-sans font-bold text-slate-500">
+                        {pageIndex + 1} / {pages.length}
+                    </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-2">
+                    <button
+                        onClick={handlePrev}
+                        disabled={isFirstPage}
+                        className="bg-slate-800 text-white hover:bg-slate-700 font-magic font-bold px-6 py-2.5 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] disabled:opacity-40 disabled:pointer-events-none transition-all active:translate-y-0.5"
+                    >
+                        {language === 'en' ? '◀ Back' : '◀ Geri'}
+                    </button>
+
+                    <button
+                        onClick={handleNext}
+                        className="bg-amber-500 text-slate-955 hover:bg-amber-400 font-magic font-bold px-8 py-2.5 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all active:translate-y-0.5"
+                    >
+                        {isLastPage
+                            ? (language === 'en' ? 'Start Game ➔' : 'Oyuna Başla ➔')
+                            : (language === 'en' ? 'Next ▶' : 'İleri ▶')}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 // --- ANA EKRAN BİLEŞENLERİ (SCREENS) ---
 
@@ -869,7 +1015,7 @@ interface GameClientProps {
     handlers: GameHandlers;
 }
 
-const GameClient: React.FC<GameClientProps> = ({ gameData, gameState, playerState, cauldron, brewState, treatmentBench, treatmentStatus, language, setLanguage, setAppMode, activeTab, setActiveTab, t, handlers }) => {
+function GameClient({ gameData, gameState, playerState, cauldron, brewState, treatmentBench, treatmentStatus, language, setLanguage, setAppMode, activeTab, setActiveTab, t, handlers }: GameClientProps): React.JSX.Element {
     return (
         <div className="space-y-6">
             <div className="bg-[#2a131b] border-4 border-slate-900 p-6 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
@@ -913,7 +1059,7 @@ const GameClient: React.FC<GameClientProps> = ({ gameData, gameState, playerStat
             </div>
         </div>
     );
-};
+}
 
 // -- STÜDYO BİLEŞENLERİ (GELİŞTİRİCİ ARAÇLARI) --
 
@@ -926,16 +1072,14 @@ interface DeveloperStudioProps {
     t: (key: string, fallback?: string) => string;
 }
 
-const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData, setGameState, setPlayerState, setAppMode, t }) => {
+function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, setAppMode, t }: DeveloperStudioProps): React.JSX.Element {
     const [activeTab, setActiveTab] = useState<string>('dataEditor');
     const [newPlant, setNewPlant] = useState<Plant>({ id: '', name: '', rarity: 'Yaygın', cost: 10, properties: [], imageUrl: '' });
     const [newDisease, setNewDisease] = useState<Disease>({ id: '', name: '', symptoms: [] });
     const [newPotion, setNewPotion] = useState<Potion>({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
     const [tempIngredient, setTempIngredient] = useState<Ingredient>({ type: 'plant', id: '', count: 1 });
 
-    // Diyalog Editörü State'leri
     const [activeEditorStoryId, setActiveEditorStoryId] = useState<string>('story_baran');
-    // Gelişmiş Karakter Yaratma Formu State'leri
     const [newStoryline, setNewStoryline] = useState<{ id: string; characterName: string; description: string; avatarUrl: string }>({ id: '', characterName: '', description: '', avatarUrl: '' });
     const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
 
@@ -944,13 +1088,11 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         nextNodeId: string;
         delayDays: number;
         autoCreateNode: boolean;
-        // Gereksinimler (Requirements)
         reqGold: number;
         reqPlant: string;
         reqPlantCount: number;
         reqPotion: string;
         reqPotionCount: number;
-        // Ödüller (Rewards)
         rewardGold: number;
         rewardPlantId: string;
         rewardPlantCount: number;
@@ -977,7 +1119,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const [importText, setImportText] = useState<string>('');
     const [importStatus, setImportStatus] = useState<string>('');
 
-    // Yeni Market Düzenleyici State Değişkenleri
     const [selectedMarketPlantId, setSelectedMarketPlantId] = useState<string>('');
     const [marketPlantCost, setMarketPlantCost] = useState<number>(10);
     const [marketPlantStock, setMarketMarketPlantStock] = useState<number>(5);
@@ -988,17 +1129,17 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const [marketPotionStock, setMarketPotionStock] = useState<number>(1);
     const [marketPotionDay, setMarketPotionDay] = useState<number>(1);
 
-    // Semptom ve Nitelik Düzenleyici State Değişkenleri
     const [newSymptom, setNewSymptom] = useState<string>('');
     const [newPlantProperty, setNewPlantProperty] = useState<PlantProperty>({ name: '', curesSymptoms: [] });
 
-    // --- DÜZENLEME (EDIT) STATE DEĞİŞKENLERİ ---
+    const [newIntroPage, setNewIntroPage] = useState<IntroPage>({ id: '', title: '', text: '', imageUrl: '' });
+    const [editingIntroPageId, setEditingIntroPageId] = useState<string | null>(null);
+
     const [editingPlantId, setEditingPlantId] = useState<string | null>(null);
     const [editingPotionId, setEditingPotionId] = useState<string | null>(null);
     const [editingNodeId, setEditingNodeId] = useState<string | null>(null);
     const [editNodeData, setEditNodeData] = useState<{ npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
 
-    // Stüdyo İşlevleri
     const handleExportJSON = (): void => {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData, null, 2));
         const downloadAnchor = document.createElement('a');
@@ -1011,17 +1152,16 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         try {
             const parsed = JSON.parse(importText);
             if (parsed.plants && parsed.potions) {
-                // Eski veya eksik JSON yüklemelerine karşı güvenli fallback katmanı
                 const validatedData: GameData = {
                     ...INITIAL_DATA,
                     ...parsed,
                     marketPlants: parsed.marketPlants || [],
-                    marketRecipes: parsed.marketRecipes || []
+                    marketRecipes: parsed.marketRecipes || [],
+                    introPages: parsed.introPages || INITIAL_DATA.introPages || []
                 };
                 setGameData(validatedData);
                 setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
 
-                // İçe aktarılan hikayelerdeki diyalog başlangıç düğümlerini ve günlerini gameState durumuna eş zamanlı eşleyelim!
                 const initialProgress: Record<string, StoryProgressItem> = {};
                 validatedData.storylines.forEach(story => {
                     const firstNode = story.nodes && story.nodes.length > 0 ? story.nodes[0] : null;
@@ -1069,6 +1209,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         Object.keys(gameData.translations.en || {}).forEach(k => keys.add(k));
         gameData.plants.forEach(p => keys.add(`plant.${p.id}.name`));
         gameData.potions.forEach(pot => keys.add(`potion.${pot.id}.name`));
+        (gameData.introPages || []).forEach(page => {
+            keys.add(`intro.title.${page.id}`);
+            keys.add(`intro.text.${page.id}`);
+        });
         gameData.storylines.forEach(story => {
             keys.add(`char.${story.id}`);
             keys.add(`char.${story.id}.desc`);
@@ -1080,12 +1224,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         return Array.from(keys);
     };
 
-    // Veri Ekleme & Düzenleme Mantığı (Bitki)
     const toggleProp = (propName: string): void => setNewPlant({ ...newPlant, properties: newPlant.properties.includes(propName) ? newPlant.properties.filter(p => p !== propName) : [...newPlant.properties, propName] });
 
     const handleAddPlant = (): void => {
         if (editingPlantId) {
-            // Düzenleme kaydı
             handleTranslateChange('tr', `plant.${editingPlantId}.name`, newPlant.name);
             setGameData(prev => {
                 if (!prev) return prev;
@@ -1096,7 +1238,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             });
             setEditingPlantId(null);
         } else {
-            // Yeni ekleme kaydı
             if (!newPlant.id) return;
             handleTranslateChange('tr', `plant.${newPlant.id}.name`, newPlant.name);
             setGameData(prev => {
@@ -1117,10 +1258,8 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         setNewPotion({ ...newPotion, ingredients: [...newPotion.ingredients, { ...tempIngredient, count: Number(tempIngredient.count) }] });
     };
 
-    // İksir Ekleme & Düzenleme Mantığı
     const handleAddPotionRecipe = (): void => {
         if (editingPotionId) {
-            // Düzenleme kaydı
             handleTranslateChange('tr', `potion.${editingPotionId}.name`, newPotion.name);
             setGameData(prev => {
                 if (!prev) return prev;
@@ -1131,9 +1270,8 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             });
             setEditingPotionId(null);
         } else {
-            // Yeni ekleme kaydı
             if (!newPotion.id) return;
-            handleTranslateChange('tr', `potion.${newPotion.id}.name`, newPotion.name); // Dil senkronizasyonu
+            handleTranslateChange('tr', `potion.${newPotion.id}.name`, newPotion.name);
             setGameData(prev => {
                 if (!prev) return prev;
                 const alreadyExists = prev.potions.some(p => p.id === newPotion.id);
@@ -1147,7 +1285,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         setNewPotion({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
     };
 
-    // Diyalog Düğümü (Node) Düzenleme Kaydı
     const handleSaveNodeEdits = (): void => {
         if (!activeEditorStoryId || !editingNodeId) return;
         handleTranslateChange('tr', `node.${editingNodeId}.npcText`, editNodeData.npcText);
@@ -1165,7 +1302,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 diseaseId: editNodeData.diseaseId || undefined,
                                 dynamicSuccessNodeId: editNodeData.dynamicSuccessNodeId || undefined,
                                 dynamicFailNodeId: editNodeData.dynamicFailNodeId || undefined,
-                                day: Number(editNodeData.day) || undefined // Gün verisini kaydet
+                                day: Number(editNodeData.day) || undefined
                             } : n)
                         };
                     }
@@ -1176,7 +1313,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         setEditingNodeId(null);
     };
 
-    // Hastalık Ekleme Mantığı
     const handleAddDisease = (): void => {
         if (!newDisease.id || !newDisease.name) return;
         handleTranslateChange('tr', `disease.${newDisease.id}.name`, newDisease.name);
@@ -1192,7 +1328,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         setNewDisease({ id: '', name: '', symptoms: [] });
     };
 
-    // Semptom ve Nitelik Ekleme Mantığı
     const handleAddSymptom = (): void => {
         if (!newSymptom.trim()) return;
         const trimmed = newSymptom.trim();
@@ -1226,7 +1361,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         setNewPlantProperty({ name: '', curesSymptoms: [] });
     };
 
-    // Market Düzenleme İşlemleri
     const handleAddMarketPlant = (): void => {
         if (!selectedMarketPlantId) return;
         setGameData(prev => {
@@ -1247,7 +1381,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 ]
             };
         });
-        setSelectedMarketPlantId(''); // Form sıfırlama
+        setSelectedMarketPlantId('');
     };
 
     const handleAddMarketRecipe = (): void => {
@@ -1270,7 +1404,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 ]
             };
         });
-        setSelectedMarketPotionId(''); // Form sıfırlama
+        setSelectedMarketPotionId('');
     };
 
     const handleRemoveMarketPlant = (plantId: string): void => {
@@ -1293,20 +1427,15 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         });
     };
 
-    // Gelişmiş Karakter Yaratma ve Otomatik Akış Sistemi
     const handleAddStoryline = (): void => {
         if(!newStoryline.id || !newStoryline.characterName) return;
-
-        // Benzersiz ID'yi güvenceye alıyoruz
         const safeStoryId = newStoryline.id.startsWith('story_') ? newStoryline.id : `story_${newStoryline.id}`;
 
-        // Dil / Çeviri Senkronizasyonu
         handleTranslateChange('tr', `char.${safeStoryId}`, newStoryline.characterName);
         if (newStoryline.description) {
             handleTranslateChange('tr', `char.${safeStoryId}.desc`, newStoryline.description);
         }
 
-        // Karakteri veri ağacına kaydediyoruz
         setGameData(prev => {
             if (!prev) return prev;
             const alreadyExists = prev.storylines.some(s => s.id === safeStoryId);
@@ -1325,7 +1454,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
 
         const autoFirstNodeId = `node_${safeStoryId.replace('story_', '')}_1`;
 
-        // Yeni karakteri oyuncunun aktif hikaye ilerleme durumuna ekliyoruz ki oyunda kapıya gelebilsin!
         setGameState(prev => {
             return {
                 ...prev,
@@ -1340,7 +1468,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
 
-        // Karakter yaratıldığı an boş bir diyalog ağacı olmaması için otomatik bir ilk diyalog düğümü oluşturuyoruz (Varsayılan 1. Gün)
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1350,7 +1477,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         const initNode: StoryNode = {
                             id: autoFirstNodeId,
                             npcText: `${newStoryline.characterName} şifacı kulübesinin kapısını araladı. Ona nasıl yardım edeceksin?`,
-                            day: 1, // Varsayılan tetiklenme günü 1
+                            day: 1,
                             choices: []
                         };
                         handleTranslateChange('tr', `node.${autoFirstNodeId}.npcText`, initNode.npcText);
@@ -1361,16 +1488,13 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
 
-        // Yeni eklenen karakteri hemen editörde aktif karakter seçelim
         setActiveEditorStoryId(safeStoryId);
-
-        // Formu temizle
         setNewStoryline({ id: '', characterName: '', description: '', avatarUrl: '' });
     };
 
     const handleAddNodeToStory = (): void => {
         if(!activeEditorStoryId || !newNode.id) return;
-        handleTranslateChange('tr', `node.${newNode.id}.npcText`, newNode.npcText); // Dil senkronizasyonu
+        handleTranslateChange('tr', `node.${newNode.id}.npcText`, newNode.npcText);
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1394,15 +1518,11 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             text: newChoice.text,
             nextNodeId: targetNextNodeId,
             delayDays: newChoice.delayDays || undefined,
-
-            // Alınacaklar
             reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined,
             reqPlant: newChoice.reqPlant || undefined,
             reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined,
             reqPotion: newChoice.reqPotion || undefined,
             reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined,
-
-            // Ödüller
             rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined,
             rewardPlantId: newChoice.rewardPlantId || undefined,
             rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined,
@@ -1410,7 +1530,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined
         };
 
-        // Eklenen seçeneğin çevirisini otomatik dil veritabanına ekle
         if (gameData) {
             const story = gameData.storylines.find(s => s.id === activeEditorStoryId);
             const node = story?.nodes.find(n => n.id === nodeId);
@@ -1448,12 +1567,74 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             rewardPlantCount: 1,
             rewardPotionId: '',
             rewardPotionCount: 1
-        }); // Seçim formunu temizle
+        });
     };
 
-    // ============================================================================
-    // CLOSURE-SCOPED GÜVENLİ VIEW METOTLARI
-    // ============================================================================
+    const handleAddIntroPage = (): void => {
+        if (!newIntroPage.id || !newIntroPage.title || !newIntroPage.text) return;
+
+        handleTranslateChange('tr', `intro.title.${newIntroPage.id}`, newIntroPage.title);
+        handleTranslateChange('tr', `intro.text.${newIntroPage.id}`, newIntroPage.text);
+
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentPages = prev.introPages || [];
+
+            if (editingIntroPageId) {
+                return {
+                    ...prev,
+                    introPages: currentPages.map(page => page.id === editingIntroPageId ? newIntroPage : page)
+                };
+            } else {
+                const alreadyExists = currentPages.some(page => page.id === newIntroPage.id);
+                if (alreadyExists) return prev;
+                return {
+                    ...prev,
+                    introPages: [...currentPages, newIntroPage]
+                };
+            }
+        });
+
+        setNewIntroPage({ id: '', title: '', text: '', imageUrl: '' });
+        setEditingIntroPageId(null);
+    };
+
+    const handleRemoveIntroPage = (id: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                introPages: (prev.introPages || []).filter(page => page.id !== id)
+            };
+        });
+    };
+
+    const moveIntroPage = (index: number, direction: 'up' | 'down'): void => {
+        if (!gameData) return;
+        const pages = [...(gameData.introPages || [])];
+        if (direction === 'up' && index === 0) return;
+        if (direction === 'down' && index === pages.length - 1) return;
+
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        const temp = pages[index];
+        pages[index] = pages[targetIndex];
+        pages[targetIndex] = temp;
+
+        setGameData({
+            ...gameData,
+            introPages: pages
+        });
+    };
+
+    const isImageUrl = (url: string): boolean => {
+        if (!url) return false;
+        const normalized = url.toLowerCase().trim();
+        return normalized.startsWith('http') ||
+            normalized.startsWith('/') ||
+            normalized.startsWith('assets/') ||
+            normalized.startsWith('./assets') ||
+            /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
+    };
 
     const renderCreatePlant = (): React.JSX.Element => {
         const isEditing = editingPlantId !== null;
@@ -1552,7 +1733,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 <div className="space-y-1">{newPotion.ingredients.map((ing, idx) => <div key={idx}
                                                                                          className="bg-amber-50 p-1 border text-xs text-slate-900">{ing.id} x{ing.count}</div>)}</div>
 
-                {/* İksirin İyi Geldiği Hastalıklar */}
                 <div className="pt-2">
                     <label className="text-xs font-bold text-slate-700 block mb-1">Tedavi Ettiği Hastalıklar:</label>
                     <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
@@ -1655,7 +1835,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const renderManagePropertiesAndSymptoms = (): React.JSX.Element => {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
-                {/* Semptom Havuzu */}
                 <div className="space-y-3">
                     <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">⚠️ Yeni Semptom Tanımla</h2>
                     <div className="flex gap-2">
@@ -1681,7 +1860,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                     </div>
                 </div>
 
-                {/* Yeni Bitki Nitelik ve Şifa Tanımlama */}
                 <div className="space-y-3 pt-4 border-t-2 border-slate-900/10">
                     <h2 className="text-2xl font-bold font-magic text-slate-900">🌿 Yeni Bitki Özelliği (Nitelik)</h2>
                     <input
@@ -1791,7 +1969,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                         onClick={() => {
                                             setNewPlant({ ...plant });
                                             setEditingPlantId(plant.id);
-                                            window.scrollTo({ top: 0, behavior: 'smooth' }); // Düzenleme formuna yumuşak geçiş
+                                            window.scrollTo({ top: 0, behavior: 'smooth' });
                                         }}
                                         className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-2.5 py-0.5 rounded border-2 border-black font-bold font-magic"
                                     >
@@ -1811,7 +1989,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6 col-span-1 lg:col-span-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                    {/* Hastalık Listesi */}
                     <div className="space-y-3 font-parchment">
                         <h3 className="text-xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-1 flex items-center gap-2">
                             🦠 Tanımlı Hastalıklar ({gameData.diseases.length})
@@ -1849,7 +2026,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         </div>
                     </div>
 
-                    {/* İksir Listesi */}
                     <div className="space-y-3 font-parchment">
                         <h3 className="text-xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-1 flex items-center gap-2">
                             🧪 Tanımlı İksirler ({gameData.potions.length})
@@ -1879,7 +2055,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                             onClick={() => {
                                                 setNewPotion({ ...pot });
                                                 setEditingPotionId(pot.id);
-                                                window.scrollTo({ top: 0, behavior: 'smooth' }); // Düzenleme formuna yumuşak geçiş
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
                                             }}
                                             className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic shadow"
                                         >
@@ -1910,17 +2086,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         );
     };
 
-    // Resim olup olmadığını kontrol eden fonksiyonun aynısı burada da kullanılıyor
-    const isImageUrl = (url: string): boolean => {
-        if (!url) return false;
-        const normalized = url.toLowerCase().trim();
-        return normalized.startsWith('http') ||
-            normalized.startsWith('/') ||
-            normalized.startsWith('assets/') ||
-            normalized.startsWith('./assets') ||
-            /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
-    };
-
     const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
         if (visited.has(nodeId)) return <div className="text-xs text-red-955 font-bold p-2 bg-red-100 rounded border-2">Döngü Tespit Edildi</div>;
         const nextVisited = new Set(visited);
@@ -1933,12 +2098,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 <div className="bg-[#f3e8d2] border-4 border-slate-900 rounded-2xl p-4 w-72 shadow-md relative z-10">
                     <div className="flex justify-between items-center mb-1">
                         <span className="text-xs font-mono font-bold text-indigo-900">#{node.id}</span>
-                        {/* GÜN ETİKETİ - AĞAÇ ÜZERİNDE GÖSTERİLİR */}
                         <span className="text-xs bg-amber-500 text-slate-955 px-2 py-0.5 rounded-full font-bold border border-black flex items-center gap-1">📅 Gün: {node.day ?? 1}</span>
                     </div>
                     <p className="text-sm font-bold">"{node.npcText}"</p>
 
-                    {/* Düğüm Aksiyon Butonları (Pencil ✏️ ve Choice ➕) */}
                     <div className="absolute -right-3 -top-3 flex gap-1">
                         <button
                             onClick={() => {
@@ -1974,7 +2137,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3 space-y-1 font-sans">
                                     <p className="font-bold font-parchment text-sm">{t(`choice.${node.id}.${idx}`, choice.text)}</p>
 
-                                    {/* Seçenek Preview Detayı */}
                                     <div className="text-[9px] text-slate-600 flex flex-col items-center leading-tight">
                                         {choice.reqGold ? <span>💸 -💰{choice.reqGold} Altın</span> : null}
                                         {choice.reqPlant ? <span>💸 -🌿{choice.reqPlant} (x{choice.reqPlantCount || 1})</span> : null}
@@ -1993,11 +2155,149 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         );
     };
 
-    const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
+    const renderIntroEditor = (): React.JSX.Element => {
+        const pages = gameData.introPages || [];
+        const isEditing = editingIntroPageId !== null;
 
-    // ============================================================================
-    // ANA RETURN GÖVDESİ
-    // ============================================================================
+        return (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 font-parchment min-h-[600px]">
+
+                <div className="lg:col-span-2 bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📖 Giriş Hikayesi Sayfaları ({pages.length})</h2>
+                        <div className="space-y-3 max-h-[480px] overflow-y-auto pr-2">
+                            {pages.length === 0 ? (
+                                <p className="italic text-slate-600 font-bold p-4 text-center bg-amber-50 rounded-xl border border-dashed border-slate-400">Hiç giriş sayfası tanımlanmamış. Sağdaki formdan ilk sayfanızı ekleyin!</p>
+                            ) : (
+                                pages.map((page, index) => (
+                                    <div key={page.id} className="bg-amber-50/70 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center gap-4 hover:shadow-md transition-shadow relative">
+                                        <div className="flex-1 space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="bg-amber-500 text-slate-955 text-xs px-2 py-0.5 rounded-full font-sans font-bold">Sayfa {index + 1}</span>
+                                                <h3 className="font-bold text-lg text-slate-900 leading-none">{t(`intro.title.${page.id}`, page.title)}</h3>
+                                            </div>
+                                            <p className="text-xs font-mono font-semibold text-indigo-900">ID: #{page.id}</p>
+                                            <p className="text-sm text-slate-600 line-clamp-2 leading-tight">{t(`intro.text.${page.id}`, page.text)}</p>
+                                            {page.imageUrl && (
+                                                <span className="text-[10px] bg-slate-200 border text-slate-700 font-mono font-bold px-1.5 py-0.5 rounded block max-w-max">🖼️ {page.imageUrl}</span>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-col gap-1.5 items-end">
+                                            <div className="flex gap-1">
+                                                <button
+                                                    onClick={() => moveIntroPage(index, 'up')}
+                                                    disabled={index === 0}
+                                                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-sans text-xs font-bold px-2 py-1 rounded border border-black shadow"
+                                                    title="Yukarı Taşı"
+                                                >
+                                                    ▲
+                                                </button>
+                                                <button
+                                                    onClick={() => moveIntroPage(index, 'down')}
+                                                    disabled={index === pages.length - 1}
+                                                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-sans text-xs font-bold px-2 py-1 rounded border border-black shadow"
+                                                    title="Aşağı Taşı"
+                                                >
+                                                    ▼
+                                                </button>
+                                            </div>
+                                            <div className="flex gap-1">
+                                                <button
+                                                    onClick={() => {
+                                                        setNewIntroPage({ ...page });
+                                                        setEditingIntroPageId(page.id);
+                                                    }}
+                                                    className="bg-yellow-500 hover:bg-yellow-400 text-slate-955 text-xs font-bold px-2 py-1 rounded border border-black shadow font-sans"
+                                                >
+                                                    ✏️
+                                                </button>
+                                                <button
+                                                    onClick={() => handleRemoveIntroPage(page.id)}
+                                                    className="bg-red-800 text-white text-xs font-bold px-2 py-1 rounded border border-black shadow font-sans animate-pulse"
+                                                >
+                                                    Sil
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                    <div className="flex justify-between items-center border-b border-slate-900/10 pb-1.5">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900">
+                            {isEditing ? '✏️ Sayfayı Düzenle' : '📖 Yeni Sayfa Ekle'}
+                        </h2>
+                        {isEditing && (
+                            <button
+                                onClick={() => {
+                                    setEditingIntroPageId(null);
+                                    setNewIntroPage({ id: '', title: '', text: '', imageUrl: '' });
+                                }}
+                                className="bg-red-800 text-white font-sans text-xs font-bold px-2 py-0.5 rounded border border-black shadow"
+                            >
+                                İptal
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="space-y-3">
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Benzersiz ID:</label>
+                            <input
+                                disabled={isEditing}
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-mono font-bold disabled:opacity-50 text-slate-900"
+                                placeholder="intro_sayfa_1"
+                                value={isEditing ? editingIntroPageId : newIntroPage.id}
+                                onChange={e => setNewIntroPage({ ...newIntroPage, id: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Sayfa Başlığı:</label>
+                            <input
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-slate-900"
+                                placeholder="Giriş Bölümü Başlığı"
+                                value={newIntroPage.title}
+                                onChange={e => setNewIntroPage({ ...newIntroPage, title: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Görsel / Resim Yolu veya Emoji:</label>
+                            <input
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-slate-900"
+                                placeholder="assets/intro_pic.png veya 👤"
+                                value={newIntroPage.imageUrl}
+                                onChange={e => setNewIntroPage({ ...newIntroPage, imageUrl: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Hikaye Metni:</label>
+                            <textarea
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-sans font-semibold text-slate-900 h-32 resize-none leading-relaxed"
+                                placeholder="Bu sayfada anlatılacak kadim hikayeyi yazın..."
+                                value={newIntroPage.text}
+                                onChange={e => setNewIntroPage({ ...newIntroPage, text: e.target.value })}
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleAddIntroPage}
+                            className="w-full bg-emerald-500 text-slate-955 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-emerald-400 active:translate-y-0.5"
+                        >
+                            {isEditing ? 'Sayfa Değişikliklerini Kaydet' : 'Sayfayı Hikayeye Ekle'}
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        );
+    };
+
+    const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
 
     return (
         <div className="space-y-6 text-slate-800 font-parchment text-lg">
@@ -2016,6 +2316,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 {[
                     { id: 'dataEditor', label: '🌿 Element & Reçete' },
                     { id: 'dialogueEditor', label: '💬 Diyalog Ağacı & Karakter' },
+                    { id: 'introEditor', label: '📖 Hikaye Girişi' },
                     { id: 'marketEditor', label: '🛒 Market Düzenleyici' },
                     { id: 'translationEditor', label: '🌍 Lokalizasyon' },
                     { id: 'jsonHub', label: '📂 JSON Motoru' }
@@ -2030,18 +2331,16 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                     {renderCreatePotion()}
                     {renderCreateDisease()}
                     {renderManagePropertiesAndSymptoms()}
-                    {/* Sistemdeki Tüm Bitkileri Listeler */}
                     {renderStudioPlantsListLocal()}
-                    {/* Sistemdeki Tüm Hastalıkları ve İksirleri Listeler */}
                     {renderStudioDiseasesAndPotionsLocal()}
                 </div>
             )}
 
-            {/* MARKET DÜZENLEYİCİSİ GÖRÜNÜMÜ */}
+            {activeTab === 'introEditor' && renderIntroEditor()}
+
             {activeTab === 'marketEditor' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-parchment">
 
-                    {/* PAZAR BİTKİLERİ FORMU & LİSTESİ */}
                     <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
                         <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌿 Pazara Bitki Ekle</h2>
                         <div className="space-y-3">
@@ -2088,7 +2387,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         </div>
                     </div>
 
-                    {/* PAZAR İKSİR FORMÜLLERİ FORMU & LİSTESİ */}
                     <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
                         <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📜 Pazara Formül (Ürün) Ekle</h2>
                         <div className="space-y-3">
@@ -2138,14 +2436,11 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 </div>
             )}
 
-            {}
             {activeTab === 'dialogueEditor' && (
                 <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 min-h-[750px] font-parchment">
 
-                    {/* SOL PANEL: Karakter Listesi & Karakter Yaratıcı */}
                     <div className="bg-[#f3e8d2] p-4 rounded-2xl border-4 border-slate-900 overflow-y-auto flex flex-col max-h-[750px]">
 
-                        {/* YENİ KARAKTER YARATMA FORMU */}
                         <div className="mb-6 bg-amber-100/60 p-4 rounded-xl border-2 border-slate-900/40 space-y-3 text-sm flex-none">
                             <h3 className="font-magic font-bold text-slate-800 text-sm border-b border-slate-900/10 pb-1.5 flex items-center gap-1">👥 Yeni Karakter Yarat</h3>
                             <div className="space-y-2">
@@ -2197,7 +2492,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                             </button>
                         </div>
 
-                        {/* KARAKTER SEÇİM LİSTESİ */}
                         <h2 className="text-2xl font-bold font-magic mb-3 flex-none">👥 Karakterler ({gameData.storylines.length})</h2>
                         <div className="space-y-2 overflow-y-auto flex-1 pr-1">
                             {gameData.storylines.map(story => (
@@ -2218,7 +2512,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         </div>
                     </div>
 
-                    {/* SAĞ PANEL: Diyalog Ağacı Ağaç Görünümü & Detayları */}
                     <div className="xl:col-span-3 bg-[#e9dbbe] border-4 border-slate-900 rounded-2xl flex flex-col relative max-h-[750px]">
                         <div className="flex-1 overflow-auto p-8 relative">
                             {currentStory && currentStory.nodes.length > 0 ? renderVisualNode(currentStory, currentStory.nodes[0].id) : (
@@ -2229,7 +2522,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         </div>
                         <div className="bg-[#f3e8d2] border-t-4 border-slate-900 p-4">
                             {editingNodeId ? (
-                                /* DÜĞÜM (NODE) DÜZENLEME PANELİ */
                                 <div className="space-y-3 bg-[#dfd1b3] p-4 rounded-xl border-2 border-slate-900">
                                     <div className="flex justify-between items-center border-b border-slate-900/10 pb-1">
                                         <h3 className="font-bold font-magic text-sm">💬 Konuşma Düğümünü Düzenle (#{editingNodeId})</h3>
@@ -2245,7 +2537,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                             <input type="number" min="1" className="w-full border-2 border-slate-900 rounded p-1.5 font-bold font-parchment text-sm bg-white text-slate-900" value={editNodeData.day} onChange={e => setEditNodeData({...editNodeData, day: Number(e.target.value) || 1})} />
                                         </div>
                                         <div>
-                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Teşhis Edilecek Hastalık:</label>
+                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Teşis Edilecek Hastalık:</label>
                                             <select className="w-full border-2 border-slate-900 rounded p-1.5 font-bold bg-white text-slate-800 font-parchment text-sm" value={editNodeData.diseaseId} onChange={e => setEditNodeData({...editNodeData, diseaseId: e.target.value})}>
                                                 <option value="">Yok (Düz Konuşma)</option>
                                                 {gameData.diseases.map(d => <option key={d.id} value={d.id}>{t(`disease.${d.id}.name`, d.name)}</option>)}
@@ -2263,7 +2555,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     <button onClick={handleSaveNodeEdits} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2 text-sm">Düğüm Değişikliklerini Kaydet</button>
                                 </div>
                             ) : selectedNodeId ? (
-                                /* SEÇENEK (CHOICE) EKLEME PANELİ */
                                 <div className="space-y-3 bg-[#e9dbbe] p-4 rounded-xl border-2 border-slate-900 overflow-y-auto max-h-[300px]">
                                     <div className="flex justify-between items-center border-b border-slate-900/10 pb-2">
                                         <h3 className="font-bold font-magic text-sm">#{selectedNodeId} için Seçenek Ekle</h3>
@@ -2292,16 +2583,13 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                             <label htmlFor="autoCreateCheckbox" className="font-bold cursor-pointer text-slate-800 font-parchment">Yeni bir sonraki düğüm otomatik oluşturulsun</label>
                                         </div>
 
-                                        {/* GEREKSİNİMLER (REQUIREMENTS) */}
                                         <div className="border-t border-slate-900/15 pt-2 mt-2">
                                             <span className="font-bold text-red-900 font-magic block mb-2">🔴 Gereksinimler (Bizden Tüketilecekler)</span>
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                                {/* Altın */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken Altın:</label>
                                                     <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs font-bold text-slate-900 bg-white" value={newChoice.reqGold} onChange={e => setNewChoice({...newChoice, reqGold: Number(e.target.value)})} />
                                                 </div>
-                                                {/* Bitki */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken Bitki:</label>
                                                     <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.reqPlant ?? ''} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
@@ -2315,7 +2603,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                         </div>
                                                     )}
                                                 </div>
-                                                {/* İksir */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken İksir:</label>
                                                     <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.reqPotion ?? ''} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
@@ -2332,16 +2619,13 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                             </div>
                                         </div>
 
-                                        {/* ÖDÜLLER (REWARDS) */}
                                         <div className="border-t border-slate-900/15 pt-2 mt-2">
                                             <span className="font-bold text-emerald-900 font-magic block mb-2">🟢 Ödüller (Bize Verilecekler)</span>
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                                {/* Altın */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül Altın:</label>
                                                     <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs font-bold text-slate-900 bg-white" value={newChoice.rewardGold} onChange={e => setNewChoice({...newChoice, rewardGold: Number(e.target.value)})} />
                                                 </div>
-                                                {/* Bitki */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül Bitki:</label>
                                                     <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.rewardPlantId ?? ''} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
@@ -2355,7 +2639,6 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                         </div>
                                                     )}
                                                 </div>
-                                                {/* İksir */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül İksir:</label>
                                                     <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.rewardPotionId ?? ''} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
@@ -2429,34 +2712,49 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             )}
         </div>
     );
-};
+}
 
 interface PortalScreenProps {
     setAppMode: React.Dispatch<React.SetStateAction<string>>;
     setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+    setIntroPageIndex: React.Dispatch<React.SetStateAction<number>>;
+    gameData: GameData | null;
     language: string;
 }
 
-const PortalScreen: React.FC<PortalScreenProps> = ({ setAppMode, setActiveTab, language }) => (
-    <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2] flex items-center justify-center p-4 md:p-8">
-        <div className="max-w-xl w-full bg-[#2a131b] border-8 border-slate-900 p-8 rounded-3xl shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center space-y-6 relative overflow-hidden font-parchment">
-            <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-amber-500 to-red-800"></div>
-            <span className="text-8xl block animate-idle-float transform hover:scale-110">⚗️</span>
-            <div className="space-y-2">
-                <h1 className="text-4xl md:text-5xl font-bold font-magic text-amber-400">Simyacı & Şifacı</h1>
-                <p className="font-parchment text-lg text-amber-100/70">{language === 'en' ? 'Büyü Mirası World Portal' : 'Büyü Mirası ve Döngüsü Portal'}</p>
-            </div>
-            <div className="grid grid-cols-1 gap-4 pt-4 font-parchment">
-                <button onClick={() => { setAppMode('client'); setActiveTab('shopArea'); }} className="group p-5 rounded-2xl border-4 border-black bg-amber-500 hover:bg-amber-400 text-slate-955 font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between">
-                    <div><span className="font-magic block text-lg">🏪 Oyuna Gir</span></div><span className="text-2xl group-hover:translate-x-1">➡️</span>
-                </button>
-                <button onClick={() => { setAppMode('studio'); }} className="group p-5 rounded-2xl border-4 border-black bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between">
-                    <div><span className="font-magic block text-lg">🧙‍♂️ Geliştirici Stüdyosu</span></div><span className="text-2xl group-hover:translate-x-1">➡️</span>
-                </button>
+function PortalScreen({ setAppMode, setActiveTab, setIntroPageIndex, gameData, language }: PortalScreenProps): React.JSX.Element {
+    const handleStartGame = () => {
+        const pages = gameData?.introPages || [];
+        if (pages.length > 0) {
+            setIntroPageIndex(0);
+            setAppMode('intro');
+        } else {
+            setAppMode('client');
+            setActiveTab('shopArea');
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2] flex items-center justify-center p-4 md:p-8">
+            <div className="max-w-xl w-full bg-[#2a131b] border-8 border-slate-900 p-8 rounded-3xl shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center space-y-6 relative overflow-hidden font-parchment">
+                <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-amber-500 to-red-800"></div>
+                <span className="text-8xl block animate-idle-float transform hover:scale-110">⚗️</span>
+                <div className="space-y-2">
+                    <h1 className="text-4xl md:text-5xl font-bold font-magic text-amber-400">Simyacı & Şifacı</h1>
+                    <p className="font-parchment text-lg text-amber-100/70">{language === 'en' ? 'Büyü Mirası World Portal' : 'Büyü Mirası ve Döngüsü Portal'}</p>
+                </div>
+                <div className="grid grid-cols-1 gap-4 pt-4 font-parchment">
+                    <button onClick={handleStartGame} className="group p-5 rounded-2xl border-4 border-black bg-amber-500 hover:bg-amber-400 text-slate-955 font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between">
+                        <div><span className="font-magic block text-lg">🏪 Oyuna Gir</span></div><span className="text-2xl group-hover:translate-x-1">➡️</span>
+                    </button>
+                    <button onClick={() => { setAppMode('studio'); }} className="group p-5 rounded-2xl border-4 border-black bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between">
+                        <div><span className="font-magic block text-lg">🧙‍♂️ Geliştirici Stüdyosu</span></div><span className="text-2xl group-hover:translate-x-1">➡️</span>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+}
 
 // ============================================================================
 // BÖLÜM 3: ANA APP BİLEŞENİ (STATE VE HANDLER MERKEZİ)
@@ -2465,8 +2763,8 @@ const PortalScreen: React.FC<PortalScreenProps> = ({ setAppMode, setActiveTab, l
 export default function App(): React.JSX.Element {
     const [appMode, setAppMode] = useState<string>('portal');
     const [activeTab, setActiveTab] = useState<string>('shopArea');
-    const [gameData, setGameData] = useState<GameData | null>(null); // Başlangıçta boş (null) bırakıyoruz
-    const [isLoading, setIsLoading] = useState<boolean>(true); // Yüklenme durumu için yeni state
+    const [gameData, setGameData] = useState<GameData | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [language, setLanguage] = useState<string>('tr');
     const [playerState, setPlayerState] = useState<PlayerState>({ gold: 200, rentDebt: 0, inventory: { plants: { 'p_demir_ardic': 4, 'p_gumus_kok': 1, 'p_isildak_otu': 2, 'p_kara_kabuk': 3 }, potions: { 'pot_alkarisi_savar': 1 } }, knownPotions: ['pot_alkarisi_savar'] });
     const [cauldron, setCauldron] = useState<CauldronItem[]>([]);
@@ -2476,14 +2774,13 @@ export default function App(): React.JSX.Element {
     const [gameState, setGameState] = useState<GameState>({ day: 1, currentCustomer: null, rentPaidThisWeek: false, storyProgress: { 'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 }, 'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 } }, logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'] });
     const [rentPopup, setRentPopup] = useState<RentPopup>({ show: false, message: '' });
 
-    // Bileşen ilk yüklendiğinde JSON verisini çek
+    const [introPageIndex, setIntroPageIndex] = useState<number>(0);
+
     useEffect(() => {
         fetch('/assets/gameData.json')
             .then(response => {
                 if (!response.ok) throw new Error("Ağ hatası veya dosya bulunamadı");
 
-                // Gelen yanıtın Content-Type başlığını kontrol ediyoruz.
-                // Dosya bulunamadığında SPA sunucusu index.html döndürürse (HTML içeriği), bunu reddedip catch bloğuna fırlatıyoruz.
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
                     throw new TypeError("Beklenen JSON verisi alınamadı! Dosya eksik olabilir.");
@@ -2492,7 +2789,11 @@ export default function App(): React.JSX.Element {
                 return response.json();
             })
             .then(data => {
-                setGameData(data);
+                setGameData({
+                    ...INITIAL_DATA,
+                    ...data,
+                    introPages: data.introPages || INITIAL_DATA.introPages || []
+                });
                 setIsLoading(false);
             })
             .catch(error => {
@@ -2505,7 +2806,6 @@ export default function App(): React.JSX.Element {
     const t = (key: string, fallback: string = ""): string => gameData?.translations[language]?.[key] || gameData?.translations['tr']?.[key] || fallback || key;
     const addLog = (msg: string): void => setGameState(prev => ({ ...prev, logs: [msg, ...prev.logs].slice(0, 5) }));
 
-    // HANDLERS (Oyun Mantığı)
     const handleEndDay = (): void => {
         let rentOverdue = false;
         let nextRentDebt = playerState.rentDebt;
@@ -2531,17 +2831,14 @@ export default function App(): React.JSX.Element {
     const handleCallCustomer = (): void => {
         if (!gameData) return;
 
-        // availableStories filtresinde hem Choice bazlı "delayDays" kontrolü (availableDay)
-        // hem de hedef Düğüm bazlı "day" (node.day) kontrolü entegre şekilde doğrulanır!
         const availableStories = Object.entries(gameState.storyProgress)
             .filter(([sId, prog]) => {
                 if (prog.currentNodeId === 'END') return false;
                 if (prog.availableDay > gameState.day) return false;
 
-                // Hikayedeki hedef düğümü bul ve tetiklenme günü kısıtlamasını doğrula
                 const storyDef = gameData.storylines.find(s => s.id === sId);
                 const nodeDef = storyDef?.nodes.find(n => n.id === prog.currentNodeId);
-                const nodeDayReq = nodeDef?.day ?? 1; // Belirtilmemişse varsayılan 1. Gün
+                const nodeDayReq = nodeDef?.day ?? 1;
 
                 return gameState.day >= nodeDayReq;
             })
@@ -2563,7 +2860,6 @@ export default function App(): React.JSX.Element {
         const reqPotionCount = choice.reqPotionCount || 1;
         const reqPlantCount = choice.reqPlantCount || 1;
 
-        // Gereksinim Stok/Bakiye Kontrolü (Hata Koruma)
         if (cur.gold < reqGoldCount) {
             addLog(`❌ Yetersiz altın!`);
             return;
@@ -2577,7 +2873,6 @@ export default function App(): React.JSX.Element {
             return;
         }
 
-        // Eksiltmeler
         if (choice.reqGold) {
             cur.gold -= choice.reqGold;
         }
@@ -2594,7 +2889,6 @@ export default function App(): React.JSX.Element {
             };
         }
 
-        // Ödüller
         if (choice.rewardGold) {
             cur.gold += choice.rewardGold;
         }
@@ -2621,7 +2915,6 @@ export default function App(): React.JSX.Element {
             const nextNode = story?.nodes.find(n => n.id === choice.nextNodeId);
             const nextNodeDay = nextNode?.day ?? 1;
 
-            // Seçim bazlı gecikme (delayDays) ve bir sonraki düğümün gün gereksinimi (day) harmanlanır:
             const isDelayedByChoice = (choice.delayDays || 0) > 0;
             const isDelayedByNodeDay = nextNodeDay > gameState.day;
 
@@ -2827,7 +3120,8 @@ export default function App(): React.JSX.Element {
 
     return (
         <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2]">
-            {appMode === 'portal' && <PortalScreen setAppMode={setAppMode} setActiveTab={setActiveTab} language={language} />}
+            {appMode === 'portal' && <PortalScreen setAppMode={setAppMode} setActiveTab={setActiveTab} setIntroPageIndex={setIntroPageIndex} gameData={gameData} language={language} />}
+            {appMode === 'intro' && <IntroScreen gameData={gameData} pageIndex={introPageIndex} setPageIndex={setIntroPageIndex} setAppMode={setAppMode} language={language} t={t} />}
             {appMode === 'client' && <div className="p-4 md:p-8 max-w-6xl mx-auto"><GameClient gameData={gameData} gameState={gameState} playerState={playerState} cauldron={cauldron} brewState={brewState} treatmentBench={treatmentBench} treatmentStatus={treatmentStatus} language={language} setLanguage={setLanguage} setAppMode={setAppMode} activeTab={activeTab} setActiveTab={setActiveTab} t={t} handlers={handlers} /></div>}
             {appMode === 'studio' && <div className="p-4 md:p-8 max-w-6xl mx-auto"><DeveloperStudio gameData={gameData} setGameData={setGameData} setGameState={setGameState} setPlayerState={setPlayerState} setAppMode={setAppMode} t={t} /></div>}
 
