@@ -7,4 +7,11 @@ export default defineConfig({
     react(),
     tailwindcss(), // Görsel motoru Vite'e bağladık
   ],
+  server: {
+    sourcemap: true, // Geliştirme sunucusunda kaynak haritalarını zorunlu kılın
+    port: 5173       // Kullandığınız portun doğru olduğundan emin olun
+  },
+  build: {
+    sourcemap: true  // Gerekirse build süreçleri için de aktif edin
+  }
 })
