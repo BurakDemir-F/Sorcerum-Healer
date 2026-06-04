@@ -43,11 +43,21 @@ interface Choice {
     text: string;
     nextNodeId: string | null;
     delayDays?: number;
+
+    // Gereksinimler (Oyuncudan Alınacaklar)
     reqPotion?: string;
+    reqPotionCount?: number;
+    reqPlant?: string;
+    reqPlantCount?: number;
     reqGold?: number;
-    giveGold?: number;
+
+    // Ödüller (Oyuncuya Verilecekler)
+    rewardGold?: number;
     rewardPlantId?: string;
     rewardPlantCount?: number;
+    rewardPotionId?: string;
+    rewardPotionCount?: number;
+
     autoCreateNode?: boolean;
 }
 
@@ -220,13 +230,13 @@ const INITIAL_DATA: GameData = {
                 {
                     id: 'node_baran_poyraz', npcText: 'Aklım yerine geldi, zihnimdeki o uğursuz çığlıklar kesildi! Atım Poyraz bile senin şifanı övdü... Şimdi İlayda ve Derya adındaki küs nehir ruhlarını barıştırma görevim var. Bana bir parça Naiad Nefesi verirsen minnettar olurum.',
                     choices: [
-                        { text: 'Naiad Nefesi İksirini Al (İksiri Ver)', nextNodeId: 'node_baran_reconciled', reqPotion: 'pot_naiad_nefesi', delayDays: 5 },
+                        { text: 'Naiad Nefesi İksirini Al (İksiri Ver)', nextNodeId: 'node_baran_reconciled', reqPotion: 'pot_naiad_nefesi', reqPotionCount: 1, delayDays: 5 },
                         { text: 'Uzak dur benden konuşan beygir ve deliler!', nextNodeId: 'node_baran_dead', delayDays: 1 }
                     ]
                 },
                 {
                     id: 'node_baran_reconciled', npcText: 'Şifacı! Senin iksirin sayesinde nehre girdim ve İlayda ile Derya yı barıştırdım. Sana teşekkür etmek için nehrin dibinden çıkardığım bu Sihirli Buğdayı hediye ediyoruz!',
-                    choices: [{ text: 'Kendine çok iyi bak Baran.', nextNodeId: null, rewardPlantId: 'p_sihirli_bugday', rewardPlantCount: 1 }]
+                    choices: [{ text: 'Kendine çok iyi bak Baran.', nextNodeId: null, rewardPlantId: 'p_sihirli_bugday', rewardPlantCount: 1, rewardGold: 50 }]
                 },
                 {
                     id: 'node_baran_dead', npcText: 'Baran karanlığa teslim oldu... Alkarısı zihnini tamamen ele geçirdi. Çığlıklar atarak vahşi ormana karışıp kayboldu.',
@@ -650,11 +660,64 @@ const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, l
 
                             <div className="space-y-4">
                                 {activeNode.choices.map((choice, idx) => {
-                                    const hasPotion = choice.reqPotion ? (playerState.inventory.potions[choice.reqPotion] || 0) > 0 : true;
-                                    const hasGold = choice.reqGold ? playerState.gold >= choice.reqGold : true;
+                                    const reqGoldCount = choice.reqGold || 0;
+                                    const hasGold = playerState.gold >= reqGoldCount;
+
+                                    const reqPotionCount = choice.reqPotionCount || 1;
+                                    const hasPotion = choice.reqPotion
+                                        ? (playerState.inventory.potions[choice.reqPotion] || 0) >= reqPotionCount
+                                        : true;
+
+                                    const reqPlantCount = choice.reqPlantCount || 1;
+                                    const hasPlant = choice.reqPlant
+                                        ? (playerState.inventory.plants[choice.reqPlant] || 0) >= reqPlantCount
+                                        : true;
+
+                                    const canChoose = hasGold && hasPotion && hasPlant;
+
                                     return (
-                                        <button key={idx} onClick={() => handlers.handleCustomerChoice(choice, idx, activeNode!, activeStory!.id)} disabled={!hasPotion || !hasGold} className="w-full text-left p-4 rounded-xl border-2 bg-amber-100 border-slate-900 hover:bg-amber-50 flex justify-between items-center disabled:opacity-50">
+                                        <button
+                                            key={idx}
+                                            onClick={() => handlers.handleCustomerChoice(choice, idx, activeNode!, activeStory!.id)}
+                                            disabled={!canChoose}
+                                            className="w-full text-left p-4 rounded-xl border-2 bg-amber-100 border-slate-900 hover:bg-amber-50 flex flex-col justify-between items-start disabled:opacity-50 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                        >
                                             <span className="text-slate-900 font-bold">&gt; {t(`choice.${activeNode!.id}.${idx}`, choice.text)}</span>
+
+                                            {/* Alınacaklar ve Verilecekler Gösterimi */}
+                                            <div className="flex gap-2 text-[11px] mt-2 flex-wrap">
+                                                {choice.reqGold ? (
+                                                    <span className="text-red-900 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded font-bold font-sans">
+                                  Gereken: 💰 {choice.reqGold} Altın
+                                </span>
+                                                ) : null}
+                                                {choice.reqPlant ? (
+                                                    <span className="text-red-900 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded font-bold font-sans">
+                                  Gereken: 🌿 {t(`plant.${choice.reqPlant}.name`, choice.reqPlant)} (x{choice.reqPlantCount || 1})
+                                </span>
+                                                ) : null}
+                                                {choice.reqPotion ? (
+                                                    <span className="text-red-900 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded font-bold font-sans">
+                                  Gereken: 🧪 {t(`potion.${choice.reqPotion}.name`, choice.reqPotion)} (x{choice.reqPotionCount || 1})
+                                </span>
+                                                ) : null}
+
+                                                {choice.rewardGold ? (
+                                                    <span className="text-emerald-900 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded font-bold font-sans">
+                                  Ödül: 💰 {choice.rewardGold} Altın
+                                </span>
+                                                ) : null}
+                                                {choice.rewardPlantId ? (
+                                                    <span className="text-emerald-900 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded font-bold font-sans">
+                                  Ödül: 🌿 {t(`plant.${choice.rewardPlantId}.name`, choice.rewardPlantId)} (x{choice.rewardPlantCount || 1})
+                                </span>
+                                                ) : null}
+                                                {choice.rewardPotionId ? (
+                                                    <span className="text-emerald-900 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded font-bold font-sans">
+                                  Ödül: 🧪 {t(`potion.${choice.rewardPotionId}.name`, choice.rewardPotionId)} (x{choice.rewardPotionCount || 1})
+                                </span>
+                                                ) : null}
+                                            </div>
                                         </button>
                                     );
                                 })}
@@ -917,7 +980,41 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const [activeEditorStoryId, setActiveEditorStoryId] = useState<string>('story_baran');
     const [newStoryline, setNewStoryline] = useState<{ id: string; characterName: string; avatarUrl: string }>({ id: '', characterName: '', avatarUrl: '' });
     const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '' });
-    const [newChoice, setNewChoice] = useState<{ text: string; nextNodeId: string; reqPotion: string; reqGold: number; giveGold: number; rewardPlantCount: number; delayDays: number; autoCreateNode: boolean }>({ text: '', nextNodeId: '', reqPotion: '', reqGold: 0, giveGold: 0, rewardPlantCount: 1, delayDays: 0, autoCreateNode: false });
+
+    const [newChoice, setNewChoice] = useState<{
+        text: string;
+        nextNodeId: string;
+        delayDays: number;
+        autoCreateNode: boolean;
+        // Gereksinimler (Requirements)
+        reqGold: number;
+        reqPlant: string;
+        reqPlantCount: number;
+        reqPotion: string;
+        reqPotionCount: number;
+        // Ödüller (Rewards)
+        rewardGold: number;
+        rewardPlantId: string;
+        rewardPlantCount: number;
+        rewardPotionId: string;
+        rewardPotionCount: number;
+    }>({
+        text: '',
+        nextNodeId: '',
+        delayDays: 0,
+        autoCreateNode: false,
+        reqGold: 0,
+        reqPlant: '',
+        reqPlantCount: 1,
+        reqPotion: '',
+        reqPotionCount: 1,
+        rewardGold: 0,
+        rewardPlantId: '',
+        rewardPlantCount: 1,
+        rewardPotionId: '',
+        rewardPotionCount: 1
+    });
+
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const [importText, setImportText] = useState<string>('');
     const [importStatus, setImportStatus] = useState<string>('');
@@ -1171,6 +1268,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         });
         setNewNode({id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: ''});
     };
+
     const handleAddChoiceToNodeAdv = (nodeId: string): void => {
         let targetNextNodeId: string | null = newChoice.nextNodeId || null;
         const extraNodes: StoryNode[] = [];
@@ -1184,10 +1282,20 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             text: newChoice.text,
             nextNodeId: targetNextNodeId,
             delayDays: newChoice.delayDays || undefined,
+
+            // Alınacaklar
+            reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined,
+            reqPlant: newChoice.reqPlant || undefined,
+            reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined,
             reqPotion: newChoice.reqPotion || undefined,
-            reqGold: newChoice.reqGold || undefined,
-            giveGold: newChoice.giveGold || undefined,
-            rewardPlantCount: newChoice.rewardPlantCount || undefined,
+            reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined,
+
+            // Ödüller
+            rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined,
+            rewardPlantId: newChoice.rewardPlantId || undefined,
+            rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined,
+            rewardPotionId: newChoice.rewardPotionId || undefined,
+            rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined
         };
 
         // Eklenen seçeneğin çevirisini otomatik dil veritabanına ekle
@@ -1211,7 +1319,22 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
         setSelectedNodeId(null);
-        setNewChoice({ text: '', nextNodeId: '', reqPotion: '', reqGold: 0, giveGold: 0, rewardPlantCount: 1, delayDays: 0, autoCreateNode: false }); // Seçim formunu temizle
+        setNewChoice({
+            text: '',
+            nextNodeId: '',
+            delayDays: 0,
+            autoCreateNode: false,
+            reqGold: 0,
+            reqPlant: '',
+            reqPlantCount: 1,
+            reqPotion: '',
+            reqPotionCount: 1,
+            rewardGold: 0,
+            rewardPlantId: '',
+            rewardPlantCount: 1,
+            rewardPotionId: '',
+            rewardPotionCount: 1
+        }); // Seçim formunu temizle
     };
 
     const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
@@ -1236,8 +1359,18 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         {node.choices.map((choice, idx) => (
                             <div key={idx} className="flex flex-col items-center relative pt-4 min-w-[200px]">
                                 <div className="absolute top-0 left-1/2 w-1 h-4 bg-slate-900 -translate-x-1/2"></div>
-                                <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3">
+                                <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3 space-y-1">
                                     <p className="font-bold">{t(`choice.${node.id}.${idx}`, choice.text)}</p>
+
+                                    {/* Seçenek Preview Detayı */}
+                                    <div className="text-[9px] text-slate-600 flex flex-col items-center leading-tight">
+                                        {choice.reqGold ? <span>💸 -💰{choice.reqGold} Altın</span> : null}
+                                        {choice.reqPlant ? <span>💸 -🌿{choice.reqPlant} (x{choice.reqPlantCount || 1})</span> : null}
+                                        {choice.reqPotion ? <span>💸 -🧪{choice.reqPotion} (x{choice.reqPotionCount || 1})</span> : null}
+                                        {choice.rewardGold ? <span>🎁 +💰{choice.rewardGold} Altın</span> : null}
+                                        {choice.rewardPlantId ? <span>🎁 +🌿{choice.rewardPlantId} (x{choice.rewardPlantCount || 1})</span> : null}
+                                        {choice.rewardPotionId ? <span>🎁 +🧪{choice.rewardPotionId} (x{choice.rewardPotionCount || 1})</span> : null}
+                                    </div>
                                 </div>
                                 {renderVisualNode(story, choice.nextNodeId || '', nextVisited)}
                             </div>
@@ -1279,17 +1412,17 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                    placeholder="İsim" value={newPotion.name}
                    onChange={e => setNewPotion({...newPotion, name: e.target.value})}/>
             <div className="flex gap-2">
-                <select className="bg-amber-50 border-2 border-slate-900 p-2 flex-1 rounded" value={tempIngredient.id}
+                <select className="bg-amber-50 border-2 border-slate-900 p-2 flex-1 rounded text-xs font-bold" value={tempIngredient.id}
                         onChange={e => setTempIngredient({...tempIngredient, id: e.target.value, type: e.target.value.startsWith('pot_') ? 'potion' : 'plant'})}>
                     <option value="">İçerik Seç...</option>
                     {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                 </select>
-                <button onClick={handleAddTempIngredient} className="bg-indigo-600 text-white px-4 rounded-lg font-bold border-2 border-black">Ekle</button>
+                <button onClick={handleAddTempIngredient} className="bg-indigo-600 text-white px-4 rounded-lg font-bold border-2 border-black text-xs">Ekle</button>
             </div>
             <div className="space-y-1">{newPotion.ingredients.map((ing, idx) => <div key={idx}
-                                                                                     className="bg-amber-50 p-1 border">{ing.id} x{ing.count}</div>)}</div>
+                                                                                     className="bg-amber-50 p-1 border text-xs">{ing.id} x{ing.count}</div>)}</div>
 
-            {/* İksirin İyi Geldiği Hastalıklar (Yeni Özellik) */}
+            {/* İksirin İyi Geldiği Hastalıklar */}
             <div className="pt-2">
                 <label className="text-xs font-bold text-slate-700 block mb-1">Tedavi Ettiği Hastalıklar:</label>
                 <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
@@ -1327,7 +1460,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         </div>;
     }
 
-    // Yeni Hastalık Yaratma Arayüzü (Yeni Metot)
+    // Yeni Hastalık Yaratma Arayüzü
     function renderCreateDisease(): React.JSX.Element {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
@@ -1388,7 +1521,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         );
     }
 
-    // Semptom ve Nitelik Yönetim Arayüzü (Yeni Metot)
+    // Semptom ve Nitelik Yönetim Arayüzü
     function renderManagePropertiesAndSymptoms(): React.JSX.Element {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
@@ -1470,7 +1603,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         );
     }
 
-    // Kayıtlı Hastalıkları ve İksirleri Gösteren Stüdyo Tablosu (Yeni Metot)
+    // Kayıtlı Hastalıkları ve İksirleri Gösteren Stüdyo Tablosu
     function renderStudioDiseasesAndPotions(gameData: GameData, t: (key: string, fallback?: string) => string): React.JSX.Element {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6 col-span-1 lg:col-span-2">
@@ -1582,7 +1715,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 {[
                     { id: 'dataEditor', label: '🌿 Element & Reçete' },
                     { id: 'dialogueEditor', label: '💬 Diyalog Ağacı' },
-                    { id: 'marketEditor', label: '🛒 Market Düzenleyici' }, // Yeni Tab
+                    { id: 'marketEditor', label: '🛒 Market Düzenleyici' },
                     { id: 'translationEditor', label: '🌍 Lokalizasyon' },
                     { id: 'jsonHub', label: '📂 JSON Motoru' }
                 ].map(tab => (
@@ -1722,10 +1855,117 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         </div>
                         <div className="bg-[#f3e8d2] border-t-4 border-slate-900 p-4">
                             {selectedNodeId ? (
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center"><h3 className="font-bold">#{selectedNodeId} için Seçenek</h3><button onClick={() => setSelectedNodeId(null)}>✕</button></div>
-                                    <input className="w-full border-2 p-2" placeholder="Metin" value={newChoice.text} onChange={e => setNewChoice({...newChoice, text: e.target.value})} />
-                                    <button onClick={() => handleAddChoiceToNodeAdv(selectedNodeId!)} className="w-full bg-emerald-500 p-2 rounded-xl">Kaydet</button>
+                                <div className="space-y-3 bg-[#e9dbbe] p-4 rounded-xl border-2 border-slate-900 overflow-y-auto max-h-[500px]">
+                                    <div className="flex justify-between items-center border-b border-slate-900/10 pb-2">
+                                        <h3 className="font-bold font-magic text-sm">#{selectedNodeId} için Seçenek Ekle</h3>
+                                        <button onClick={() => setSelectedNodeId(null)} className="font-bold text-red-800">✕</button>
+                                    </div>
+
+                                    <div className="space-y-2 text-xs">
+                                        <div>
+                                            <label className="font-bold block mb-1">Seçenek Metni (Görünen Buton Metni):</label>
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-bold" placeholder="Örn: Alkarısı Savar İksirini Al" value={newChoice.text} onChange={e => setNewChoice({...newChoice, text: e.target.value})} />
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <label className="font-bold block mb-1">Hedef Düğüm ID'si:</label>
+                                                <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono" placeholder="node_baran_reconciled" value={newChoice.nextNodeId} onChange={e => setNewChoice({...newChoice, nextNodeId: e.target.value})} />
+                                            </div>
+                                            <div>
+                                                <label className="font-bold block mb-1">Gecikme Günü (delayDays):</label>
+                                                <input type="number" className="w-full border-2 border-slate-900 rounded p-1.5" value={newChoice.delayDays} onChange={e => setNewChoice({...newChoice, delayDays: Number(e.target.value)})} />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2 py-1 bg-amber-50 p-2 rounded border border-slate-400">
+                                            <input type="checkbox" id="autoCreateCheckbox" checked={newChoice.autoCreateNode} onChange={e => setNewChoice({...newChoice, autoCreateNode: e.target.checked})} />
+                                            <label htmlFor="autoCreateCheckbox" className="font-bold cursor-pointer text-slate-800">Yeni bir sonraki düğüm otomatik oluşturulsun</label>
+                                        </div>
+
+                                        {/* GEREKSİNİMLER (REQUIREMENTS) */}
+                                        <div className="border-t border-slate-900/15 pt-2 mt-2">
+                                            <span className="font-bold text-red-900 font-magic block mb-2">🔴 Gereksinimler (Bizden Tüketilecekler)</span>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                                {/* Altın */}
+                                                <div className="bg-red-50/50 p-2 rounded border border-red-200">
+                                                    <label className="font-bold block mb-1 text-red-955">Gereken Altın:</label>
+                                                    <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs" value={newChoice.reqGold} onChange={e => setNewChoice({...newChoice, reqGold: Number(e.target.value)})} />
+                                                </div>
+                                                {/* Bitki */}
+                                                <div className="bg-red-50/50 p-2 rounded border border-red-200">
+                                                    <label className="font-bold block mb-1 text-red-955">Gereken Bitki:</label>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.reqPlant} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
+                                                        <option value="">Yok...</option>
+                                                        {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
+                                                    </select>
+                                                    {newChoice.reqPlant && (
+                                                        <div className="mt-1">
+                                                            <label className="text-[10px] block">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.reqPlantCount} onChange={e => setNewChoice({...newChoice, reqPlantCount: Number(e.target.value)})} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {/* İksir */}
+                                                <div className="bg-red-50/50 p-2 rounded border border-red-200">
+                                                    <label className="font-bold block mb-1 text-red-955">Gereken İksir:</label>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.reqPotion} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
+                                                        <option value="">Yok...</option>
+                                                        {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
+                                                    </select>
+                                                    {newChoice.reqPotion && (
+                                                        <div className="mt-1">
+                                                            <label className="text-[10px] block">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.reqPotionCount} onChange={e => setNewChoice({...newChoice, reqPotionCount: Number(e.target.value)})} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* ÖDÜLLER (REWARDS) */}
+                                        <div className="border-t border-slate-900/15 pt-2 mt-2">
+                                            <span className="font-bold text-emerald-900 font-magic block mb-2">🟢 Ödüller (Bize Verilecekler)</span>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                                {/* Altın */}
+                                                <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
+                                                    <label className="font-bold block mb-1 text-emerald-955">Ödül Altın:</label>
+                                                    <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs" value={newChoice.rewardGold} onChange={e => setNewChoice({...newChoice, rewardGold: Number(e.target.value)})} />
+                                                </div>
+                                                {/* Bitki */}
+                                                <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
+                                                    <label className="font-bold block mb-1 text-emerald-955">Ödül Bitki:</label>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.rewardPlantId} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
+                                                        <option value="">Yok...</option>
+                                                        {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
+                                                    </select>
+                                                    {newChoice.rewardPlantId && (
+                                                        <div className="mt-1">
+                                                            <label className="text-[10px] block">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.rewardPlantCount} onChange={e => setNewChoice({...newChoice, rewardPlantCount: Number(e.target.value)})} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {/* İksir */}
+                                                <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
+                                                    <label className="font-bold block mb-1 text-emerald-955">Ödül İksir:</label>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.rewardPotionId} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
+                                                        <option value="">Yok...</option>
+                                                        {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
+                                                    </select>
+                                                    {newChoice.rewardPotionId && (
+                                                        <div className="mt-1">
+                                                            <label className="text-[10px] block">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.rewardPotionCount} onChange={e => setNewChoice({...newChoice, rewardPotionCount: Number(e.target.value)})} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <button onClick={() => handleAddChoiceToNodeAdv(selectedNodeId!)} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-955 font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2">Seçeneği Düğüme Ekle</button>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-3 gap-4">
@@ -1888,22 +2128,61 @@ export default function App(): React.JSX.Element {
 
     const handleCustomerChoice = (choice: Choice, idx: number, activeNode: StoryNode, storyId: string): void => {
         const cur = { ...playerState };
-        if (choice.reqPotion) {
-            if ((cur.inventory.potions[choice.reqPotion] || 0) <= 0) {
-                addLog(`❌ ${t(`potion.${choice.reqPotion}.name`)} gerekiyor!`);
-                return;
-            }
-            cur.inventory.potions = { ...cur.inventory.potions, [choice.reqPotion]: cur.inventory.potions[choice.reqPotion] - 1 };
-        }
-        if (choice.reqGold && cur.gold < choice.reqGold) {
+
+        const reqGoldCount = choice.reqGold || 0;
+        const reqPotionCount = choice.reqPotionCount || 1;
+        const reqPlantCount = choice.reqPlantCount || 1;
+
+        // Gereksinim Stok/Bakiye Kontrolü (Hata Koruma)
+        if (cur.gold < reqGoldCount) {
             addLog(`❌ Yetersiz altın!`);
             return;
         }
-        if (choice.reqGold) cur.gold -= choice.reqGold;
-
-        if (choice.rewardPlantId) {
-            cur.inventory.plants = { ...cur.inventory.plants, [choice.rewardPlantId]: (cur.inventory.plants[choice.rewardPlantId] || 0) + (choice.rewardPlantCount || 1) };
+        if (choice.reqPotion && (cur.inventory.potions[choice.reqPotion] || 0) < reqPotionCount) {
+            addLog(`❌ ${t(`potion.${choice.reqPotion}.name`)} yetersiz!`);
+            return;
         }
+        if (choice.reqPlant && (cur.inventory.plants[choice.reqPlant] || 0) < reqPlantCount) {
+            addLog(`❌ ${t(`plant.${choice.reqPlant}.name`)} yetersiz!`);
+            return;
+        }
+
+        // Eksiltmeler
+        if (choice.reqGold) {
+            cur.gold -= choice.reqGold;
+        }
+        if (choice.reqPotion) {
+            cur.inventory.potions = {
+                ...cur.inventory.potions,
+                [choice.reqPotion]: cur.inventory.potions[choice.reqPotion] - reqPotionCount
+            };
+        }
+        if (choice.reqPlant) {
+            cur.inventory.plants = {
+                ...cur.inventory.plants,
+                [choice.reqPlant]: cur.inventory.plants[choice.reqPlant] - reqPlantCount
+            };
+        }
+
+        // Ödüller
+        if (choice.rewardGold) {
+            cur.gold += choice.rewardGold;
+        }
+        if (choice.rewardPlantId) {
+            const rewardCount = choice.rewardPlantCount || 1;
+            cur.inventory.plants = {
+                ...cur.inventory.plants,
+                [choice.rewardPlantId]: (cur.inventory.plants[choice.rewardPlantId] || 0) + rewardCount
+            };
+        }
+        if (choice.rewardPotionId) {
+            const rewardCount = choice.rewardPotionCount || 1;
+            cur.inventory.potions = {
+                ...cur.inventory.potions,
+                [choice.rewardPotionId]: (cur.inventory.potions[choice.rewardPotionId] || 0) + rewardCount
+            };
+        }
+
         setPlayerState(cur);
 
         const updProgress = { ...gameState.storyProgress };
