@@ -282,7 +282,7 @@ const INITIAL_DATA: GameData = {
             "ui.pantry": "Kiler Çantası", "ui.treatment_bench": "Teşhis & Tedavi Masası", "ui.apply_treatment": "Tedaviyi Uygula",
             "ui.buy": "Satın Al", "ui.stock": "Stok", "ui.rent_popup_title": "Haciz & Borç Mektubu", "ui.sign_letter": "Mektubu İmzala (Altınlar Kesilsin)",
             "ui.empty_bench": "Şifa masası boş. Aşağıdan bitki veya iksir diz!", "ui.fill_bench": "Tezgahı Doldur (Envanterinden Seç):",
-            "ui.diagnosis": "Teşhis", "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
+            "ui.diagnosis": "Teşhes", "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
             "char.story_baran": "Genç Druid Baran", "char.story_landlord": "Tahsildar Kazım",
             "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı", "plant.p_gumus_kok.name": "Gümüş Kök",
             "plant.p_isildak_otu.name": "Işıldak Otu", "plant.p_sihirli_bugday.name": "Sihirli Buğday",
@@ -436,77 +436,6 @@ function renderPotions(t: (key: string, fallback?: string) => string, playerStat
     );
 }
 
-function renderStudioPlantsList(gameData: GameData, t: (key: string, fallback?: string) => string, onEdit?: (plant: Plant) => void): React.JSX.Element {
-    return (
-        <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4 col-span-1 lg:col-span-2">
-            <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2 flex items-center gap-2">
-                📦 Sistem Veritabanındaki Kayıtlı Tüm Bitkiler ({gameData.plants.length})
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[360px] overflow-y-auto pr-2">
-                {gameData.plants.map(plant => {
-                    const symptoms = getHerbCuredSymptoms(plant.id, gameData);
-
-                    const rarityColors: Record<string, string> = {
-                        'Yaygın': 'bg-slate-200 text-slate-800 border-slate-400',
-                        'Normal': 'bg-blue-100 text-blue-800 border-blue-400',
-                        'Nadir': 'bg-purple-100 text-purple-800 border-purple-400',
-                        'Efsanevi': 'bg-amber-100 text-amber-955 border-amber-500 animate-pulse'
-                    };
-                    const rarityColor = rarityColors[plant.rarity] || 'bg-slate-100 text-slate-700 border-slate-300';
-
-                    return (
-                        <div key={plant.id} className="bg-amber-50/70 p-4 rounded-xl border-2 border-slate-900 flex flex-col justify-between space-y-3 shadow-sm hover:shadow-md transition-shadow relative">
-                            <div>
-                                <div className="flex justify-between items-start gap-2">
-                                    <div>
-                                        <h3 className="font-bold text-lg text-slate-900 leading-tight">{t(`plant.${plant.id}.name`, plant.name)}</h3>
-                                        <span className="text-xs font-mono text-indigo-900 block font-semibold mt-0.5">ID: #{plant.id}</span>
-                                    </div>
-                                    <span className={`text-[10px] px-2 py-0.5 rounded-full border-2 font-bold whitespace-nowrap ${rarityColor}`}>
-                    {plant.rarity}
-                  </span>
-                                </div>
-
-                                <div className="mt-3 space-y-1.5 border-t border-dashed border-slate-900/10 pt-2 text-xs text-slate-700">
-                                    <p className="leading-snug">
-                                        <strong className="text-slate-900 font-magic">🌿 Nitelikler:</strong> {plant.properties.map(p => t(`prop.${p}`, p)).join(', ') || 'Belirtilmemiş'}
-                                    </p>
-                                    <div className="leading-snug">
-                                        <strong className="text-slate-900 font-magic">⚡ Giderdiği Semptomlar:</strong>
-                                        <div className="flex flex-wrap gap-1 mt-1">
-                                            {symptoms.length > 0 ? (
-                                                symptoms.map(s => (
-                                                    <span key={s} className="bg-emerald-100 border border-emerald-400 text-emerald-800 px-1.5 py-0.5 rounded text-[10px] font-bold font-sans">
-                            {t(`symptom.${s}`, s)}
-                          </span>
-                                                ))
-                                            ) : (
-                                                <span className="text-slate-500 italic text-[10px]">Herhangi bir semptom gidermiyor.</span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="pt-2 border-t border-slate-900/10 flex justify-between items-center text-xs">
-                                <span className="text-slate-500">Maliyet: <strong className="font-magic font-bold text-red-955 text-[13px]">💰 {plant.cost}</strong></span>
-                                {onEdit && (
-                                    <button
-                                        onClick={() => onEdit(plant)}
-                                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-2 py-0.5 rounded border-2 border-black font-bold font-magic"
-                                    >
-                                        ✏️ Düzenle
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-}
-
 interface SidePanelProps {
     playerState: PlayerState;
     gameState: GameState;
@@ -626,7 +555,7 @@ const ShopArea: React.FC<ShopAreaProps> = ({ gameState, playerState, gameData, l
                                     <div className="bg-[#dfd1b3] p-4 rounded-xl border-2 border-slate-900 min-h-[65px] flex flex-wrap gap-2 items-center">
                                         {treatmentBench.length === 0 && <span className="text-sm text-slate-600 italic">{t('ui.empty_bench')}</span>}
                                         {treatmentBench.map((item, index) => (
-                                            <button key={index} onClick={() => handlers.handleRemoveFromTreatmentBench(index)} className="bg-[#f3e8d2] border-2 border-slate-900 text-slate-900 hover:bg-red-800 hover:text-white px-3 py-1 rounded-lg font-bold">
+                                            <button key={index} onClick={() => handlers.handleRemoveFromTreatmentBench(index)} className="bg-[#f3e8d2] border-2 border-slate-900 text-slate-955 hover:bg-red-800 hover:text-white px-3 py-1 rounded-lg font-bold">
                                                 {item.type === 'plant' ? '🌿' : '🧪'} {item.type === 'plant' ? t(`plant.${item.id}.name`) : t(`potion.${item.id}.name`)} ✕
                                             </button>
                                         ))}
@@ -1175,7 +1104,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         setNewPotion({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
     };
 
-    // Diyalog Düğümü (Node) Düzenleme Kaydı (Yeni Metot)
+    // Diyalog Düğümü (Node) Düzenleme Kaydı
     const handleSaveNodeEdits = (): void => {
         if (!activeEditorStoryId || !editingNodeId) return;
         handleTranslateChange('tr', `node.${editingNodeId}.npcText`, editNodeData.npcText);
@@ -1414,214 +1343,148 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         }); // Seçim formunu temizle
     };
 
-    const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
-        if (visited.has(nodeId)) return <div className="text-xs text-red-955 font-bold p-2 bg-red-100 rounded border-2">Döngü Tespit Edildi</div>;
-        const nextVisited = new Set(visited);
-        nextVisited.add(nodeId);
-        const node = story.nodes.find(n => n.id === nodeId);
-        if (!node) return <div className="text-slate-600 text-xs italic p-2 bg-amber-50 rounded border border-dashed">Diyalog Bitiş</div>;
+    // ============================================================================
+    // CLOSURE-SCOPED GÜVENLİ VIEW METOTLARI (YUKARIDA DEĞİL, STATE BİLGİSİNDEN ÖTÜRÜ BURADA)
+    // ============================================================================
 
+    const renderCreatePlant = (): React.JSX.Element => {
+        const isEditing = editingPlantId !== null;
         return (
-            <div className="flex flex-col items-center relative mt-4 font-parchment">
-                <div className="bg-[#f3e8d2] border-4 border-slate-900 rounded-2xl p-4 w-72 shadow-md relative z-10">
-                    <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-mono font-bold text-indigo-900">#{node.id}</span>
-                    </div>
-                    <p className="text-sm font-bold">"{node.npcText}"</p>
-
-                    {/* Düğüm Aksiyon Butonları (Pencil ✏️ ve Choice ➕) */}
-                    <div className="absolute -right-3 -top-3 flex gap-1">
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                <div className="flex justify-between items-center border-b border-slate-900/10 pb-1">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900">{isEditing ? `🌿 Bitkiyi Düzenle (#${editingPlantId})` : '🌿 Yeni Bitki Yarat'}</h2>
+                    {isEditing && (
                         <button
                             onClick={() => {
-                                setEditingNodeId(node.id);
-                                setEditNodeData({
-                                    npcText: node.npcText,
-                                    diseaseId: node.diseaseId || '',
-                                    dynamicSuccessNodeId: node.dynamicSuccessNodeId || '',
-                                    dynamicFailNodeId: node.dynamicFailNodeId || ''
-                                });
+                                setEditingPlantId(null);
+                                setNewPlant({ id: '', name: '', rarity: 'Yaygın', cost: 10, properties: [], imageUrl: '' });
                             }}
-                            className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-slate-955 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow"
-                            title="Düğümü Düzenle"
+                            className="bg-red-800 text-white font-sans text-xs font-bold px-2 py-0.5 rounded border border-black shadow"
                         >
-                            ✏️
+                            Vazgeç
                         </button>
-                        <button
-                            onClick={() => setSelectedNodeId(node.id)}
-                            className="bg-emerald-500 hover:bg-emerald-400 border-2 border-black text-slate-955 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow"
-                            title="Seçenek Ekle"
-                        >
-                            ➕
-                        </button>
+                    )}
+                </div>
+                <input
+                    disabled={isEditing}
+                    className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold disabled:opacity-50"
+                    placeholder="ID (p_mavi)"
+                    value={isEditing ? editingPlantId : newPlant.id}
+                    onChange={e => setNewPlant({...newPlant, id: e.target.value})}
+                />
+                <input className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold" placeholder="İsim"
+                       value={newPlant.name} onChange={e => setNewPlant({...newPlant, name: e.target.value})}/>
+
+                <div className="grid grid-cols-2 gap-2">
+                    <div>
+                        <label className="text-xs font-bold block mb-1">Nadirlik Derecesi</label>
+                        <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm" value={newPlant.rarity} onChange={e => setNewPlant({...newPlant, rarity: e.target.value})}>
+                            <option value="Yaygın">Yaygın</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Nadir">Nadir</option>
+                            <option value="Efsanevi">Efsanevi</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold block mb-1">Değeri (Maliyet)</label>
+                        <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={newPlant.cost} onChange={e => setNewPlant({...newPlant, cost: Number(e.target.value)})} />
                     </div>
                 </div>
-                {node.choices && node.choices.length > 0 && (
-                    <div className="flex gap-6 relative pt-6">
-                        <div className="absolute top-0 left-1/2 w-1 h-6 bg-slate-900 -translate-x-1/2"></div>
-                        {node.choices.map((choice, idx) => (
-                            <div key={idx} className="flex flex-col items-center relative pt-4 min-w-[200px]">
-                                <div className="absolute top-0 left-1/2 w-1 h-4 bg-slate-900 -translate-x-1/2"></div>
-                                <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3 space-y-1">
-                                    <p className="font-bold">{t(`choice.${node.id}.${idx}`, choice.text)}</p>
 
-                                    {/* Seçenek Preview Detayı */}
-                                    <div className="text-[9px] text-slate-600 flex flex-col items-center leading-tight">
-                                        {choice.reqGold ? <span>💸 -💰{choice.reqGold} Altın</span> : null}
-                                        {choice.reqPlant ? <span>💸 -🌿{choice.reqPlant} (x{choice.reqPlantCount || 1})</span> : null}
-                                        {choice.reqPotion ? <span>💸 -🧪{choice.reqPotion} (x{choice.reqPotionCount || 1})</span> : null}
-                                        {choice.rewardGold ? <span>🎁 +💰{choice.rewardGold} Altın</span> : null}
-                                        {choice.rewardPlantId ? <span>🎁 +🌿{choice.rewardPlantId} (x{choice.rewardPlantCount || 1})</span> : null}
-                                        {choice.rewardPotionId ? <span>🎁 +🧪{choice.rewardPotionId} (x{choice.rewardPotionCount || 1})</span> : null}
-                                    </div>
-                                </div>
-                                {renderVisualNode(story, choice.nextNodeId || '', nextVisited)}
-                            </div>
-                        ))}
-                    </div>
-                )}
+                <div className="flex flex-wrap gap-2 mb-2 p-4 border-2 border-slate-900/30 rounded-xl bg-amber-100/30">
+                    {gameData.plantProperties.map(prop => (
+                        <button key={prop.name} onClick={() => toggleProp(prop.name)}
+                                className={`text-sm px-3 py-1 rounded-xl border-2 ${newPlant.properties.includes(prop.name) ? 'bg-emerald-600 text-white' : 'bg-amber-100 border-slate-700'}`}>{prop.name}</button>
+                    ))}
+                </div>
+                <button onClick={handleAddPlant}
+                        className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    {isEditing ? "Bitki Değişikliklerini Kaydet" : "Kaydet"}
+                </button>
             </div>
         );
     };
 
-    // Bitki Oluşturma & Düzenleme Arayüzü
-    function renderCreatePlant(): React.JSX.Element {
-        const isEditing = editingPlantId !== null;
-        return <div
-            className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-900/10 pb-1">
-                <h2 className="text-2xl font-bold font-magic text-slate-900">{isEditing ? `🌿 Bitkiyi Düzenle (#${editingPlantId})` : '🌿 Yeni Bitki Yarat'}</h2>
-                {isEditing && (
-                    <button
-                        onClick={() => {
-                            setEditingPlantId(null);
-                            setNewPlant({ id: '', name: '', rarity: 'Yaygın', cost: 10, properties: [], imageUrl: '' });
-                        }}
-                        className="bg-red-800 text-white font-sans text-xs font-bold px-2 py-0.5 rounded border border-black shadow"
-                    >
-                        Vazgeç
-                    </button>
-                )}
-            </div>
-            <input
-                disabled={isEditing}
-                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold disabled:opacity-50"
-                placeholder="ID (p_mavi)"
-                value={isEditing ? editingPlantId : newPlant.id}
-                onChange={e => setNewPlant({...newPlant, id: e.target.value})}
-            />
-            <input className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold" placeholder="İsim"
-                   value={newPlant.name} onChange={e => setNewPlant({...newPlant, name: e.target.value})}/>
-
-            <div className="grid grid-cols-2 gap-2">
-                <div>
-                    <label className="text-xs font-bold block mb-1">Nadirlik Derecesi</label>
-                    <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={newPlant.rarity} onChange={e => setNewPlant({...newPlant, rarity: e.target.value})}>
-                        <option value="Yaygın">Yaygın</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Nadir">Nadir</option>
-                        <option value="Efsanevi">Efsanevi</option>
-                    </select>
-                </div>
-                <div>
-                    <label className="text-xs font-bold block mb-1">Değeri (Maliyet)</label>
-                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={newPlant.cost} onChange={e => setNewPlant({...newPlant, cost: Number(e.target.value)})} />
-                </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2 mb-2 p-4 border-2 border-slate-900/30 rounded-xl bg-amber-100/30">
-                {gameData.plantProperties.map(prop => (
-                    <button key={prop.name} onClick={() => toggleProp(prop.name)}
-                            className={`text-sm px-3 py-1 rounded-xl border-2 ${newPlant.properties.includes(prop.name) ? 'bg-emerald-600 text-white' : 'bg-amber-100 border-slate-700'}`}>{prop.name}</button>
-                ))}
-            </div>
-            <button onClick={handleAddPlant}
-                    className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                {isEditing ? "Bitki Değişikliklerini Kaydet" : "Kaydet"}
-            </button>
-        </div>;
-    }
-
-    // İksir Oluşturma & Düzenleme Arayüzü
-    function renderCreatePotion(): React.JSX.Element {
+    const renderCreatePotion = (): React.JSX.Element => {
         const isEditing = editingPotionId !== null;
-        return <div
-            className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-900/10 pb-1">
-                <h2 className="text-2xl font-bold font-magic text-slate-900">{isEditing ? `⚗️ İksiri Düzenle (#${editingPotionId})` : '⚗️ Yeni İksir Formülü'}</h2>
-                {isEditing && (
-                    <button
-                        onClick={() => {
-                            setEditingPotionId(null);
-                            setNewPotion({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
-                        }}
-                        className="bg-red-800 text-white font-sans text-xs font-bold px-2 py-0.5 rounded border border-black shadow"
-                    >
-                        Vazgeç
-                    </button>
-                )}
-            </div>
-            <input
-                disabled={isEditing}
-                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold disabled:opacity-50"
-                placeholder="ID (pot_hiz)"
-                value={isEditing ? editingPotionId : newPotion.id}
-                onChange={e => setNewPotion({...newPotion, id: e.target.value})}
-            />
-            <input className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold"
-                   placeholder="İsim" value={newPotion.name}
-                   onChange={e => setNewPotion({...newPotion, name: e.target.value})}/>
-            <div className="flex gap-2">
-                <select className="bg-amber-50 border-2 border-slate-900 p-2 flex-1 rounded text-xs font-bold" value={tempIngredient.id}
-                        onChange={e => setTempIngredient({...tempIngredient, id: e.target.value, type: e.target.value.startsWith('pot_') ? 'potion' : 'plant'})}>
-                    <option value="">İçerik Seç...</option>
-                    {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
-                </select>
-                <button onClick={handleAddTempIngredient} className="bg-indigo-600 text-white px-4 rounded-lg font-bold border-2 border-black text-xs">Ekle</button>
-            </div>
-            <div className="space-y-1">{newPotion.ingredients.map((ing, idx) => <div key={idx}
-                                                                                     className="bg-amber-50 p-1 border text-xs">{ing.id} x{ing.count}</div>)}</div>
-
-            {/* İksirin İyi Geldiği Hastalıklar */}
-            <div className="pt-2">
-                <label className="text-xs font-bold text-slate-700 block mb-1">Tedavi Ettiği Hastalıklar:</label>
-                <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
-                    {gameData.diseases.map(dis => {
-                        const isChecked = newPotion.curesDiseaseIds.includes(dis.id);
-                        return (
-                            <button
-                                key={dis.id}
-                                type="button"
-                                onClick={() => {
-                                    setNewPotion(prev => ({
-                                        ...prev,
-                                        curesDiseaseIds: isChecked
-                                            ? prev.curesDiseaseIds.filter(id => id !== dis.id)
-                                            : [...prev.curesDiseaseIds, dis.id]
-                                    }));
-                                }}
-                                className={`text-left text-[10px] p-1.5 rounded border-2 flex items-center gap-1 transition-all ${
-                                    isChecked
-                                        ? 'bg-purple-800 border-black text-white font-bold'
-                                        : 'bg-amber-50 border-slate-300 text-slate-600'
-                                }`}
-                            >
-                                <span>{isChecked ? '✓' : 'o'}</span>
-                                <span className="truncate">{t(`disease.${dis.id}.name`, dis.name)}</span>
-                            </button>
-                        );
-                    })}
+        return (
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                <div className="flex justify-between items-center border-b border-slate-900/10 pb-1">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900">{isEditing ? `⚗️ İksiri Düzenle (#${editingPotionId})` : '⚗️ Yeni İksir Formülü'}</h2>
+                    {isEditing && (
+                        <button
+                            onClick={() => {
+                                setEditingPotionId(null);
+                                setNewPotion({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
+                            }}
+                            className="bg-red-800 text-white font-sans text-xs font-bold px-2 py-0.5 rounded border border-black shadow"
+                        >
+                            Vazgeç
+                        </button>
+                    )}
                 </div>
+                <input
+                    disabled={isEditing}
+                    className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold disabled:opacity-50"
+                    placeholder="ID (pot_hiz)"
+                    value={isEditing ? editingPotionId : newPotion.id}
+                    onChange={e => setNewPotion({...newPotion, id: e.target.value})}
+                />
+                <input className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold"
+                       placeholder="İsim" value={newPotion.name}
+                       onChange={e => setNewPotion({...newPotion, name: e.target.value})}/>
+                <div className="flex gap-2">
+                    <select className="bg-amber-50 border-2 border-slate-900 p-2 flex-1 rounded text-xs font-bold font-parchment" value={tempIngredient.id}
+                            onChange={e => setTempIngredient({...tempIngredient, id: e.target.value, type: e.target.value.startsWith('pot_') ? 'potion' : 'plant'})}>
+                        <option value="">İçerik Seç...</option>
+                        {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
+                    </select>
+                    <button onClick={handleAddTempIngredient} className="bg-indigo-600 text-white px-4 rounded-lg font-bold border-2 border-black text-xs">Ekle</button>
+                </div>
+                <div className="space-y-1">{newPotion.ingredients.map((ing, idx) => <div key={idx}
+                                                                                         className="bg-amber-50 p-1 border text-xs">{ing.id} x{ing.count}</div>)}</div>
+
+                {/* İksirin İyi Geldiği Hastalıklar */}
+                <div className="pt-2">
+                    <label className="text-xs font-bold text-slate-700 block mb-1">Tedavi Ettiği Hastalıklar:</label>
+                    <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
+                        {gameData.diseases.map(dis => {
+                            const isChecked = newPotion.curesDiseaseIds.includes(dis.id);
+                            return (
+                                <button
+                                    key={dis.id}
+                                    type="button"
+                                    onClick={() => {
+                                        setNewPotion(prev => ({
+                                            ...prev,
+                                            curesDiseaseIds: isChecked
+                                                ? prev.curesDiseaseIds.filter(id => id !== dis.id)
+                                                : [...prev.curesDiseaseIds, dis.id]
+                                        }));
+                                    }}
+                                    className={`text-left text-[10px] p-1.5 rounded border-2 flex items-center gap-1 transition-all ${
+                                        isChecked
+                                            ? 'bg-purple-800 border-black text-white font-bold'
+                                            : 'bg-amber-50 border-slate-300 text-slate-600'
+                                    }`}
+                                >
+                                    <span>{isChecked ? '✓' : 'o'}</span>
+                                    <span className="truncate">{t(`disease.${dis.id}.name`, dis.name)}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <button onClick={handleAddPotionRecipe}
+                        className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    {isEditing ? "Reçete Değişikliklerini Kaydet" : "Tarifi Kaydet"}
+                </button>
             </div>
+        );
+    };
 
-            <button onClick={handleAddPotionRecipe}
-                    className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                {isEditing ? "Reçete Değişikliklerini Kaydet" : "Tarifi Kaydet"}
-            </button>
-        </div>;
-    }
-
-    // Yeni Hastalık Yaratma Arayüzü
-    function renderCreateDisease(): React.JSX.Element {
+    const renderCreateDisease = (): React.JSX.Element => {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
                 <h2 className="text-2xl font-bold font-magic text-slate-900">🦠 Yeni Hastalık Yarat</h2>
@@ -1679,10 +1542,9 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 </div>
             </div>
         );
-    }
+    };
 
-    // Semptom ve Nitelik Yönetim Arayüzü
-    function renderManagePropertiesAndSymptoms(): React.JSX.Element {
+    const renderManagePropertiesAndSymptoms = (): React.JSX.Element => {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
                 {/* Semptom Havuzu */}
@@ -1713,7 +1575,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
 
                 {/* Yeni Bitki Nitelik ve Şifa Tanımlama */}
                 <div className="space-y-3 pt-4 border-t-2 border-slate-900/10">
-                    <h2 className="text-2xl font-bold font-magic text-slate-900 font-magic">🌿 Yeni Bitki Özelliği (Nitelik)</h2>
+                    <h2 className="text-2xl font-bold font-magic text-slate-900">🌿 Yeni Bitki Özelliği (Nitelik)</h2>
                     <input
                         className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-sm"
                         placeholder="Özellik İsmi (Örn: Zehir Sökücü)"
@@ -1761,16 +1623,88 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 </div>
             </div>
         );
-    }
+    };
 
-    // Kayıtlı Hastalıkları ve İksirleri Gösteren Stüdyo Tablosu
-    function renderStudioDiseasesAndPotions(gameData: GameData, t: (key: string, fallback?: string) => string): React.JSX.Element {
+    const renderStudioPlantsListLocal = (): React.JSX.Element => {
+        return (
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4 col-span-1 lg:col-span-2 font-parchment">
+                <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2 flex items-center gap-2">
+                    📦 Sistem Veritabanındaki Kayıtlı Tüm Bitkiler ({gameData.plants.length})
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[360px] overflow-y-auto pr-2">
+                    {gameData.plants.map(plant => {
+                        const symptoms = getHerbCuredSymptoms(plant.id, gameData);
+
+                        const rarityColors: Record<string, string> = {
+                            'Yaygın': 'bg-slate-200 text-slate-800 border-slate-400',
+                            'Normal': 'bg-blue-100 text-blue-800 border-blue-400',
+                            'Nadir': 'bg-purple-100 text-purple-800 border-purple-400',
+                            'Efsanevi': 'bg-amber-100 text-amber-955 border-amber-500 animate-pulse'
+                        };
+                        const rarityColor = rarityColors[plant.rarity] || 'bg-slate-100 text-slate-700 border-slate-300';
+
+                        return (
+                            <div key={plant.id} className="bg-amber-50/70 p-4 rounded-xl border-2 border-slate-900 flex flex-col justify-between space-y-3 shadow-sm hover:shadow-md transition-shadow relative">
+                                <div>
+                                    <div className="flex justify-between items-start gap-2">
+                                        <div>
+                                            <h3 className="font-bold text-lg text-slate-900 leading-tight">{t(`plant.${plant.id}.name`, plant.name)}</h3>
+                                            <span className="text-xs font-mono text-indigo-900 block font-semibold mt-0.5">ID: #{plant.id}</span>
+                                        </div>
+                                        <span className={`text-[10px] px-2 py-0.5 rounded-full border-2 font-bold whitespace-nowrap ${rarityColor}`}>
+                      {plant.rarity}
+                    </span>
+                                    </div>
+
+                                    <div className="mt-3 space-y-1.5 border-t border-dashed border-slate-900/10 pt-2 text-xs text-slate-700 font-sans">
+                                        <p className="leading-snug">
+                                            <strong className="text-slate-900 font-magic">🌿 Nitelikler:</strong> {plant.properties.map(p => t(`prop.${p}`, p)).join(', ') || 'Belirtilmemiş'}
+                                        </p>
+                                        <div className="leading-snug">
+                                            <strong className="text-slate-900 font-magic">⚡ Giderdiği Semptomlar:</strong>
+                                            <div className="flex flex-wrap gap-1 mt-1">
+                                                {symptoms.length > 0 ? (
+                                                    symptoms.map(s => (
+                                                        <span key={s} className="bg-emerald-100 border border-emerald-400 text-emerald-800 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                              {t(`symptom.${s}`, s)}
+                            </span>
+                                                    ))
+                                                ) : (
+                                                    <span className="text-slate-500 italic text-[10px]">Herhangi bir semptom gidermiyor.</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="pt-2 border-t-2 border-slate-900/10 flex justify-between items-center text-xs">
+                                    <span className="text-slate-500">Maliyet: <strong className="font-magic font-bold text-red-955 text-[13px]">💰 {plant.cost}</strong></span>
+                                    <button
+                                        onClick={() => {
+                                            setNewPlant({ ...plant });
+                                            setEditingPlantId(plant.id);
+                                            window.scrollTo({ top: 0, behavior: 'smooth' }); // Düzenleme formuna yumuşak geçiş
+                                        }}
+                                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-2.5 py-0.5 rounded border-2 border-black font-bold font-magic"
+                                    >
+                                        ✏️ Düzenle
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
+
+    const renderStudioDiseasesAndPotionsLocal = (): React.JSX.Element => {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6 col-span-1 lg:col-span-2">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-parchment">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                     {/* Hastalık Listesi */}
-                    <div className="space-y-3">
+                    <div className="space-y-3 font-parchment">
                         <h3 className="text-xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-1 flex items-center gap-2">
                             🦠 Tanımlı Hastalıklar ({gameData.diseases.length})
                         </h3>
@@ -1798,7 +1732,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 };
                                             });
                                         }}
-                                        className="bg-red-800 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic self-center"
+                                        className="bg-red-800 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic self-center animate-pulse"
                                     >
                                         Sil
                                     </button>
@@ -1808,7 +1742,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                     </div>
 
                     {/* İksir Listesi */}
-                    <div className="space-y-3">
+                    <div className="space-y-3 font-parchment">
                         <h3 className="text-xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-1 flex items-center gap-2">
                             🧪 Tanımlı İksirler ({gameData.potions.length})
                         </h3>
@@ -1818,14 +1752,14 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     <div className="space-y-1">
                                         <span className="font-bold text-slate-900 block leading-tight">{t(`potion.${pot.id}.name`, pot.name)}</span>
                                         <span className="text-xs font-mono text-indigo-900 font-semibold block">ID: #{pot.id} | Satış: {pot.sellPrice}💰</span>
-                                        <div className="text-[10px] text-slate-600 leading-tight">
+                                        <div className="text-[10px] text-slate-600 leading-tight font-sans">
                                             <strong>İçerik:</strong> {pot.ingredients.map(ing => `${ing.count}x ${t(`plant.${ing.id}.name`, ing.id)}`).join(', ')}
                                         </div>
-                                        <div className="flex flex-wrap gap-1 mt-1">
+                                        <div className="flex flex-wrap gap-1 mt-1 font-sans">
                                             {pot.curesDiseaseIds.map(dId => {
                                                 const dDef = gameData.diseases.find(d => d.id === dId);
                                                 return (
-                                                    <span key={dId} className="bg-purple-100 text-purple-900 border border-purple-300 rounded text-[9px] px-1.5 py-0.5 font-bold font-sans">
+                                                    <span key={dId} className="bg-purple-100 text-purple-900 border border-purple-300 rounded text-[9px] px-1.5 py-0.5 font-bold">
                             {t(`disease.${dId}.name`, dDef ? dDef.name : dId)}
                           </span>
                                                 );
@@ -1837,8 +1771,9 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                             onClick={() => {
                                                 setNewPotion({ ...pot });
                                                 setEditingPotionId(pot.id);
+                                                window.scrollTo({ top: 0, behavior: 'smooth' }); // Düzenleme formuna yumuşak geçiş
                                             }}
-                                            className="bg-indigo-600 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic"
+                                            className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic shadow"
                                         >
                                             Düzelt
                                         </button>
@@ -1852,7 +1787,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                     };
                                                 });
                                             }}
-                                            className="bg-red-800 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic"
+                                            className="bg-red-800 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic shadow animate-pulse"
                                         >
                                             Sil
                                         </button>
@@ -1865,9 +1800,82 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 </div>
             </div>
         );
-    }
+    };
+
+    const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
+        if (visited.has(nodeId)) return <div className="text-xs text-red-955 font-bold p-2 bg-red-100 rounded border-2">Döngü Tespit Edildi</div>;
+        const nextVisited = new Set(visited);
+        nextVisited.add(nodeId);
+        const node = story.nodes.find(n => n.id === nodeId);
+        if (!node) return <div className="text-slate-600 text-xs italic p-2 bg-amber-50 rounded border border-dashed">Diyalog Bitiş</div>;
+
+        return (
+            <div className="flex flex-col items-center relative mt-4 font-parchment">
+                <div className="bg-[#f3e8d2] border-4 border-slate-900 rounded-2xl p-4 w-72 shadow-md relative z-10">
+                    <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs font-mono font-bold text-indigo-900">#{node.id}</span>
+                    </div>
+                    <p className="text-sm font-bold">"{node.npcText}"</p>
+
+                    {/* Düğüm Aksiyon Butonları (Pencil ✏️ ve Choice ➕) */}
+                    <div className="absolute -right-3 -top-3 flex gap-1">
+                        <button
+                            onClick={() => {
+                                setEditingNodeId(node.id);
+                                setEditNodeData({
+                                    npcText: node.npcText,
+                                    diseaseId: node.diseaseId || '',
+                                    dynamicSuccessNodeId: node.dynamicSuccessNodeId || '',
+                                    dynamicFailNodeId: node.dynamicFailNodeId || ''
+                                });
+                            }}
+                            className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-slate-955 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow"
+                            title="Düğümü Düzenle"
+                        >
+                            ✏️
+                        </button>
+                        <button
+                            onClick={() => setSelectedNodeId(node.id)}
+                            className="bg-emerald-500 hover:bg-emerald-400 border-2 border-black text-slate-955 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow"
+                            title="Seçenek Ekle"
+                        >
+                            ➕
+                        </button>
+                    </div>
+                </div>
+                {node.choices && node.choices.length > 0 && (
+                    <div className="flex gap-6 relative pt-6">
+                        <div className="absolute top-0 left-1/2 w-1 h-6 bg-slate-900 -translate-x-1/2"></div>
+                        {node.choices.map((choice, idx) => (
+                            <div key={idx} className="flex flex-col items-center relative pt-4 min-w-[200px]">
+                                <div className="absolute top-0 left-1/2 w-1 h-4 bg-slate-900 -translate-x-1/2"></div>
+                                <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3 space-y-1 font-sans">
+                                    <p className="font-bold font-parchment text-sm">{t(`choice.${node.id}.${idx}`, choice.text)}</p>
+
+                                    {/* Seçenek Preview Detayı */}
+                                    <div className="text-[9px] text-slate-600 flex flex-col items-center leading-tight">
+                                        {choice.reqGold ? <span>💸 -💰{choice.reqGold} Altın</span> : null}
+                                        {choice.reqPlant ? <span>💸 -🌿{choice.reqPlant} (x{choice.reqPlantCount || 1})</span> : null}
+                                        {choice.reqPotion ? <span>💸 -🧪{choice.reqPotion} (x{choice.reqPotionCount || 1})</span> : null}
+                                        {choice.rewardGold ? <span>🎁 +💰{choice.rewardGold} Altın</span> : null}
+                                        {choice.rewardPlantId ? <span>🎁 +🌿{choice.rewardPlantId} (x{choice.rewardPlantCount || 1})</span> : null}
+                                        {choice.rewardPotionId ? <span>🎁 +🧪{choice.rewardPotionId} (x{choice.rewardPotionCount || 1})</span> : null}
+                                    </div>
+                                </div>
+                                {renderVisualNode(story, choice.nextNodeId || '', nextVisited)}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
+
+    // ============================================================================
+    // ANA RETURN GÖVDESİ (ARTIK YUKARIDAKİ TÜM METOTLAR TAM OLARAK TANIMLI!)
+    // ============================================================================
 
     return (
         <div className="space-y-6 text-slate-800 font-parchment text-lg">
@@ -1900,17 +1908,14 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                     {renderCreatePotion()}
                     {renderCreateDisease()}
                     {renderManagePropertiesAndSymptoms()}
-                    {/* Sistemdeki Tüm Bitkileri Listeler (Düzenleme Yeteneği ile) */}
-                    {renderStudioPlantsList(gameData, t, (plant) => {
-                        setNewPlant({ ...plant });
-                        setEditingPlantId(plant.id);
-                    })}
-                    {/* Sistemdeki Tüm Hastalıkları ve İksirleri Listeler */}
-                    {renderStudioDiseasesAndPotions(gameData, t)}
+                    {/* Sistemdeki Tüm Bitkileri Listeler (Yeni closure-scoped güvenli listeleyici ile) */}
+                    {renderStudioPlantsListLocal()}
+                    {/* Sistemdeki Tüm Hastalıkları ve İksirleri Listeler (Yeni closure-scoped güvenli listeleyici ile) */}
+                    {renderStudioDiseasesAndPotionsLocal()}
                 </div>
             )}
 
-            {/* YENİ EKLENEN MARKET DÜZENLEYİCİSİ GÖRÜNÜMÜ */}
+            {/* MARKET DÜZENLEYİCİSİ GÖRÜNÜMÜ */}
             {activeTab === 'marketEditor' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-parchment">
 
@@ -1920,7 +1925,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         <div className="space-y-3">
                             <div>
                                 <label className="text-xs font-bold block mb-1">Bitki Seçin</label>
-                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={selectedMarketPlantId} onChange={e => setSelectedMarketPlantId(e.target.value)}>
+                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm" value={selectedMarketPlantId} onChange={e => setSelectedMarketPlantId(e.target.value)}>
                                     <option value="">Seçiniz...</option>
                                     {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                                 </select>
@@ -1936,10 +1941,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 </div>
                                 <div>
                                     <label className="text-xs font-bold block mb-1">Açılacağı Gün</label>
-                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900" value={marketPlantDay} onChange={e => setMarketPlantDay(Number(e.target.value))} />
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900 text-sm" value={marketPlantDay} onChange={e => setMarketPlantDay(Number(e.target.value))} />
                                 </div>
                             </div>
-                            <button onClick={handleAddMarketPlant} className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black text-slate-955 font-magic">Bitkiyi Markete Tanımla</button>
+                            <button onClick={handleAddMarketPlant} className="w-full bg-emerald-500 font-bold py-3 rounded-xl border-4 border-black text-slate-955 font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Bitkiyi Markete Tanımla</button>
                         </div>
 
                         <div className="pt-4 border-t-2 border-slate-900/10">
@@ -1948,10 +1953,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 {(gameData.marketPlants || []).map(mp => {
                                     const pl = gameData.plants.find(p => p.id === mp.plantId);
                                     return (
-                                        <div key={mp.plantId} className="flex justify-between items-center bg-amber-50/50 border border-slate-400 p-2 rounded-lg text-sm">
+                                        <div key={mp.plantId} className="flex justify-between items-center bg-amber-50/50 border border-slate-400 p-2 rounded-lg text-sm font-parchment">
                                             <div>
                                                 <span className="font-bold text-slate-900">{t(`plant.${mp.plantId}.name`, pl?.name)}</span>
-                                                <span className="text-xs block text-slate-600">💰 {mp.cost} Altın | Stok: {mp.stock} | 📅 {mp.availableDay ?? 1}. Gün</span>
+                                                <span className="text-xs block text-slate-600 font-sans mt-0.5">💰 {mp.cost} Altın | Stok: {mp.stock} | 📅 {mp.availableDay ?? 1}. Gün</span>
                                             </div>
                                             <button onClick={() => handleRemoveMarketPlant(mp.plantId)} className="bg-red-800 text-white text-xs px-2.5 py-1 rounded border-2 border-black font-bold font-magic">Kaldır</button>
                                         </div>
@@ -1967,7 +1972,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         <div className="space-y-3">
                             <div>
                                 <label className="text-xs font-bold block mb-1">İksir Seçin</label>
-                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold" value={selectedMarketPotionId} onChange={e => setSelectedMarketPotionId(e.target.value)}>
+                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm" value={selectedMarketPotionId} onChange={e => setSelectedMarketPotionId(e.target.value)}>
                                     <option value="">Seçiniz...</option>
                                     {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
                                 </select>
@@ -1983,10 +1988,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 </div>
                                 <div>
                                     <label className="text-xs font-bold block mb-1">Açılacağı Gün</label>
-                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900" value={marketPotionDay} onChange={e => setMarketPotionDay(Number(e.target.value))} />
+                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900 text-sm" value={marketPotionDay} onChange={e => setMarketPotionDay(Number(e.target.value))} />
                                 </div>
                             </div>
-                            <button onClick={handleAddMarketRecipe} className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black text-white font-magic">Formülü Markete Tanımla</button>
+                            <button onClick={handleAddMarketRecipe} className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black text-white font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Formülü Markete Tanımla</button>
                         </div>
 
                         <div className="pt-4 border-t-2 border-slate-900/10">
@@ -1995,12 +2000,12 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 {(gameData.marketRecipes || []).map(mr => {
                                     const pot = gameData.potions.find(p => p.id === mr.potionId);
                                     return (
-                                        <div key={mr.potionId} className="flex justify-between items-center bg-purple-50/50 border border-slate-400 p-2 rounded-lg text-sm">
+                                        <div key={mr.potionId} className="flex justify-between items-center bg-purple-50/50 border border-slate-400 p-2 rounded-lg text-sm font-parchment">
                                             <div>
                                                 <span className="font-bold text-purple-900">{t(`potion.${mr.potionId}.name`, pot?.name)} Formülü</span>
-                                                <span className="text-xs block text-slate-600">💰 {mr.cost} Altın | Stok: {mr.stock} | 📅 {mr.availableDay ?? 1}. Gün</span>
+                                                <span className="text-xs block text-slate-600 font-sans mt-0.5">💰 {mr.cost} Altın | Stok: {mr.stock} | 📅 {mr.availableDay ?? 1}. Gün</span>
                                             </div>
-                                            <button onClick={() => handleRemoveMarketRecipe(mr.potionId)} className="bg-red-800 text-white text-xs px-2.5 py-1 rounded border-2 border-black font-bold font-magic">Kaldır</button>
+                                            <button onClick={() => handleRemoveMarketRecipe(mr.potionId)} className="bg-red-800 text-white text-xs px-2.5 py-1 rounded border-2 border-black font-bold font-magic shadow">Kaldır</button>
                                         </div>
                                     );
                                 })}
@@ -2037,23 +2042,23 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-sans">
                                         <div>
-                                            <label className="font-bold block mb-1 text-slate-800">NPC Konuşma Metni:</label>
-                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-bold text-slate-800" value={editNodeData.npcText} onChange={e => setEditNodeData({...editNodeData, npcText: e.target.value})} />
+                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">NPC Konuşma Metni:</label>
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-bold text-slate-800 font-parchment text-sm" value={editNodeData.npcText} onChange={e => setEditNodeData({...editNodeData, npcText: e.target.value})} />
                                         </div>
                                         <div>
-                                            <label className="font-bold block mb-1 text-slate-800">Teşhis Edilecek Hastalık:</label>
-                                            <select className="w-full border-2 border-slate-900 rounded p-1.5 font-bold bg-white text-slate-800" value={editNodeData.diseaseId} onChange={e => setEditNodeData({...editNodeData, diseaseId: e.target.value})}>
+                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Teşhis Edilecek Hastalık:</label>
+                                            <select className="w-full border-2 border-slate-900 rounded p-1.5 font-bold bg-white text-slate-800 font-parchment text-sm" value={editNodeData.diseaseId} onChange={e => setEditNodeData({...editNodeData, diseaseId: e.target.value})}>
                                                 <option value="">Yok (Düz Konuşma)</option>
                                                 {gameData.diseases.map(d => <option key={d.id} value={d.id}>{t(`disease.${d.id}.name`, d.name)}</option>)}
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="font-bold block mb-1 text-slate-800">Başarılı Tedavi Düğüm ID:</label>
-                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-800" value={editNodeData.dynamicSuccessNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicSuccessNodeId: e.target.value})} />
+                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Başarılı Tedavi Düğüm ID:</label>
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-800 font-parchment text-sm" value={editNodeData.dynamicSuccessNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicSuccessNodeId: e.target.value})} />
                                         </div>
                                         <div>
-                                            <label className="font-bold block mb-1 text-slate-800">Başarısız Tedavi Düğüm ID:</label>
-                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-800" value={editNodeData.dynamicFailNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicFailNodeId: e.target.value})} />
+                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Başarısız Tedavi Düğüm ID:</label>
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-800 font-parchment text-sm" value={editNodeData.dynamicFailNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicFailNodeId: e.target.value})} />
                                         </div>
                                     </div>
                                     <button onClick={handleSaveNodeEdits} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2 text-sm">Düğüm Değişikliklerini Kaydet</button>
@@ -2063,7 +2068,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 <div className="space-y-3 bg-[#e9dbbe] p-4 rounded-xl border-2 border-slate-900 overflow-y-auto max-h-[500px]">
                                     <div className="flex justify-between items-center border-b border-slate-900/10 pb-2">
                                         <h3 className="font-bold font-magic text-sm">#{selectedNodeId} için Seçenek Ekle</h3>
-                                        <button onClick={() => setSelectedNodeId(null)} className="font-bold text-red-800 font-sans text-xs">✕</button>
+                                        <button onClick={() => setSelectedNodeId(null)} className="font-bold text-red-800 font-sans text-xs font-bold">✕</button>
                                     </div>
 
                                     <div className="space-y-2 text-xs">
@@ -2085,7 +2090,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
 
                                         <div className="flex items-center gap-2 py-1 bg-amber-50 p-2 rounded border border-slate-400">
                                             <input type="checkbox" id="autoCreateCheckbox" checked={newChoice.autoCreateNode} onChange={e => setNewChoice({...newChoice, autoCreateNode: e.target.checked})} />
-                                            <label htmlFor="autoCreateCheckbox" className="font-bold cursor-pointer text-slate-800">Yeni bir sonraki düğüm otomatik oluşturulsun</label>
+                                            <label htmlFor="autoCreateCheckbox" className="font-bold cursor-pointer text-slate-800 font-parchment">Yeni bir sonraki düğüm otomatik oluşturulsun</label>
                                         </div>
 
                                         {/* GEREKSİNİMLER (REQUIREMENTS) */}
@@ -2095,33 +2100,33 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* Altın */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken Altın:</label>
-                                                    <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs" value={newChoice.reqGold} onChange={e => setNewChoice({...newChoice, reqGold: Number(e.target.value)})} />
+                                                    <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs font-bold" value={newChoice.reqGold} onChange={e => setNewChoice({...newChoice, reqGold: Number(e.target.value)})} />
                                                 </div>
                                                 {/* Bitki */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken Bitki:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.reqPlant} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment" value={newChoice.reqPlant} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                                                     </select>
                                                     {newChoice.reqPlant && (
                                                         <div className="mt-1">
-                                                            <label className="text-[10px] block">Miktar:</label>
-                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.reqPlantCount} onChange={e => setNewChoice({...newChoice, reqPlantCount: Number(e.target.value)})} />
+                                                            <label className="text-[10px] block font-sans">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px] font-bold" value={newChoice.reqPlantCount} onChange={e => setNewChoice({...newChoice, reqPlantCount: Number(e.target.value)})} />
                                                         </div>
                                                     )}
                                                 </div>
                                                 {/* İksir */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken İksir:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.reqPotion} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment" value={newChoice.reqPotion} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
                                                     </select>
                                                     {newChoice.reqPotion && (
                                                         <div className="mt-1">
-                                                            <label className="text-[10px] block">Miktar:</label>
-                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.reqPotionCount} onChange={e => setNewChoice({...newChoice, reqPotionCount: Number(e.target.value)})} />
+                                                            <label className="text-[10px] block font-sans">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px] font-bold" value={newChoice.reqPotionCount} onChange={e => setNewChoice({...newChoice, reqPotionCount: Number(e.target.value)})} />
                                                         </div>
                                                     )}
                                                 </div>
@@ -2135,33 +2140,33 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* Altın */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül Altın:</label>
-                                                    <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs" value={newChoice.rewardGold} onChange={e => setNewChoice({...newChoice, rewardGold: Number(e.target.value)})} />
+                                                    <input type="number" className="w-full border border-slate-400 rounded p-1 text-xs font-bold" value={newChoice.rewardGold} onChange={e => setNewChoice({...newChoice, rewardGold: Number(e.target.value)})} />
                                                 </div>
                                                 {/* Bitki */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül Bitki:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.rewardPlantId} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment" value={newChoice.rewardPlantId} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                                                     </select>
                                                     {newChoice.rewardPlantId && (
                                                         <div className="mt-1">
-                                                            <label className="text-[10px] block">Miktar:</label>
-                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.rewardPlantCount} onChange={e => setNewChoice({...newChoice, rewardPlantCount: Number(e.target.value)})} />
+                                                            <label className="text-[10px] block font-sans">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px] font-bold" value={newChoice.rewardPlantCount} onChange={e => setNewChoice({...newChoice, rewardPlantCount: Number(e.target.value)})} />
                                                         </div>
                                                     )}
                                                 </div>
                                                 {/* İksir */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül İksir:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold" value={newChoice.rewardPotionId} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment" value={newChoice.rewardPotionId} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
                                                     </select>
                                                     {newChoice.rewardPotionId && (
                                                         <div className="mt-1">
-                                                            <label className="text-[10px] block">Miktar:</label>
-                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px]" value={newChoice.rewardPotionCount} onChange={e => setNewChoice({...newChoice, rewardPotionCount: Number(e.target.value)})} />
+                                                            <label className="text-[10px] block font-sans">Miktar:</label>
+                                                            <input type="number" className="w-full border border-slate-400 rounded p-0.5 text-[10px] font-bold" value={newChoice.rewardPotionCount} onChange={e => setNewChoice({...newChoice, rewardPotionCount: Number(e.target.value)})} />
                                                         </div>
                                                     )}
                                                 </div>
@@ -2170,13 +2175,13 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
 
                                     </div>
 
-                                    <button onClick={() => handleAddChoiceToNodeAdv(selectedNodeId!)} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-955 font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2">Seçeneği Düğüme Ekle</button>
+                                    <button onClick={() => handleAddChoiceToNodeAdv(selectedNodeId!)} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-955 font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Seçeneği Düğüme Ekle</button>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-3 gap-4">
                                     <input className="border-2 p-2" placeholder="Node ID" value={newNode.id} onChange={e => setNewNode({...newNode, id: e.target.value})} />
                                     <input className="border-2 p-2" placeholder="NPC Text" value={newNode.npcText} onChange={e => setNewNode({...newNode, npcText: e.target.value})} />
-                                    <button onClick={handleAddNodeToStory} className="bg-indigo-600 text-white rounded-xl">Boş Düğüm Ekle</button>
+                                    <button onClick={handleAddNodeToStory} className="bg-indigo-600 text-white rounded-xl font-magic font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Boş Düğüm Ekle</button>
                                 </div>
                             )}
                         </div>
@@ -2185,17 +2190,17 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             )}
 
             {activeTab === 'translationEditor' && (
-                <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                    <h2 className="text-2xl font-bold font-magic">🌍 Dil & Lokalizasyon</h2>
+                <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-parchment">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌍 Dil & Lokalizasyon</h2>
                     <div className="border-4 border-slate-900 rounded-2xl bg-amber-50 mt-4 max-h-[400px] overflow-y-auto font-sans">
                         <table className="w-full text-left text-sm font-bold">
-                            <thead className="bg-[#2a131b] text-amber-100 border-b-4 border-slate-900">
+                            <thead className="bg-[#2a131b] text-amber-100 border-b-4 border-slate-900 font-magic">
                             <tr><th className="p-3">Key</th><th className="p-3">TR</th><th className="p-3">EN</th></tr>
                             </thead>
                             <tbody className="divide-y divide-slate-900/10">
                             {getAllLocalesKeys().map(key => (
                                 <tr key={key}>
-                                    <td className="p-2 font-mono text-xs text-indigo-950">{key}</td>
+                                    <td className="p-2 font-mono text-xs text-indigo-955">{key}</td>
                                     <td className="p-2"><input type="text" className="w-full bg-amber-50 border p-1" value={gameData.translations.tr[key] || ''} onChange={e => handleTranslateChange('tr', key, e.target.value)} /></td>
                                     <td className="p-2"><input type="text" className="w-full bg-amber-50 border p-1" value={gameData.translations.en[key] || ''} onChange={e => handleTranslateChange('en', key, e.target.value)} /></td>
                                 </tr>
@@ -2208,13 +2213,13 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
 
             {activeTab === 'jsonHub' && (
                 <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
-                    <h2 className="text-2xl font-bold font-magic">📂 JSON Motoru</h2>
+                    <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📂 JSON Motoru</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        <textarea readOnly className="h-80 bg-slate-900 text-green-400 p-3 rounded-xl font-mono text-xs" value={JSON.stringify(gameData, null, 2)}/>
+                        <textarea readOnly className="h-80 bg-slate-900 text-green-400 p-3 rounded-xl font-mono text-xs font-sans border-2 border-slate-900" value={JSON.stringify(gameData, null, 2)}/>
                         <div className="space-y-3">
-                            <textarea className="w-full h-56 bg-slate-100 p-3 rounded-xl border-2 font-mono text-xs" placeholder='{"plants": [], ...}' value={importText} onChange={e => setImportText(e.target.value)}/>
-                            <button onClick={handleImportJSON} className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl border-4 border-black">JSON Yükle</button>
-                            {importStatus && <div className="p-2 bg-amber-50 border-2">{importStatus}</div>}
+                            <textarea className="w-full h-56 bg-slate-100 p-3 rounded-xl border-2 font-mono text-xs font-sans" placeholder='{"plants": [], ...}' value={importText} onChange={e => setImportText(e.target.value)}/>
+                            <button onClick={handleImportJSON} className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">JSON Yükle</button>
+                            {importStatus && <div className="p-2 bg-amber-50 border-2 border-slate-900 font-parchment font-bold text-sm text-center rounded">{importStatus}</div>}
                         </div>
                     </div>
                 </div>
