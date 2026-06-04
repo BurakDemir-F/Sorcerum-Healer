@@ -279,7 +279,13 @@ const INITIAL_DATA: GameData = {
             "potion.pot_alkarisi_savar.name": "Alkarısı Savar İksir", "potion.pot_arindirici.name": "Arındırıcı Eliksir",
             "potion.pot_naiad_nefesi.name": "Naiad Nefesi İksiri",
             "symptom.Alkarısı Karabasanı": "Alkarısı Karabasanı", "symptom.Kirli Büyü Zehirlenmesi": "Kirli Büyü Zehirlenmesi",
-            "disease.d_alkarisi.name": "Alkarısı Musallatı", "disease.d_kirli_buyu.name": "Kirli Büyü Çürümesi"
+            "symptom.Bataklık Çürümesi": "Bataklık Çürümesi", "symptom.Işıldak Çırmığı": "Işıldak Çırmığı",
+            "symptom.Ateş": "Ateş", "symptom.Kanama": "Kanama", "symptom.Halsizlik": "Halsizlik",
+            "symptom.Baş Dönmesi": "Baş Dönmesi", "symptom.Titreme": "Titreme", "symptom.Zehirlenme": "Zehirlenme",
+            "disease.d_alkarisi.name": "Alkarısı Musallatı", "disease.d_kirli_buyu.name": "Kirli Büyü Çürümesi",
+            "disease.d_isildak_isirigi.name": "Işıldak Tırmalaması", "disease.d_bataklik_vebasi.name": "Bataklık Çürümesi",
+            "prop.Demir Özlü": "Demir Özlü", "prop.Gümüşlü": "Gümüşlü", "prop.Sihirli": "Sihirli",
+            "prop.Tuzlu": "Tuzlu", "prop.Sakinleştirici": "Sakinleştirici"
         },
         en: {
             "ui.gold": "Gold", "ui.day": "Day", "ui.rent_debt": "Rent Debt", "ui.end_day": "End Day", "ui.call_customer": "Check Door!",
@@ -927,6 +933,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const [marketPotionStock, setMarketPotionStock] = useState<number>(1);
     const [marketPotionDay, setMarketPotionDay] = useState<number>(1);
 
+    // Semptom ve Nitelik Düzenleyici State Değişkenleri
+    const [newSymptom, setNewSymptom] = useState<string>('');
+    const [newPlantProperty, setNewPlantProperty] = useState<PlantProperty>({ name: '', curesSymptoms: [] });
+
     // Stüdyo İşlevleri
     const handleExportJSON = (): void => {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData, null, 2));
@@ -1017,6 +1027,56 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
         setNewPotion({ id: '', name: '', sellPrice: 50, curesDiseaseIds: [], ingredients: [] });
+    };
+
+    // Hastalık Ekleme Mantığı
+    const handleAddDisease = (): void => {
+        if (!newDisease.id || !newDisease.name) return;
+        handleTranslateChange('tr', `disease.${newDisease.id}.name`, newDisease.name);
+        setGameData(prev => {
+            if (!prev) return prev;
+            const alreadyExists = prev.diseases.some(d => d.id === newDisease.id);
+            if (alreadyExists) return prev;
+            return {
+                ...prev,
+                diseases: [...prev.diseases, newDisease]
+            };
+        });
+        setNewDisease({ id: '', name: '', symptoms: [] });
+    };
+
+    // Semptom ve Nitelik Ekleme Mantığı
+    const handleAddSymptom = (): void => {
+        if (!newSymptom.trim()) return;
+        const trimmed = newSymptom.trim();
+        if (gameData.diseaseSymptoms.includes(trimmed)) return;
+        handleTranslateChange('tr', `symptom.${trimmed}`, trimmed);
+        handleTranslateChange('en', `symptom.${trimmed}`, trimmed);
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                diseaseSymptoms: [...prev.diseaseSymptoms, trimmed]
+            };
+        });
+        setNewSymptom('');
+    };
+
+    const handleAddPlantProperty = (): void => {
+        if (!newPlantProperty.name.trim()) return;
+        const name = newPlantProperty.name.trim();
+        const alreadyExists = gameData.plantProperties.some(p => p.name === name);
+        if (alreadyExists) return;
+        handleTranslateChange('tr', `prop.${name}`, name);
+        handleTranslateChange('en', `prop.${name}`, name);
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                plantProperties: [...prev.plantProperties, { ...newPlantProperty, name }]
+            };
+        });
+        setNewPlantProperty({ name: '', curesSymptoms: [] });
     };
 
     // Market Düzenleme İşlemleri
@@ -1155,7 +1215,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     };
 
     const renderVisualNode = (story: Storyline, nodeId: string, visited: Set<string> = new Set()): React.JSX.Element => {
-        if (visited.has(nodeId)) return <div className="text-xs text-red-900 font-bold p-2 bg-red-100 rounded border-2">Döngü Tespit Edildi</div>;
+        if (visited.has(nodeId)) return <div className="text-xs text-red-955 font-bold p-2 bg-red-100 rounded border-2">Döngü Tespit Edildi</div>;
         const nextVisited = new Set(visited);
         nextVisited.add(nodeId);
         const node = story.nodes.find(n => n.id === nodeId);
@@ -1219,20 +1279,288 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                    placeholder="İsim" value={newPotion.name}
                    onChange={e => setNewPotion({...newPotion, name: e.target.value})}/>
             <div className="flex gap-2">
-                <select className="bg-amber-50 border-2 border-slate-900 p-2" value={tempIngredient.id}
+                <select className="bg-amber-50 border-2 border-slate-900 p-2 flex-1 rounded" value={tempIngredient.id}
                         onChange={e => setTempIngredient({...tempIngredient, id: e.target.value, type: e.target.value.startsWith('pot_') ? 'potion' : 'plant'})}>
-                    <option value="">Seç...</option>
-                    {gameData.plants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                    <option value="">İçerik Seç...</option>
+                    {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                 </select>
-                <button onClick={handleAddTempIngredient} className="bg-indigo-600 text-white px-4 rounded-lg">Ekle
-                </button>
+                <button onClick={handleAddTempIngredient} className="bg-indigo-600 text-white px-4 rounded-lg font-bold border-2 border-black">Ekle</button>
             </div>
             <div className="space-y-1">{newPotion.ingredients.map((ing, idx) => <div key={idx}
                                                                                      className="bg-amber-50 p-1 border">{ing.id} x{ing.count}</div>)}</div>
+
+            {/* İksirin İyi Geldiği Hastalıklar (Yeni Özellik) */}
+            <div className="pt-2">
+                <label className="text-xs font-bold text-slate-700 block mb-1">Tedavi Ettiği Hastalıklar:</label>
+                <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
+                    {gameData.diseases.map(dis => {
+                        const isChecked = newPotion.curesDiseaseIds.includes(dis.id);
+                        return (
+                            <button
+                                key={dis.id}
+                                type="button"
+                                onClick={() => {
+                                    setNewPotion(prev => ({
+                                        ...prev,
+                                        curesDiseaseIds: isChecked
+                                            ? prev.curesDiseaseIds.filter(id => id !== dis.id)
+                                            : [...prev.curesDiseaseIds, dis.id]
+                                    }));
+                                }}
+                                className={`text-left text-[10px] p-1.5 rounded border-2 flex items-center gap-1 transition-all ${
+                                    isChecked
+                                        ? 'bg-purple-800 border-black text-white font-bold'
+                                        : 'bg-amber-50 border-slate-300 text-slate-600'
+                                }`}
+                            >
+                                <span>{isChecked ? '✓' : 'o'}</span>
+                                <span className="truncate">{t(`disease.${dis.id}.name`, dis.name)}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
             <button onClick={handleAddPotionRecipe}
                     className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black">Tarifi Kaydet
             </button>
         </div>;
+    }
+
+    // Yeni Hastalık Yaratma Arayüzü (Yeni Metot)
+    function renderCreateDisease(): React.JSX.Element {
+        return (
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                <h2 className="text-2xl font-bold font-magic text-slate-900">🦠 Yeni Hastalık Yarat</h2>
+                <div className="space-y-3">
+                    <input
+                        className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold"
+                        placeholder="ID (d_veba)"
+                        value={newDisease.id}
+                        onChange={e => setNewDisease({...newDisease, id: e.target.value})}
+                    />
+                    <input
+                        className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold"
+                        placeholder="Hastalık İsmi (Örn: Kara Veba)"
+                        value={newDisease.name}
+                        onChange={e => setNewDisease({...newDisease, name: e.target.value})}
+                    />
+
+                    <div>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">Hastalık Semptomları:</label>
+                        <div className="grid grid-cols-2 gap-1 max-h-36 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
+                            {gameData.diseaseSymptoms.map(symptom => {
+                                const isChecked = newDisease.symptoms.includes(symptom);
+                                return (
+                                    <button
+                                        key={symptom}
+                                        type="button"
+                                        onClick={() => {
+                                            setNewDisease(prev => ({
+                                                ...prev,
+                                                symptoms: isChecked
+                                                    ? prev.symptoms.filter(s => s !== symptom)
+                                                    : [...prev.symptoms, symptom]
+                                            }));
+                                        }}
+                                        className={`text-left text-xs p-1.5 rounded border-2 flex items-center gap-1.5 transition-all ${
+                                            isChecked
+                                                ? 'bg-red-800 border-black text-amber-100 font-bold'
+                                                : 'bg-amber-50 border-slate-300 text-slate-700'
+                                        }`}
+                                    >
+                                        <span>{isChecked ? '✅' : '⬜'}</span>
+                                        <span className="truncate">{t(`symptom.${symptom}`, symptom)}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleAddDisease}
+                        className="w-full bg-red-800 text-white font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-red-700"
+                    >
+                        Hastalığı Kaydet
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Semptom ve Nitelik Yönetim Arayüzü (Yeni Metot)
+    function renderManagePropertiesAndSymptoms(): React.JSX.Element {
+        return (
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
+                {/* Semptom Havuzu */}
+                <div className="space-y-3">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">⚠️ Yeni Semptom Tanımla</h2>
+                    <div className="flex gap-2">
+                        <input
+                            className="flex-1 bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-sm"
+                            placeholder="Semptom İsmi (Örn: Aşırı Ateş)"
+                            value={newSymptom}
+                            onChange={e => setNewSymptom(e.target.value)}
+                        />
+                        <button
+                            onClick={handleAddSymptom}
+                            className="bg-indigo-600 hover:bg-indigo-500 border-2 border-black text-white font-bold px-4 rounded-xl text-sm"
+                        >
+                            Ekle
+                        </button>
+                    </div>
+                    <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
+                        {gameData.diseaseSymptoms.map(symp => (
+                            <span key={symp} className="bg-amber-100 text-slate-850 text-xs px-2.5 py-0.5 rounded-full border border-slate-400 font-bold">
+                {t(`symptom.${symp}`, symp)}
+              </span>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Yeni Bitki Nitelik ve Şifa Tanımlama */}
+                <div className="space-y-3 pt-4 border-t-2 border-slate-900/10">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900">🌿 Yeni Bitki Özelliği (Nitelik)</h2>
+                    <input
+                        className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-sm"
+                        placeholder="Özellik İsmi (Örn: Zehir Sökücü)"
+                        value={newPlantProperty.name}
+                        onChange={e => setNewPlantProperty({...newPlantProperty, name: e.target.value})}
+                    />
+
+                    <div>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">Gidereceği Semptomlar:</label>
+                        <div className="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
+                            {gameData.diseaseSymptoms.map(symptom => {
+                                const isChecked = newPlantProperty.curesSymptoms.includes(symptom);
+                                return (
+                                    <button
+                                        key={symptom}
+                                        type="button"
+                                        onClick={() => {
+                                            setNewPlantProperty(prev => ({
+                                                ...prev,
+                                                curesSymptoms: isChecked
+                                                    ? prev.curesSymptoms.filter(s => s !== symptom)
+                                                    : [...prev.curesSymptoms, symptom]
+                                            }));
+                                        }}
+                                        className={`text-left text-[10px] p-1.5 rounded border-2 flex items-center gap-1.5 transition-all ${
+                                            isChecked
+                                                ? 'bg-emerald-800 border-black text-white font-bold'
+                                                : 'bg-amber-50 border-slate-300 text-slate-600'
+                                        }`}
+                                    >
+                                        <span>{isChecked ? '✓' : 'o'}</span>
+                                        <span className="truncate">{t(`symptom.${symptom}`, symptom)}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleAddPlantProperty}
+                        className="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl border-4 border-black text-sm"
+                    >
+                        Özelliği Kaydet
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Kayıtlı Hastalıkları ve İksirleri Gösteren Stüdyo Tablosu (Yeni Metot)
+    function renderStudioDiseasesAndPotions(gameData: GameData, t: (key: string, fallback?: string) => string): React.JSX.Element {
+        return (
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6 col-span-1 lg:col-span-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    {/* Hastalık Listesi */}
+                    <div className="space-y-3">
+                        <h3 className="text-xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-1 flex items-center gap-2">
+                            🦠 Tanımlı Hastalıklar ({gameData.diseases.length})
+                        </h3>
+                        <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                            {gameData.diseases.map(dis => (
+                                <div key={dis.id} className="bg-amber-50/70 p-3 rounded-xl border-2 border-slate-900 flex justify-between items-start gap-2">
+                                    <div>
+                                        <span className="font-bold text-slate-900 block">{t(`disease.${dis.id}.name`, dis.name)}</span>
+                                        <span className="text-xs font-mono text-indigo-900 font-semibold">ID: #{dis.id}</span>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                            {dis.symptoms.map(s => (
+                                                <span key={s} className="bg-red-100 text-red-900 border border-red-300 rounded text-[9px] px-1.5 py-0.5 font-bold font-sans">
+                          {t(`symptom.${s}`, s)}
+                        </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setGameData(prev => {
+                                                if (!prev) return prev;
+                                                return {
+                                                    ...prev,
+                                                    diseases: prev.diseases.filter(d => d.id !== dis.id)
+                                                };
+                                            });
+                                        }}
+                                        className="bg-red-800 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic"
+                                    >
+                                        Sil
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* İksir Listesi */}
+                    <div className="space-y-3">
+                        <h3 className="text-xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-1 flex items-center gap-2">
+                            🧪 Tanımlı İksirler ({gameData.potions.length})
+                        </h3>
+                        <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                            {gameData.potions.map(pot => (
+                                <div key={pot.id} className="bg-amber-50/70 p-3 rounded-xl border-2 border-slate-900 flex justify-between items-start gap-2">
+                                    <div className="space-y-1">
+                                        <span className="font-bold text-slate-900 block leading-tight">{t(`potion.${pot.id}.name`, pot.name)}</span>
+                                        <span className="text-xs font-mono text-indigo-900 font-semibold block">ID: #{pot.id} | Satış: {pot.sellPrice}💰</span>
+                                        <div className="text-[10px] text-slate-600">
+                                            <strong>İçerik:</strong> {pot.ingredients.map(ing => `${ing.count}x ${t(`plant.${ing.id}.name`, ing.id)}`).join(', ')}
+                                        </div>
+                                        <div className="flex flex-wrap gap-1">
+                                            {pot.curesDiseaseIds.map(dId => {
+                                                const dDef = gameData.diseases.find(d => d.id === dId);
+                                                return (
+                                                    <span key={dId} className="bg-purple-100 text-purple-900 border border-purple-300 rounded text-[9px] px-1.5 py-0.5 font-bold font-sans">
+                            {t(`disease.${dId}.name`, dDef ? dDef.name : dId)}
+                          </span>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setGameData(prev => {
+                                                if (!prev) return prev;
+                                                return {
+                                                    ...prev,
+                                                    potions: prev.potions.filter(p => p.id !== pot.id)
+                                                };
+                                            });
+                                        }}
+                                        className="bg-red-800 text-white text-[10px] px-2.5 py-1 rounded border-2 border-black font-bold font-magic"
+                                    >
+                                        Sil
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        );
     }
 
     const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
@@ -1266,8 +1594,12 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {renderCreatePlant()}
                     {renderCreatePotion()}
+                    {renderCreateDisease()}
+                    {renderManagePropertiesAndSymptoms()}
                     {/* Sistemdeki Tüm Bitkileri Listeler */}
                     {renderStudioPlantsList(gameData, t)}
+                    {/* Sistemdeki Tüm Hastalıkları ve İksirleri Listeler */}
+                    {renderStudioDiseasesAndPotions(gameData, t)}
                 </div>
             )}
 
@@ -1496,6 +1828,14 @@ export default function App(): React.JSX.Element {
         fetch('/assets/gameData.json')
             .then(response => {
                 if (!response.ok) throw new Error("Ağ hatası veya dosya bulunamadı");
+
+                // Gelen yanıtın Content-Type başlığını kontrol ediyoruz.
+                // Dosya bulunamadığında SPA sunucusu index.html döndürürse (HTML içeriği), bunu reddedip catch bloğuna fırlatıyoruz.
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new TypeError("Uups, beklenen JSON verisi alınamadı! Dosya eksik olabilir veya sunucu index.html döndürdü.");
+                }
+
                 return response.json();
             })
             .then(data => {

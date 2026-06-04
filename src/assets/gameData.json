@@ -1,0 +1,420 @@
+{
+  "plantProperties": [
+    {
+      "name": "Demir Özlü",
+      "curesSymptoms": [
+        "Bataklık Çürümesi",
+        "Kanama"
+      ]
+    },
+    {
+      "name": "Gümüşlü",
+      "curesSymptoms": [
+        "Alkarısı Karabasanı",
+        "Zehirlenme"
+      ]
+    },
+    {
+      "name": "Sihirli",
+      "curesSymptoms": [
+        "Kirli Büyü Zehirlenmesi",
+        "Halsizlik"
+      ]
+    },
+    {
+      "name": "Tuzlu",
+      "curesSymptoms": [
+        "Işıldak Çırmığı",
+        "Ateş"
+      ]
+    },
+    {
+      "name": "Sakinleştirici",
+      "curesSymptoms": [
+        "Baş Dönmesi",
+        "Titreme"
+      ]
+    }
+  ],
+  "diseaseSymptoms": [
+    "Alkarısı Karabasanı",
+    "Kirli Büyü Zehirlenmesi",
+    "Bataklık Çürümesi",
+    "Işıldak Çırmığı",
+    "Ateş",
+    "Kanama",
+    "Halsizlik",
+    "Baş Dönmesi",
+    "Titreme",
+    "Zehirlenme"
+  ],
+  "plants": [
+    {
+      "id": "p_demir_ardic",
+      "name": "Demir-Ardıç Yaprağı",
+      "rarity": "Yaygın",
+      "cost": 8,
+      "properties": [
+        "Demir Özlü",
+        "Sakinleştirici"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "p_gumus_kok",
+      "name": "Gümüş Kök",
+      "rarity": "Nadir",
+      "cost": 20,
+      "properties": [
+        "Gümüşlü",
+        "Sakinleştirici"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "p_isildak_otu",
+      "name": "Işıldak Otu",
+      "rarity": "Normal",
+      "cost": 12,
+      "properties": [
+        "Sihirli",
+        "Tuzlu"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "p_sihirli_bugday",
+      "name": "Sihirli Buğday",
+      "rarity": "Efsanevi",
+      "cost": 45,
+      "properties": [
+        "Sihirli",
+        "Gümüşlü"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "p_kara_kabuk",
+      "name": "Kara-Kabuk Reçinesi",
+      "rarity": "Yaygın",
+      "cost": 6,
+      "properties": [
+        "Demir Özlü"
+      ],
+      "imageUrl": ""
+    }
+  ],
+  "diseases": [
+    {
+      "id": "d_alkarisi",
+      "name": "Alkarısı Musallatı",
+      "symptoms": [
+        "Alkarısı Karabasanı",
+        "Titreme",
+        "Baş Dönmesi"
+      ]
+    },
+    {
+      "id": "d_kirli_buyu",
+      "name": "Kirli Büyü Çürümesi",
+      "symptoms": [
+        "Kirli Büyü Zehirlenmesi",
+        "Ateş",
+        "Halsizlik"
+      ]
+    },
+    {
+      "id": "d_isildak_isirigi",
+      "name": "Işıldak Tırmalaması",
+      "symptoms": [
+        "Işıldak Çırmığı",
+        "Kanama"
+      ]
+    },
+    {
+      "id": "d_bataklik_vebasi",
+      "name": "Bataklık Çürümesi",
+      "symptoms": [
+        "Bataklık Çürümesi",
+        "Zehirlenme"
+      ]
+    }
+  ],
+  "potions": [
+    {
+      "id": "pot_alkarisi_savar",
+      "name": "Alkarısı Savar İksir",
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "p_gumus_kok",
+          "count": 2
+        },
+        {
+          "type": "plant",
+          "id": "p_demir_ardic",
+          "count": 1
+        }
+      ],
+      "curesDiseaseIds": [
+        "d_alkarisi"
+      ],
+      "sellPrice": 65
+    },
+    {
+      "id": "pot_arindirici",
+      "name": "Arındırıcı Eliksir",
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "p_sihirli_bugday",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "p_demir_ardic",
+          "count": 2
+        }
+      ],
+      "curesDiseaseIds": [
+        "d_kirli_buyu"
+      ],
+      "sellPrice": 90
+    },
+    {
+      "id": "pot_naiad_nefesi",
+      "name": "Naiad Nefesi İksiri",
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "p_isildak_otu",
+          "count": 2
+        },
+        {
+          "type": "plant",
+          "id": "p_gumus_kok",
+          "count": 1
+        }
+      ],
+      "curesDiseaseIds": [
+        "d_bataklik_vebasi"
+      ],
+      "sellPrice": 75
+    }
+  ],
+  "storylines": [
+    {
+      "id": "story_baran",
+      "characterName": "Genç Druid Baran",
+      "avatarUrl": "",
+      "nodes": [
+        {
+          "id": "node_baran_1",
+          "npcText": "Selam şifacı... Ben Baran. Yolculuk beni perişan etti. Rüyamda yaşlı, kırmızı gözlü korkunç bir kadının kahkahalarını duyuyorum. Ciğerlerim yanıyor. Bana şifa verebilir misin?",
+          "diseaseId": "d_alkarisi",
+          "dynamicSuccessNodeId": "node_baran_poyraz",
+          "dynamicFailNodeId": "node_baran_dead",
+          "choices": [
+            {
+              "text": "Sana göre bir ilacım yok Baran, üzgünüm.",
+              "nextNodeId": "node_baran_dead",
+              "delayDays": 1
+            }
+          ]
+        },
+        {
+          "id": "node_baran_poyraz",
+          "npcText": "Aklım yerine geldi, zihnimdeki o uğursuz çığlıklar kesildi! Atım Poyraz bile senin şifanı övdü... Şimdi İlayda ve Derya adındaki küs nehir ruhlarını barıştırma görevim var. Bana bir parça Naiad Nefesi verirsen minnettar olurum.",
+          "choices": [
+            {
+              "text": "Naiad Nefesi İksirini Al (İksiri Ver)",
+              "nextNodeId": "node_baran_reconciled",
+              "reqPotion": "pot_naiad_nefesi",
+              "delayDays": 5
+            },
+            {
+              "text": "Uzak dur benden konuşan beygir ve deliler!",
+              "nextNodeId": "node_baran_dead",
+              "delayDays": 1
+            }
+          ]
+        },
+        {
+          "id": "node_baran_reconciled",
+          "npcText": "Şifacı! Senin iksirin sayesinde nehre girdim ve İlayda ile Derya yı barıştırdım. Sana teşekkür etmek için nehrin dibinden çıkardığım bu Sihirli Buğdayı hediye ediyoruz!",
+          "choices": [
+            {
+              "text": "Kendine çok iyi bak Baran.",
+              "nextNodeId": null,
+              "rewardPlantId": "p_sihirli_bugday",
+              "rewardPlantCount": 1
+            }
+          ]
+        },
+        {
+          "id": "node_baran_dead",
+          "npcText": "Baran karanlığa teslim oldu... Alkarısı zihnini tamamen ele geçirdi. Çığlıklar atarak vahşi ormana karışıp kayboldu.",
+          "choices": [
+            {
+              "text": "Çok yazık oldu...",
+              "nextNodeId": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "story_landlord",
+      "characterName": "Tahsildar Kazım",
+      "avatarUrl": "",
+      "nodes": [
+        {
+          "id": "node_landlord_demand",
+          "npcText": "Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını (100 Altın) tahsil etmeye geldim.",
+          "choices": [
+            {
+              "text": "Kiramı Öde (100 Altın Öde)",
+              "nextNodeId": "node_landlord_thanks",
+              "reqGold": 100
+            },
+            {
+              "text": "Şu an ödeyemiyorum, borç yaz beyimize.",
+              "nextNodeId": "node_landlord_angry"
+            }
+          ]
+        },
+        {
+          "id": "node_landlord_thanks",
+          "npcText": "Güzel, akıllı bir şifacı. Palankamızın kapısı sana her zaman açık kalacaktır. İyi çalışmalar.",
+          "choices": [
+            {
+              "text": "Teşekkürler, iyi günler Kazım Bey.",
+              "nextNodeId": null
+            }
+          ]
+        },
+        {
+          "id": "node_landlord_angry",
+          "npcText": "Yine mi borç?! Bak burası devlet kapısı. Kazandığın her altın doğrudan benim borç defterime kesilecek, palanka kanunudur bu!",
+          "choices": [
+            {
+              "text": "Anlıyorum, yapacak bir şey yok...",
+              "nextNodeId": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "marketPlants": [
+    {
+      "plantId": "p_demir_ardic",
+      "stock": 10,
+      "maxStock": 10,
+      "cost": 6,
+      "availableDay": 1
+    },
+    {
+      "plantId": "p_gumus_kok",
+      "stock": 3,
+      "maxStock": 3,
+      "cost": 18,
+      "availableDay": 1
+    },
+    {
+      "plantId": "p_isildak_otu",
+      "stock": 5,
+      "maxStock": 5,
+      "cost": 10,
+      "availableDay": 1
+    },
+    {
+      "plantId": "p_kara_kabuk",
+      "stock": 8,
+      "maxStock": 8,
+      "cost": 5,
+      "availableDay": 1
+    }
+  ],
+  "marketRecipes": [
+    {
+      "potionId": "pot_alkarisi_savar",
+      "cost": 100,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    }
+  ],
+  "translations": {
+    "tr": {
+      "ui.gold": "Altın",
+      "ui.day": "Gün",
+      "ui.rent_debt": "Kira Borcu",
+      "ui.end_day": "Günü Bitir",
+      "ui.call_customer": "Kapıya Bak!",
+      "ui.advisor": "AKIL HOCASI",
+      "ui.chest": "Şifacı Sandığı",
+      "ui.plants_title": "Bitkilerin:",
+      "ui.potions_title": "İksirlerin:",
+      "ui.journal": "Günlük Parşömen",
+      "ui.cauldron": "Büyük Kazan",
+      "ui.brew": "Kazanı Karıştır",
+      "ui.recipe_book": "Tarif Kitabı",
+      "ui.pantry": "Kiler Çantası",
+      "ui.treatment_bench": "Teşhis & Tedavi Masası",
+      "ui.apply_treatment": "Tedaviyi Uygula",
+      "ui.buy": "Satın Al",
+      "ui.stock": "Stok",
+      "ui.rent_popup_title": "Haciz & Borç Mektubu",
+      "ui.sign_letter": "Mektubu İmzala (Altınlar Kesilsin)",
+      "ui.empty_bench": "Şifa masası boş. Aşağıdan bitki veya iksir diz!",
+      "ui.fill_bench": "Tezgahı Doldur (Envanterinden Seç):",
+      "ui.diagnosis": "Teşhis",
+      "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
+      "char.story_baran": "Genç Druid Baran",
+      "char.story_landlord": "Tahsildar Kazım",
+      "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı",
+      "plant.p_gumus_kok.name": "Gümüş Kök",
+      "plant.p_isildak_otu.name": "Işıldak Otu",
+      "plant.p_sihirli_bugday.name": "Sihirli Buğday",
+      "potion.pot_alkarisi_savar.name": "Alkarısı Savar İksir",
+      "potion.pot_arindirici.name": "Arındırıcı Eliksir",
+      "potion.pot_naiad_nefesi.name": "Naiad Nefesi İksiri",
+      "symptom.Alkarısı Karabasanı": "Alkarısı Karabasanı",
+      "symptom.Kirli Büyü Zehirlenmesi": "Kirli Büyü Zehirlenmesi",
+      "disease.d_alkarisi.name": "Alkarısı Musallatı",
+      "disease.d_kirli_buyu.name": "Kirli Büyü Çürümesi"
+    },
+    "en": {
+      "ui.gold": "Gold",
+      "ui.day": "Day",
+      "ui.rent_debt": "Rent Debt",
+      "ui.end_day": "End Day",
+      "ui.call_customer": "Check Door!",
+      "ui.advisor": "WIZARD ADVISOR",
+      "ui.chest": "Healer Chest",
+      "ui.plants_title": "Your Plants:",
+      "ui.potions_title": "Your Potions:",
+      "ui.journal": "Daily Scroll",
+      "ui.cauldron": "Great Cauldron",
+      "ui.brew": "Stir Cauldron",
+      "ui.recipe_book": "Recipe Book",
+      "ui.pantry": "Pantry Bag",
+      "ui.treatment_bench": "Diagnosis & Treatment Table",
+      "ui.apply_treatment": "Apply Treatment",
+      "ui.buy": "Buy",
+      "ui.stock": "Stock",
+      "ui.rent_popup_title": "Bailiff's Debt Letter",
+      "ui.sign_letter": "Sign the Letter",
+      "ui.empty_bench": "The healing table is empty.",
+      "ui.fill_bench": "Fill Desk (Select from Inventory):",
+      "ui.diagnosis": "Diagnosis",
+      "ui.market_title": "City Market",
+      "char.story_baran": "Young Druid Baran",
+      "char.story_landlord": "Tax Collector Kazim",
+      "plant.p_demir_ardic.name": "Iron-Juniper Leaf",
+      "plant.p_gumus_kok.name": "Silver Root",
+      "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion"
+    }
+  }
+}
