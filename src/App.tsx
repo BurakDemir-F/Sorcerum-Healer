@@ -68,6 +68,7 @@ interface StoryNode {
     dynamicSuccessNodeId?: string;
     dynamicFailNodeId?: string;
     choices: Choice[];
+    day?: number; // <<-- YENİ: Düğüm seviyesinde tetiklenme gün gereksinimi
 }
 
 interface Storyline {
@@ -225,22 +226,22 @@ const INITIAL_DATA: GameData = {
             id: 'story_baran', characterName: 'Genç Druid Baran', description: 'Zihnindeki acı verici fısıltılardan kurtulmak isteyen ve ormanda yolunu kaybetmiş acemi şifacı.', avatarUrl: '',
             nodes: [
                 {
-                    id: 'node_baran_1', npcText: 'Selam şifacı... Ben Baran. Yolculuk beni perişan etti. Rüyamda yaşlı, kırmızı gözlü korkunç bir kadının kahkahalarını duyuyorum. Ciğerlerim yanıyor. Bana şifa verebilir misin?', diseaseId: 'd_alkarisi', dynamicSuccessNodeId: 'node_baran_poyraz', dynamicFailNodeId: 'node_baran_dead',
+                    id: 'node_baran_1', npcText: 'Selam şifacı... Ben Baran. Yolculuk beni perişan etti. Rüyamda yaşlı, kırmızı gözlü korkunç bir kadının kahkahalarını duyuyorum. Ciğerlerim yanıyor. Bana şifa verebilir misin?', diseaseId: 'd_alkarisi', dynamicSuccessNodeId: 'node_baran_poyraz', dynamicFailNodeId: 'node_baran_dead', day: 1,
                     choices: [{ text: 'Sana göre bir ilacım yok Baran, üzgünüm.', nextNodeId: 'node_baran_dead', delayDays: 1 }]
                 },
                 {
-                    id: 'node_baran_poyraz', npcText: 'Aklım yerine geldi, zihnimdeki o uğursuz çığlıklar kesildi! Atım Poyraz bile senin şifanı övdü... Şimdi İlayda ve Derya adındaki küs nehir ruhlarını barıştırma görevim var. Bana bir parça Naiad Nefesi verirsen minnettar olurum.',
+                    id: 'node_baran_poyraz', npcText: 'Aklım yerine geldi, zihnimdeki o uğursuz çığlıklar kesildi! Atım Poyraz bile senin şifanı övdü... Şimdi İlayda ve Derya adındaki küs nehir ruhlarını barıştırma görevim var. Bana bir parça Naiad Nefesi verirsen minnettar olurum.', day: 1,
                     choices: [
                         { text: 'Naiad Nefesi İksirini Al (İksiri Ver)', nextNodeId: 'node_baran_reconciled', reqPotion: 'pot_naiad_nefesi', reqPotionCount: 1, delayDays: 5 },
                         { text: 'Uzak dur benden konuşan beygir ve deliler!', nextNodeId: 'node_baran_dead', delayDays: 1 }
                     ]
                 },
                 {
-                    id: 'node_baran_reconciled', npcText: 'Şifacı! Senin iksirin sayesinde nehre girdim ve İlayda ile Derya yı barıştırdım. Sana teşekkür etmek için nehrin dibinden çıkardığım bu Sihirli Buğdayı hediye ediyoruz!',
+                    id: 'node_baran_reconciled', npcText: 'Şifacı! Senin iksirin sayesinde nehre girdim ve İlayda ile Derya yı barıştırdım. Sana teşekkür etmek için nehrin dibinden çıkardığım bu Sihirli Buğdayı hediye ediyoruz!', day: 6,
                     choices: [{ text: 'Kendine çok iyi bak Baran.', nextNodeId: null, rewardPlantId: 'p_sihirli_bugday', rewardPlantCount: 1, rewardGold: 50 }]
                 },
                 {
-                    id: 'node_baran_dead', npcText: 'Baran karanlığa teslim oldu... Alkarısı zihnini tamamen ele geçirdi. Çığlıklar atarak vahşi ormana karışıp kayboldu.',
+                    id: 'node_baran_dead', npcText: 'Baran karanlığa teslim oldu... Alkarısı zihnini tamamen ele geçirdi. Çığlıklar atarak vahşi ormana karışıp kayboldu.', day: 2,
                     choices: [{ text: 'Çok yazık oldu...', nextNodeId: null }]
                 }
             ]
@@ -249,18 +250,18 @@ const INITIAL_DATA: GameData = {
             id: 'story_landlord', characterName: 'Tahsildar Kazım', description: 'Köyün beyine çalışan, palankadaki kiraları toplayan ve borç affetmeyen kurallara bağlı devlet görevlisi.', avatarUrl: '',
             nodes: [
                 {
-                    id: 'node_landlord_demand', npcText: 'Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını (100 Altın) tahsil etmeye geldim.',
+                    id: 'node_landlord_demand', npcText: 'Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını (100 Altın) tahsil etmeye geldim.', day: 7,
                     choices: [
                         { text: 'Kiramı Öde (100 Altın Öde)', nextNodeId: 'node_landlord_thanks', reqGold: 100 },
                         { text: 'Şu an ödeyemiyorum, borç yaz beyimize.', nextNodeId: 'node_landlord_angry' }
                     ]
                 },
                 {
-                    id: 'node_landlord_thanks', npcText: 'Güzel, akıllı bir şifacı. Palankamızın kapısı sana her zaman açık kalacaktır. İyi çalışmalar.',
+                    id: 'node_landlord_thanks', npcText: 'Güzel, akıllı bir şifacı. Palankamızın kapısı sana her zaman açık kalacaktır. İyi çalışmalar.', day: 7,
                     choices: [{ text: 'Teşekkürler, iyi günler Kazım Bey.', nextNodeId: null }]
                 },
                 {
-                    id: 'node_landlord_angry', npcText: 'Yine mi borç?! Bak burası devlet kapısı. Kazandığın her altın doğrudan benim borç defterime kesilecek, palanka kanunudur bu!',
+                    id: 'node_landlord_angry', npcText: 'Yine mi borç?! Bak burası devlet kapısı. Kazandığın her altın doğrudan benim borç defterime kesilecek, palanka kanunudur bu!', day: 7,
                     choices: [{ text: 'Anlıyorum, yapacak bir şey yok...', nextNodeId: null }]
                 }
             ]
@@ -727,7 +728,7 @@ const AlchemyArea: React.FC<AlchemyAreaProps> = ({ playerState, gameData, cauldr
             </div>
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col h-[530px] relative">
                 <h2 className="text-2xl font-magic text-slate-900 mb-4 border-b-2 border-slate-900/20 pb-2">⚗️ {t('ui.cauldron')}</h2>
-                <div className={`flex-1 bg-slate-950 rounded-full border-[6px] border-slate-800 mx-4 mt-2 mb-6 flex flex-wrap justify-center items-center p-6 ${brewState.status === 'brewing' ? 'animate-pulse' : ''}`}>
+                <div className={`flex-1 bg-slate-955 rounded-full border-[6px] border-slate-800 mx-4 mt-2 mb-6 flex flex-wrap justify-center items-center p-6 ${brewState.status === 'brewing' ? 'animate-pulse' : ''}`}>
                     {cauldron.length === 0 && <span className="text-slate-500 font-magic text-sm">{language === 'en' ? 'Toss items in!' : 'Kazan boş çırak.'}</span>}
                     {cauldron.map((item, idx) => {
                         const pl = gameData.plants.find(p => p.id === item.id);
@@ -923,9 +924,9 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
 
     // Diyalog Editörü State'leri
     const [activeEditorStoryId, setActiveEditorStoryId] = useState<string>('story_baran');
-    // Gelişmiş Karakter Yaratma Formu State'leri (Artık Açıklama/Description alanına da sahip)
+    // Gelişmiş Karakter Yaratma Formu State'leri
     const [newStoryline, setNewStoryline] = useState<{ id: string; characterName: string; description: string; avatarUrl: string }>({ id: '', characterName: '', description: '', avatarUrl: '' });
-    const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '' });
+    const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
 
     const [newChoice, setNewChoice] = useState<{
         text: string;
@@ -984,7 +985,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const [editingPlantId, setEditingPlantId] = useState<string | null>(null);
     const [editingPotionId, setEditingPotionId] = useState<string | null>(null);
     const [editingNodeId, setEditingNodeId] = useState<string | null>(null);
-    const [editNodeData, setEditNodeData] = useState<{ npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string }>({ npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '' });
+    const [editNodeData, setEditNodeData] = useState<{ npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
 
     // Stüdyo İşlevleri
     const handleExportJSON = (): void => {
@@ -1009,11 +1010,13 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 setGameData(validatedData);
                 setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
 
-                // İçe aktarılan hikayelerdeki diyalog başlangıç düğümlerini gameState durumuna eş zamanlı eşleyelim!
+                // İçe aktarılan hikayelerdeki diyalog başlangıç düğümlerini ve günlerini gameState durumuna eş zamanlı eşleyelim!
                 const initialProgress: Record<string, StoryProgressItem> = {};
                 validatedData.storylines.forEach(story => {
-                    const firstNodeId = story.nodes && story.nodes.length > 0 ? story.nodes[0].id : `node_${story.id.replace('story_', '')}_1`;
-                    const dayReq = story.id === 'story_landlord' ? 7 : 1;
+                    const firstNode = story.nodes && story.nodes.length > 0 ? story.nodes[0] : null;
+                    const firstNodeId = firstNode ? firstNode.id : `node_${story.id.replace('story_', '')}_1`;
+                    const firstNodeDay = firstNode ? (firstNode.day ?? 1) : 1;
+                    const dayReq = story.id === 'story_landlord' ? 7 : firstNodeDay;
                     initialProgress[story.id] = {
                         currentNodeId: firstNodeId,
                         availableDay: dayReq
@@ -1150,7 +1153,8 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                 npcText: editNodeData.npcText,
                                 diseaseId: editNodeData.diseaseId || undefined,
                                 dynamicSuccessNodeId: editNodeData.dynamicSuccessNodeId || undefined,
-                                dynamicFailNodeId: editNodeData.dynamicFailNodeId || undefined
+                                dynamicFailNodeId: editNodeData.dynamicFailNodeId || undefined,
+                                day: Number(editNodeData.day) || undefined // Gün verisini kaydet
                             } : n)
                         };
                     }
@@ -1325,7 +1329,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             };
         });
 
-        // Karakter yaratıldığı an boş bir diyalog ağacı olmaması için otomatik bir ilk diyalog düğümü oluşturuyoruz
+        // Karakter yaratıldığı an boş bir diyalog ağacı olmaması için otomatik bir ilk diyalog düğümü oluşturuyoruz (Varsayılan 1. Gün)
         setGameData(prev => {
             if (!prev) return prev;
             return {
@@ -1335,6 +1339,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                         const initNode: StoryNode = {
                             id: autoFirstNodeId,
                             npcText: `${newStoryline.characterName} şifacı kulübesinin kapısını araladı. Ona nasıl yardım edeceksin?`,
+                            day: 1, // Varsayılan tetiklenme günü 1
                             choices: []
                         };
                         handleTranslateChange('tr', `node.${autoFirstNodeId}.npcText`, initNode.npcText);
@@ -1359,10 +1364,10 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
             if (!prev) return prev;
             return {
                 ...prev,
-                storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { ...s, nodes: [...s.nodes, { ...newNode, choices: [] }] } : s)
+                storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { ...s, nodes: [...s.nodes, { ...newNode, day: Number(newNode.day) || undefined, choices: [] }] } : s)
             };
         });
-        setNewNode({id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: ''});
+        setNewNode({id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1});
     };
 
     const handleAddChoiceToNodeAdv = (nodeId: string): void => {
@@ -1371,7 +1376,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
         if (newChoice.autoCreateNode) {
             const generatedNodeId = `node_${activeEditorStoryId.replace('story_', '')}_gen_${Date.now().toString().slice(-4)}`;
             targetNextNodeId = generatedNodeId;
-            extraNodes.push({ id: generatedNodeId, npcText: 'Diyalog devam ediyor...', choices: [] });
+            extraNodes.push({ id: generatedNodeId, npcText: 'Diyalog devam ediyor...', day: 1, choices: [] });
         }
 
         const choiceObj: Choice = {
@@ -1436,7 +1441,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     };
 
     // ============================================================================
-    // CLOSURE-SCOPED GÜVENLİ VIEW METOTLARI (YUKARIDA DEĞİL, STATE BİLGİSİNDEN ÖTÜRÜ BURADA)
+    // CLOSURE-SCOPED GÜVENLİ VIEW METOTLARI
     // ============================================================================
 
     const renderCreatePlant = (): React.JSX.Element => {
@@ -1906,6 +1911,8 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 <div className="bg-[#f3e8d2] border-4 border-slate-900 rounded-2xl p-4 w-72 shadow-md relative z-10">
                     <div className="flex justify-between items-center mb-1">
                         <span className="text-xs font-mono font-bold text-indigo-900">#{node.id}</span>
+                        {/* GÜN ETİKETİ - AĞAÇ ÜZERİNDE GÖSTERİLİR */}
+                        <span className="text-xs bg-amber-500 text-slate-955 px-2 py-0.5 rounded-full font-bold border border-black flex items-center gap-1">📅 Gün: {node.day ?? 1}</span>
                     </div>
                     <p className="text-sm font-bold">"{node.npcText}"</p>
 
@@ -1918,7 +1925,8 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     npcText: node.npcText,
                                     diseaseId: node.diseaseId || '',
                                     dynamicSuccessNodeId: node.dynamicSuccessNodeId || '',
-                                    dynamicFailNodeId: node.dynamicFailNodeId || ''
+                                    dynamicFailNodeId: node.dynamicFailNodeId || '',
+                                    day: node.day ?? 1
                                 });
                             }}
                             className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-slate-955 text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow"
@@ -1966,7 +1974,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
     const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
 
     // ============================================================================
-    // ANA RETURN GÖVDESİ (ARTIK YUKARIDAKİ TÜM METOTLAR TAM OLARAK TANIMLI!)
+    // ANA RETURN GÖVDESİ
     // ============================================================================
 
     return (
@@ -2108,6 +2116,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 </div>
             )}
 
+            {}
             {activeTab === 'dialogueEditor' && (
                 <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 min-h-[750px] font-parchment">
 
@@ -2207,7 +2216,11 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-sans">
                                         <div>
                                             <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">NPC Konuşma Metni:</label>
-                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-bold text-slate-850 font-parchment text-sm bg-white" value={editNodeData.npcText} onChange={e => setEditNodeData({...editNodeData, npcText: e.target.value})} />
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-bold text-slate-855 font-parchment text-sm bg-white text-slate-900" value={editNodeData.npcText} onChange={e => setEditNodeData({...editNodeData, npcText: e.target.value})} />
+                                        </div>
+                                        <div>
+                                            <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm font-magic text-red-900">Tetikleneceği Gün (Day):</label>
+                                            <input type="number" min="1" className="w-full border-2 border-slate-900 rounded p-1.5 font-bold font-parchment text-sm bg-white text-slate-900" value={editNodeData.day} onChange={e => setEditNodeData({...editNodeData, day: Number(e.target.value) || 1})} />
                                         </div>
                                         <div>
                                             <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Teşhis Edilecek Hastalık:</label>
@@ -2218,11 +2231,11 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                         </div>
                                         <div>
                                             <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Başarılı Tedavi Düğüm ID:</label>
-                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-850 bg-white font-parchment text-sm" value={editNodeData.dynamicSuccessNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicSuccessNodeId: e.target.value})} />
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-855 bg-white font-parchment text-sm text-slate-900" value={editNodeData.dynamicSuccessNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicSuccessNodeId: e.target.value})} />
                                         </div>
                                         <div>
                                             <label className="font-bold block mb-1 text-slate-800 font-parchment text-sm">Başarısız Tedavi Düğüm ID:</label>
-                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-850 bg-white font-parchment text-sm" value={editNodeData.dynamicFailNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicFailNodeId: e.target.value})} />
+                                            <input className="w-full border-2 border-slate-900 rounded p-1.5 font-mono text-slate-855 bg-white font-parchment text-sm text-slate-900" value={editNodeData.dynamicFailNodeId} onChange={e => setEditNodeData({...editNodeData, dynamicFailNodeId: e.target.value})} />
                                         </div>
                                     </div>
                                     <button onClick={handleSaveNodeEdits} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2 text-sm">Düğüm Değişikliklerini Kaydet</button>
@@ -2269,7 +2282,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* Bitki */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken Bitki:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.reqPlant} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.req_plant_placeholder_or_real ?? newChoice.reqPlant ?? ''} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                                                     </select>
@@ -2283,7 +2296,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* İksir */}
                                                 <div className="bg-red-50/50 p-2 rounded border border-red-200">
                                                     <label className="font-bold block mb-1 text-red-955">Gereken İksir:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.reqPotion} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.reqPotion ?? ''} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
                                                     </select>
@@ -2309,7 +2322,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* Bitki */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül Bitki:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.rewardPlantId} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.rewardPlantId ?? ''} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
                                                     </select>
@@ -2323,7 +2336,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                                 {/* İksir */}
                                                 <div className="bg-emerald-50/50 p-2 rounded border border-emerald-200">
                                                     <label className="font-bold block mb-1 text-emerald-955">Ödül İksir:</label>
-                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.rewardPotionId} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
+                                                    <select className="w-full border border-slate-400 rounded p-1 bg-white text-xs font-bold font-parchment text-slate-900" value={newChoice.rewardPotionId ?? ''} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
                                                         <option value="">Yok...</option>
                                                         {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
                                                     </select>
@@ -2342,10 +2355,14 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                                     <button onClick={() => handleAddChoiceToNodeAdv(selectedNodeId!)} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-955 font-bold font-magic py-2 rounded-xl border-4 border-slate-900 mt-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Seçeneği Düğüme Ekle</button>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-4 gap-4">
                                     <input className="border-2 p-2 rounded text-slate-900 bg-white font-semibold" placeholder="Düğüm ID" value={newNode.id} onChange={e => setNewNode({...newNode, id: e.target.value})} />
                                     <input className="border-2 p-2 rounded text-slate-900 bg-white font-semibold" placeholder="Konuşma Metni" value={newNode.npcText} onChange={e => setNewNode({...newNode, npcText: e.target.value})} />
-                                    <button onClick={handleAddNodeToStory} className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-magic font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Diyalog Düğümü Ekle</button>
+                                    <div className="flex items-center gap-1.5 bg-amber-50 p-2 border-2 border-slate-900 rounded text-slate-900 font-semibold font-parchment">
+                                        <span className="text-xs whitespace-nowrap">📅 Gün:</span>
+                                        <input type="number" min="1" className="w-16 bg-white border border-slate-400 rounded px-1 text-center" value={newNode.day} onChange={e => setNewNode({...newNode, day: Number(e.target.value) || 1})} />
+                                    </div>
+                                    <button onClick={handleAddNodeToStory} className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-magic font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm">Diyalog Düğümü Ekle</button>
                                 </div>
                             )}
                         </div>
@@ -2379,7 +2396,7 @@ const DeveloperStudio: React.FC<DeveloperStudioProps> = ({ gameData, setGameData
                 <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
                     <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📂 JSON Motoru</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        <textarea readOnly className="h-80 bg-slate-900 text-green-400 p-3 rounded-xl font-mono text-xs font-sans border-2 border-slate-950" value={JSON.stringify(gameData, null, 2)}/>
+                        <textarea readOnly className="h-80 bg-slate-900 text-green-400 p-3 rounded-xl font-mono text-xs font-sans border-2 border-slate-955" value={JSON.stringify(gameData, null, 2)}/>
                         <div className="space-y-3">
                             <textarea className="w-full h-56 bg-slate-100 p-3 rounded-xl border-2 font-mono text-xs font-sans text-slate-900" placeholder='{"plants": [], ...}' value={importText} onChange={e => setImportText(e.target.value)}/>
                             <button onClick={handleImportJSON} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">JSON Yükle</button>
@@ -2490,9 +2507,26 @@ export default function App(): React.JSX.Element {
     };
 
     const handleCallCustomer = (): void => {
-        const availableStories = Object.entries(gameState.storyProgress).filter(([_, prog]) => prog.currentNodeId !== 'END' && prog.availableDay <= gameState.day).map(([sId, prog]) => ({ storyId: sId, nodeId: prog.currentNodeId }));
+        if (!gameData) return;
+
+        // availableStories filtresinde hem Choice bazlı "delayDays" kontrolü (availableDay)
+        // hem de hedef Düğüm bazlı "day" (node.day) kontrolü entegre şekilde doğrulanır!
+        const availableStories = Object.entries(gameState.storyProgress)
+            .filter(([sId, prog]) => {
+                if (prog.currentNodeId === 'END') return false;
+                if (prog.availableDay > gameState.day) return false;
+
+                // Hikayedeki hedef düğümü bul ve tetiklenme günü kısıtlamasını doğrula
+                const storyDef = gameData.storylines.find(s => s.id === sId);
+                const nodeDef = storyDef?.nodes.find(n => n.id === prog.currentNodeId);
+                const nodeDayReq = nodeDef?.day ?? 1; // Belirtilmemişse varsayılan 1. Gün
+
+                return gameState.day >= nodeDayReq;
+            })
+            .map(([sId, prog]) => ({ storyId: sId, nodeId: prog.currentNodeId }));
+
         if (availableStories.length === 0) {
-            addLog(language === 'en' ? 'Nobody is visiting.' : 'Şu an gelecek kimse yok.');
+            addLog(language === 'en' ? 'Nobody is visiting today.' : 'Şu an gelecek kimse yok. (Yarın yeni hikayeler açılabilir!)');
             return;
         }
         const selected = availableStories[Math.floor(Math.random() * availableStories.length)];
@@ -2560,9 +2594,36 @@ export default function App(): React.JSX.Element {
         setPlayerState(cur);
 
         const updProgress = { ...gameState.storyProgress };
-        if (choice.nextNodeId) {
-            updProgress[storyId] = { currentNodeId: choice.nextNodeId, availableDay: gameState.day + (choice.delayDays || 0) };
-            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: (choice.delayDays || 0) > 0 ? null : { storyId, nodeId: choice.nextNodeId as string } }));
+        if (choice.nextNodeId && gameData) {
+            const story = gameData.storylines.find(s => s.id === storyId);
+            const nextNode = story?.nodes.find(n => n.id === choice.nextNodeId);
+            const nextNodeDay = nextNode?.day ?? 1;
+
+            // Seçim bazlı gecikme (delayDays) ve bir sonraki düğümün gün gereksinimi (day) harmanlanır:
+            const isDelayedByChoice = (choice.delayDays || 0) > 0;
+            const isDelayedByNodeDay = nextNodeDay > gameState.day;
+
+            const calculatedAvailableDay = Math.max(
+                gameState.day + (choice.delayDays || 0),
+                nextNodeDay
+            );
+
+            updProgress[storyId] = {
+                currentNodeId: choice.nextNodeId,
+                availableDay: calculatedAvailableDay
+            };
+
+            const shouldDismissCustomer = isDelayedByChoice || isDelayedByNodeDay;
+
+            setGameState(prev => ({
+                ...prev,
+                storyProgress: updProgress,
+                currentCustomer: shouldDismissCustomer ? null : { storyId, nodeId: choice.nextNodeId as string }
+            }));
+
+            if (shouldDismissCustomer) {
+                addLog(language === 'en' ? `👥 Customer will return on Day ${calculatedAvailableDay}.` : `👥 Karakter dükkandan ayrıldı, ${calculatedAvailableDay}. gün tekrar gelecek.`);
+            }
         } else {
             updProgress[storyId] = { currentNodeId: 'END', availableDay: 999 };
             setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: null }));
@@ -2602,8 +2663,40 @@ export default function App(): React.JSX.Element {
             return { ...prev, gold: prev.gold + (success ? 60 : 0), inventory: inv };
         });
 
-        const targetNode = success ? activeNode.dynamicSuccessNodeId : activeNode.dynamicFailNodeId;
-        setGameState(prev => ({ ...prev, storyProgress: { ...prev.storyProgress, [activeStory.id]: { currentNodeId: targetNode || 'END', availableDay: prev.day } }, currentCustomer: targetNode ? { storyId: activeStory.id, nodeId: targetNode } : null }));
+        const targetNodeId = success ? activeNode.dynamicSuccessNodeId : activeNode.dynamicFailNodeId;
+        if (targetNodeId) {
+            const nextNode = activeStory.nodes.find(n => n.id === targetNodeId);
+            const nextNodeDay = nextNode?.day ?? 1;
+            const isDelayedByNodeDay = nextNodeDay > gameState.day;
+
+            const calculatedAvailableDay = Math.max(gameState.day, nextNodeDay);
+
+            const updProgress = {
+                ...gameState.storyProgress,
+                [activeStory.id]: { currentNodeId: targetNodeId, availableDay: calculatedAvailableDay }
+            };
+
+            setGameState(prev => ({
+                ...prev,
+                storyProgress: updProgress,
+                currentCustomer: isDelayedByNodeDay ? null : { storyId: activeStory.id, nodeId: targetNodeId }
+            }));
+
+            if (isDelayedByNodeDay) {
+                addLog(language === 'en' ? `👥 Customer will return on Day ${calculatedAvailableDay} for followup.` : `👥 Karakter dükkandan ayrıldı, devamı için ${calculatedAvailableDay}. gün tekrar gelecek.`);
+            }
+        } else {
+            const updProgress = {
+                ...gameState.storyProgress,
+                [activeStory.id]: { currentNodeId: 'END', availableDay: 999 }
+            };
+            setGameState(prev => ({
+                ...prev,
+                storyProgress: updProgress,
+                currentCustomer: null
+            }));
+        }
+
         setTreatmentStatus({ type: success ? 'success' : 'fail', message: explanation + (success ? ' (+60💰)' : '') });
         setTreatmentBench([]);
     };
@@ -2702,7 +2795,6 @@ export default function App(): React.JSX.Element {
 
     const handlers: GameHandlers = { handleEndDay, handleCallCustomer, handleCustomerChoice, handleAddToTreatmentBench, handleRemoveFromTreatmentBench, handleApplyTreatment, handleAddToCauldron, handleRemoveFromCauldron, handleBrew, handleBuyPlant, handleBuyRecipe };
 
-    // Eğer veriler henüz yüklenmediyse kullanıcıya bir yüklenme ekranı gösteriyoruz
     if (isLoading || !gameData) {
         return (
             <div className="min-h-screen bg-[#1c0f13] flex items-center justify-center">
