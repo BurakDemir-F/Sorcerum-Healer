@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // ============================================================================
 // TYPE DEFINITIONS (TYPESCRIPT ARAYÜZLERİ)
@@ -102,6 +102,12 @@ interface IntroPage {
     imageUrl?: string;
 }
 
+interface Soundtrack {
+    id: string;
+    title: string;
+    path: string;
+}
+
 type Translations = Record<string, Record<string, string>>;
 
 interface GameData {
@@ -115,6 +121,7 @@ interface GameData {
     marketRecipes: MarketRecipe[];
     translations: Translations;
     introPages: IntroPage[]; // JSON içinde hikaye giriş sayfaları verisi
+    soundtracks: Soundtrack[]; // Dinamik müzik/soundtrack listesi
 }
 
 interface PlayerState {
@@ -304,6 +311,11 @@ const INITIAL_DATA: GameData = {
             imageUrl: "assets/kazim_intro.png"
         }
     ],
+    soundtracks: [
+        { id: 'track_1', title: 'Kadim Kulübe Melodisi', path: 'Assets/tavernTrack.mp3' },
+        { id: 'track_2', title: 'Fısıldayan Gölgeler', path: 'Assets/forestTrack.mp3' },
+        { id: 'track_3', title: 'Simya Ateşi Sesi', path: 'Assets/alchemyTrack.mp3' }
+    ],
     translations: {
         tr: {
             "ui.gold": "Altın", "ui.day": "Gün", "ui.rent_debt": "Kira Borcu", "ui.end_day": "Günü Bitir", "ui.call_customer": "Kapıya Bak!",
@@ -332,7 +344,10 @@ const INITIAL_DATA: GameData = {
             "intro.title.intro_2": "Vahşi Ormanın Fısıltıları",
             "intro.text.intro_2": "Ancak vadi artık eskisi gibi huzurlu değil. Ormandan yükselen kirli büyüler nehir ruhlarını delirtiyor, Alkarıları masum köylülerin rüyalarına musallat oluyor. Şifalı ellerinle doğru bitkileri bir araya getirmeli, her derde deva iksirler kaynatmalısın.",
             "intro.title.intro_3": "Tahsildarın Gölgesi",
-            "intro.text.intro_3": "Unutma, bu dünyada hayatta kalmak sadece şifa dağıtmaktan ibaret değil. Her 7 günde bir Tahsildar Kazım kapını çalarak dükkan kirasını (100 Altın) isteyecek. Kasandaki altınları iyi yönet, aksi takdirde dükkanın mühürlenebilir!"
+            "intro.text.intro_3": "Unutma, bu dünyada hayatta kalmak sadece şifa dağıtmaktan ibaret değil. Her 7 günde bir Tahsildar Kazım kapını çalarak dükkan kirasını (100 Altın) isteyecek. Kasandaki altınları iyi yönet, aksi takdirde dükkanın mühürlenebilir!",
+            "soundtrack.track_1.title": "Kadim Kulübe Melodisi",
+            "soundtrack.track_2.title": "Fısıldayan Gölgeler",
+            "soundtrack.track_3.title": "Simya Ateşi Sesi"
         },
         en: {
             "ui.gold": "Gold", "ui.day": "Day", "ui.rent_debt": "Rent Debt", "ui.end_day": "End Day", "ui.call_customer": "Check Door!",
@@ -343,7 +358,7 @@ const INITIAL_DATA: GameData = {
             "ui.empty_bench": "The healing table is empty.", "ui.fill_bench": "Fill Desk (Select from Inventory):",
             "ui.diagnosis": "Diagnosis", "ui.market_title": "City Market",
             "char.story_baran": "Young Druid Baran", "char.story_baran.desc": "An apprentice druid trying to escape auditory whispers, lost in the wildwoods.",
-            "char.story_landlord": "Tax Collector Kazim", "char.story_landlord.desc": "The local lord's strict bailiff who extracts tavern rents weekly without mercy.",
+            "char.story_landlord": "Tax Collector Kazim", "char.story_landlord.desc": "The local lord's strict bailiff who extracts rent weekly without mercy.",
             "plant.p_demir_ardic.name": "Iron-Juniper Leaf", "plant.p_gumus_kok.name": "Silver Root",
             "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion",
             "intro.title.intro_1": "Beginning of the Legacy",
@@ -351,7 +366,10 @@ const INITIAL_DATA: GameData = {
             "intro.title.intro_2": "Whispers of the Wildwood",
             "intro.text.intro_2": "But the valley is no longer peaceful. Vile spells rising from the forest drive river spirits mad, and Alkarisi haunt the dreams of innocent villagers. You must combine the right herbs with healing hands and brew potions to cure all ailments.",
             "intro.title.intro_3": "The Shadow of the Tax Collector",
-            "intro.text.intro_3": "Remember, surviving in this world is not just about healing. Every 7 days, Kazim the Tax Collector will knock on your door to collect rent (100 Gold). Manage your gold wisely, or your shop might be sealed!"
+            "intro.text.intro_3": "Remember, surviving in this world is not just about healing. Every 7 days, Kazim the Tax Collector will knock on your door to collect rent (100 Gold). Manage your gold wisely, or your shop might be sealed!",
+            "soundtrack.track_1.title": "Ancient Cabin Melody",
+            "soundtrack.track_2.title": "Whispering Shadows",
+            "soundtrack.track_3.title": "Alchemy Fire Soundtrack"
         }
     }
 };
@@ -674,7 +692,7 @@ function ShopArea({ gameState, playerState, gameData, language, t, handlers, tre
                                             key={idx}
                                             onClick={() => handlers.handleCustomerChoice(choice, idx, activeNode!, activeStory!.id)}
                                             disabled={!canChoose}
-                                            className="w-full text-left p-4 rounded-xl border-2 bg-amber-100 border-slate-900 hover:bg-amber-50 flex flex-col justify-between items-start disabled:opacity-50 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                            className="w-full text-left p-4 rounded-xl border-2 bg-amber-100 border-slate-900 hover:bg-amber-55 flex flex-col justify-between items-start disabled:opacity-50 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                         >
                                             <span className="text-slate-900 font-bold">&gt; {t(`choice.${activeNode!.id}.${idx}`, choice.text)}</span>
 
@@ -833,7 +851,7 @@ function MarketArea({ gameData, t, handlers, currentDay, playerState }: MarketAr
                             return (
                                 <div key={mp.plantId} className="relative group bg-amber-100/50 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center cursor-help">
                                     <div className="flex items-center gap-3">
-                                        {plant.imageUrl ? <img src={plant.imageUrl} alt={plant.name} className="w-12 h-12 object-contain bg-amber-50 rounded-lg border-2 border-slate-900 p-1" /> : <span className="text-3xl">🌿</span>}
+                                        {plant.imageUrl ? <img src={plant.imageUrl} alt={plant.name} className="w-12 h-12 object-contain bg-amber-55 rounded-lg border-2 border-slate-900 p-1" /> : <span className="text-3xl">🌿</span>}
                                         <div>
                                             <h3 className="text-xl font-bold text-slate-955">{t(`plant.${plant.id}.name`, plant.name)} ({t('ui.stock')}: {mp.stock})</h3>
                                             <p className="text-sm font-bold text-red-900 font-magic">{mp.cost} {t('ui.gold')}</p>
@@ -955,7 +973,7 @@ function IntroScreen({ gameData, pageIndex, setPageIndex, setAppMode, language, 
                     </h2>
 
                     {currentPage.imageUrl && isImageUrl(currentPage.imageUrl) ? (
-                        <div className="w-64 h-48 bg-amber-50 rounded-2xl border-4 border-slate-900 overflow-hidden flex items-center justify-center p-2 shadow-lg animate-idle-float">
+                        <div className="w-64 h-48 bg-amber-55 rounded-2xl border-4 border-slate-900 overflow-hidden flex items-center justify-center p-2 shadow-lg animate-idle-float">
                             <img src={currentPage.imageUrl} alt="Hikaye Görseli" className="max-w-full max-h-full object-contain" />
                         </div>
                     ) : (
@@ -1013,9 +1031,19 @@ interface GameClientProps {
     setActiveTab: React.Dispatch<React.SetStateAction<string>>;
     t: (key: string, fallback?: string) => string;
     handlers: GameHandlers;
+    isMuted: boolean;
+    setIsMuted: React.Dispatch<React.SetStateAction<boolean>>;
+    currentTrackIndex: number;
+    changeTrack: (idx: number) => void;
 }
 
-function GameClient({ gameData, gameState, playerState, cauldron, brewState, treatmentBench, treatmentStatus, language, setLanguage, setAppMode, activeTab, setActiveTab, t, handlers }: GameClientProps): React.JSX.Element {
+function GameClient({
+                        gameData, gameState, playerState, cauldron, brewState, treatmentBench, treatmentStatus,
+                        language, setLanguage, setAppMode, activeTab, setActiveTab, t, handlers,
+                        isMuted, setIsMuted, currentTrackIndex, changeTrack
+                    }: GameClientProps): React.JSX.Element {
+    const activeTrack = gameData.soundtracks?.[currentTrackIndex];
+
     return (
         <div className="space-y-6">
             <div className="bg-[#2a131b] border-4 border-slate-900 p-6 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
@@ -1031,6 +1059,34 @@ function GameClient({ gameData, gameState, playerState, cauldron, brewState, tre
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
+                    {/* Müzik Kontrol Butonu */}
+                    <div className="bg-[#1c0f13] border-4 border-black p-1 rounded-xl flex gap-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] items-center px-2">
+                        <button
+                            onClick={() => setIsMuted(!isMuted)}
+                            className={`px-2 py-1 rounded-lg font-magic font-bold text-xs transition-colors ${isMuted ? 'text-red-400' : 'bg-amber-500 text-slate-955'}`}
+                            title={isMuted ? 'Müziği Aç' : 'Müziği Kapat'}
+                        >
+                            {isMuted ? '🔇' : '🔊'}
+                        </button>
+                        {!isMuted && activeTrack && (
+                            <div className="flex items-center gap-1">
+                                <span className="text-[10px] text-amber-200 truncate max-w-[80px]" title={t(`soundtrack.${activeTrack.id}.title`, activeTrack.title)}>
+                                    {t(`soundtrack.${activeTrack.id}.title`, activeTrack.title)}
+                                </span>
+                                <button
+                                    onClick={() => {
+                                        const nextIdx = (currentTrackIndex + 1) % (gameData.soundtracks?.length || 1);
+                                        changeTrack(nextIdx);
+                                    }}
+                                    className="text-[10px] text-amber-400 hover:text-amber-200 ml-1 font-bold font-magic"
+                                    title="Sonraki Şarkı"
+                                >
+                                    ⏭️
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="bg-[#1c0f13] border-4 border-black p-1 rounded-xl flex gap-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         <button onClick={() => setLanguage('tr')} className={`px-2 py-1 rounded-lg font-magic font-bold text-xs ${language === 'tr' ? 'bg-amber-500 text-slate-955' : 'text-slate-400'}`}>TR</button>
                         <button onClick={() => setLanguage('en')} className={`px-2 py-1 rounded-lg font-magic font-bold text-xs ${language === 'en' ? 'bg-amber-500 text-slate-955' : 'text-slate-400'}`}>EN</button>
@@ -1070,9 +1126,16 @@ interface DeveloperStudioProps {
     setPlayerState: React.Dispatch<React.SetStateAction<PlayerState>>;
     setAppMode: React.Dispatch<React.SetStateAction<string>>;
     t: (key: string, fallback?: string) => string;
+    currentTrackIndex: number;
+    changeTrack: (idx: number) => void;
+    isMuted: boolean;
+    setIsMuted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, setAppMode, t }: DeveloperStudioProps): React.JSX.Element {
+function DeveloperStudio({
+                             gameData, setGameData, setGameState, setPlayerState, setAppMode, t,
+                             currentTrackIndex, changeTrack, isMuted, setIsMuted
+                         }: DeveloperStudioProps): React.JSX.Element {
     const [activeTab, setActiveTab] = useState<string>('dataEditor');
     const [newPlant, setNewPlant] = useState<Plant>({ id: '', name: '', rarity: 'Yaygın', cost: 10, properties: [], imageUrl: '' });
     const [newDisease, setNewDisease] = useState<Disease>({ id: '', name: '', symptoms: [] });
@@ -1140,6 +1203,9 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
     const [editingNodeId, setEditingNodeId] = useState<string | null>(null);
     const [editNodeData, setEditNodeData] = useState<{ npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
 
+    // Soundtrack Atölye State'leri
+    const [newTrack, setNewTrack] = useState<Soundtrack>({ id: '', title: '', path: '' });
+
     const handleExportJSON = (): void => {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData, null, 2));
         const downloadAnchor = document.createElement('a');
@@ -1157,7 +1223,8 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
                     ...parsed,
                     marketPlants: parsed.marketPlants || [],
                     marketRecipes: parsed.marketRecipes || [],
-                    introPages: parsed.introPages || INITIAL_DATA.introPages || []
+                    introPages: parsed.introPages || INITIAL_DATA.introPages || [],
+                    soundtracks: parsed.soundtracks || INITIAL_DATA.soundtracks || []
                 };
                 setGameData(validatedData);
                 setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
@@ -1209,6 +1276,7 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
         Object.keys(gameData.translations.en || {}).forEach(k => keys.add(k));
         gameData.plants.forEach(p => keys.add(`plant.${p.id}.name`));
         gameData.potions.forEach(pot => keys.add(`potion.${pot.id}.name`));
+        (gameData.soundtracks || []).forEach(track => keys.add(`soundtrack.${track.id}.title`));
         (gameData.introPages || []).forEach(page => {
             keys.add(`intro.title.${page.id}`);
             keys.add(`intro.text.${page.id}`);
@@ -1626,14 +1694,42 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
         });
     };
 
-    const isImageUrl = (url: string): boolean => {
-        if (!url) return false;
-        const normalized = url.toLowerCase().trim();
-        return normalized.startsWith('http') ||
-            normalized.startsWith('/') ||
-            normalized.startsWith('assets/') ||
-            normalized.startsWith('./assets') ||
-            /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
+    // Soundtrack Yönetim Metotları
+    const handleAddTrack = (): void => {
+        if (!newTrack.id || !newTrack.title || !newTrack.path) return;
+        handleTranslateChange('tr', `soundtrack.${newTrack.id}.title`, newTrack.title);
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentTracks = prev.soundtracks || [];
+            const alreadyExists = currentTracks.some(t => t.id === newTrack.id);
+            if (alreadyExists) {
+                return {
+                    ...prev,
+                    soundtracks: currentTracks.map(t => t.id === newTrack.id ? newTrack : t)
+                };
+            } else {
+                return {
+                    ...prev,
+                    soundtracks: [...currentTracks, newTrack]
+                };
+            }
+        });
+        setNewTrack({ id: '', title: '', path: '' });
+    };
+
+    const handleRemoveTrack = (id: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                soundtracks: (prev.soundtracks || []).filter(t => t.id !== id)
+            };
+        });
+    };
+
+    const handleTestTrack = (idx: number): void => {
+        setIsMuted(false);
+        changeTrack(idx);
     };
 
     const renderCreatePlant = (): React.JSX.Element => {
@@ -2091,7 +2187,7 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
         const nextVisited = new Set(visited);
         nextVisited.add(nodeId);
         const node = story.nodes.find(n => n.id === nodeId);
-        if (!node) return <div className="text-slate-600 text-xs italic p-2 bg-amber-50 rounded border border-dashed">Diyalog Bitiş</div>;
+        if (!node) return <div className="text-slate-600 text-xs italic p-2 bg-amber-55 rounded border border-dashed">Diyalog Bitiş</div>;
 
         return (
             <div className="flex flex-col items-center relative mt-4 font-parchment">
@@ -2297,6 +2393,96 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
         );
     };
 
+    // Soundtrack Panel Görünümü
+    const renderMusicEditor = (): React.JSX.Element => {
+        const soundtracks = gameData.soundtracks || [];
+        return (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 font-parchment min-h-[600px]">
+                <div className="lg:col-span-2 bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🎵 Han Müzikleri & Soundtrackler ({soundtracks.length})</h2>
+                        <div className="space-y-3 max-h-[480px] overflow-y-auto pr-2">
+                            {soundtracks.length === 0 ? (
+                                <p className="italic text-slate-600 font-bold p-4 text-center bg-amber-50 rounded-xl border border-dashed border-slate-400">Hiç parça eklenmemiş. Sağdaki panelden ilk soundtrackinizi tanımlayın!</p>
+                            ) : (
+                                soundtracks.map((track, index) => {
+                                    const isCurrentPlaying = currentTrackIndex === index && !isMuted;
+                                    return (
+                                        <div key={track.id} className={`bg-amber-50/70 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center gap-4 hover:shadow-md transition-shadow relative ${isCurrentPlaying ? 'border-amber-500 ring-4 ring-amber-500/20' : ''}`}>
+                                            <div className="flex-1 space-y-1">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="bg-amber-500 text-slate-955 text-xs px-2 py-0.5 rounded-full font-sans font-bold">Parça {index + 1}</span>
+                                                    <h3 className="font-bold text-lg text-slate-900 leading-none">{t(`soundtrack.${track.id}.title`, track.title)}</h3>
+                                                </div>
+                                                <p className="text-xs font-mono font-semibold text-indigo-900">ID: #{track.id}</p>
+                                                <p className="text-sm text-slate-600 font-mono text-xs">Path: {track.path}</p>
+                                            </div>
+
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => handleTestTrack(index)}
+                                                    className={`font-sans text-xs font-bold px-3 py-1.5 rounded border border-black shadow ${isCurrentPlaying ? 'bg-amber-500 text-slate-955' : 'bg-indigo-600 text-white hover:bg-indigo-500'}`}
+                                                >
+                                                    {isCurrentPlaying ? '⏸️ Çalıyor' : '▶️ Test Et'}
+                                                </button>
+                                                <button
+                                                    onClick={() => handleRemoveTrack(track.id)}
+                                                    className="bg-red-800 text-white font-sans text-xs font-bold px-3 py-1.5 rounded border border-black shadow animate-pulse"
+                                                >
+                                                    Sil
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900 border-b border-slate-900/10 pb-1.5">🎵 Soundtrack Ekle</h2>
+                    <div className="space-y-3">
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Benzersiz ID:</label>
+                            <input
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-mono font-bold text-slate-900"
+                                placeholder="track_autumn"
+                                value={newTrack.id}
+                                onChange={e => setNewTrack({ ...newTrack, id: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Parça Başlığı:</label>
+                            <input
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-slate-900"
+                                placeholder="Sonbahar Esintisi"
+                                value={newTrack.title}
+                                onChange={e => setNewTrack({ ...newTrack, title: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">Dosya Yolu (Assets Path):</label>
+                            <input
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-mono text-sm text-slate-900"
+                                placeholder="Assets/ambient.mp3"
+                                value={newTrack.path}
+                                onChange={e => setNewTrack({ ...newTrack, path: e.target.value })}
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleAddTrack}
+                            className="w-full bg-emerald-500 text-slate-955 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-emerald-400 active:translate-y-0.5"
+                        >
+                            Soundtrack Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
 
     return (
@@ -2317,6 +2503,7 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
                     { id: 'dataEditor', label: '🌿 Element & Reçete' },
                     { id: 'dialogueEditor', label: '💬 Diyalog Ağacı & Karakter' },
                     { id: 'introEditor', label: '📖 Hikaye Girişi' },
+                    { id: 'musicEditor', label: '🎵 Müzik & Sesler' },
                     { id: 'marketEditor', label: '🛒 Market Düzenleyici' },
                     { id: 'translationEditor', label: '🌍 Lokalizasyon' },
                     { id: 'jsonHub', label: '📂 JSON Motoru' }
@@ -2337,6 +2524,8 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
             )}
 
             {activeTab === 'introEditor' && renderIntroEditor()}
+
+            {activeTab === 'musicEditor' && renderMusicEditor()}
 
             {activeTab === 'marketEditor' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-parchment">
@@ -2392,7 +2581,7 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
                         <div className="space-y-3">
                             <div>
                                 <label className="text-xs font-bold block mb-1 text-slate-700">İksir Seçin</label>
-                                <select className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm text-slate-900" value={selectedMarketPotionId} onChange={e => setSelectedMarketPotionId(e.target.value)}>
+                                <select className="w-full bg-[#dfd1b3] border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm text-slate-900" value={selectedMarketPotionId} onChange={e => setSelectedMarketPotionId(e.target.value)}>
                                     <option value="">Seçiniz...</option>
                                     {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
                                 </select>
@@ -2400,15 +2589,15 @@ function DeveloperStudio({ gameData, setGameData, setGameState, setPlayerState, 
                             <div className="grid grid-cols-3 gap-2">
                                 <div>
                                     <label className="text-xs font-bold block mb-1 text-slate-700">Formül Fiyatı</label>
-                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-slate-900" value={marketPotionCost} onChange={e => setMarketPotionCost(Number(e.target.value))} />
+                                    <input type="number" className="w-full bg-[#dfd1b3] border-2 border-slate-900 p-2 rounded-lg font-bold text-slate-900" value={marketPotionCost} onChange={e => setMarketPotionCost(Number(e.target.value))} />
                                 </div>
                                 <div>
                                     <label className="text-xs font-bold block mb-1 text-slate-700">Stok Miktarı</label>
-                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-slate-900" value={marketPotionStock} onChange={e => setMarketPotionStock(Number(e.target.value))} />
+                                    <input type="number" className="w-full bg-[#dfd1b3] border-2 border-slate-900 p-2 rounded-lg font-bold text-slate-900" value={marketPotionStock} onChange={e => setMarketPotionStock(Number(e.target.value))} />
                                 </div>
                                 <div>
                                     <label className="text-xs font-bold block mb-1 text-slate-700">Açılacağı Gün</label>
-                                    <input type="number" className="w-full bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-900 text-sm text-slate-900" value={marketPotionDay} onChange={e => setMarketPotionDay(Number(e.target.value))} />
+                                    <input type="number" className="w-full bg-[#dfd1b3] border-2 border-slate-900 p-2 rounded-lg font-bold text-indigo-955 text-sm text-slate-900" value={marketPotionDay} onChange={e => setMarketPotionDay(Number(e.target.value))} />
                                 </div>
                             </div>
                             <button onClick={handleAddMarketRecipe} className="w-full bg-purple-500 font-bold py-3 rounded-xl border-4 border-black text-white font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Formülü Markete Tanımla</button>
@@ -2736,7 +2925,7 @@ function PortalScreen({ setAppMode, setActiveTab, setIntroPageIndex, gameData, l
 
     return (
         <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2] flex items-center justify-center p-4 md:p-8">
-            <div className="max-w-xl w-full bg-[#2a131b] border-8 border-slate-900 p-8 rounded-3xl shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center space-y-6 relative overflow-hidden font-parchment">
+            <div className="max-xl w-full bg-[#2a131b] border-8 border-slate-900 p-8 rounded-3xl shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center space-y-6 relative overflow-hidden font-parchment">
                 <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-amber-500 to-red-800"></div>
                 <span className="text-8xl block animate-idle-float transform hover:scale-110">⚗️</span>
                 <div className="space-y-2">
@@ -2776,6 +2965,12 @@ export default function App(): React.JSX.Element {
 
     const [introPageIndex, setIntroPageIndex] = useState<number>(0);
 
+    // Müzik ve Soundtrack State/Ref Tanımlamaları
+    const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
+    const [isMuted, setIsMuted] = useState<boolean>(true); // Tarayıcı engellemelerini aşmak için varsayılan olarak mute başlar
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const fadeIntervalRef = useRef<any>(null);
+
     useEffect(() => {
         fetch('/assets/gameData.json')
             .then(response => {
@@ -2792,7 +2987,8 @@ export default function App(): React.JSX.Element {
                 setGameData({
                     ...INITIAL_DATA,
                     ...data,
-                    introPages: data.introPages || INITIAL_DATA.introPages || []
+                    introPages: data.introPages || INITIAL_DATA.introPages || [],
+                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || []
                 });
                 setIsLoading(false);
             })
@@ -2802,6 +2998,139 @@ export default function App(): React.JSX.Element {
                 setIsLoading(false);
             });
     }, []);
+
+    // Soundtrack Çalma Ve Yavaşça Geçiş Yapma (Fade In / Fade Out) Mekanizması
+    const changeTrack = (targetIndex: number) => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const soundtracks = gameData?.soundtracks || [];
+        if (soundtracks.length === 0) return;
+
+        const nextTrack = soundtracks[targetIndex];
+        if (!nextTrack) return;
+
+        // Mevcut devam eden fade işlemlerini sıfırla
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+
+        const MAX_VOLUME = 0.45;
+        let vol = audio.volume;
+        let step = 0;
+        const steps = 20;
+        const intervalTime = 40; // Toplamda 800ms fadeout süresi
+
+        // FADE OUT (Mevcut müziği yavaşça kıs)
+        fadeIntervalRef.current = setInterval(() => {
+            step++;
+            audio.volume = Math.max(0, vol * (1 - step / steps));
+            if (step >= steps) {
+                clearInterval(fadeIntervalRef.current);
+                audio.volume = 0;
+                audio.pause();
+
+                // Yeni müziği yükle ve başlat
+                audio.src = nextTrack.path;
+                audio.load();
+                setCurrentTrackIndex(targetIndex);
+
+                if (!isMuted) {
+                    audio.play().then(() => {
+                        let stepIn = 0;
+                        // FADE IN (Yeni müziği yavaşça aç)
+                        fadeIntervalRef.current = setInterval(() => {
+                            stepIn++;
+                            audio.volume = Math.min(MAX_VOLUME, (stepIn / steps) * MAX_VOLUME);
+                            if (stepIn >= steps) {
+                                clearInterval(fadeIntervalRef.current);
+                                audio.volume = MAX_VOLUME;
+                            }
+                        }, intervalTime);
+                    }).catch(err => {
+                        console.warn("Müzik çalma tarayıcı tarafından engellendi:", err);
+                    });
+                }
+            }
+        }, intervalTime);
+    };
+
+    // Müzik Nesnesinin İlk Kurulumu ve Şarkı Sonu Event Dinleyicisi
+    useEffect(() => {
+        if (!audioRef.current) {
+            audioRef.current = new Audio();
+        }
+        const audio = audioRef.current;
+
+        const handleTrackEnded = () => {
+            const soundtracks = gameData?.soundtracks || [];
+            if (soundtracks.length === 0) return;
+            // Sıradaki şarkıya geç, bittiyse başa dön
+            const nextIdx = (currentTrackIndex + 1) % soundtracks.length;
+            changeTrack(nextIdx);
+        };
+
+        audio.addEventListener('ended', handleTrackEnded);
+        return () => {
+            audio.removeEventListener('ended', handleTrackEnded);
+        };
+    }, [currentTrackIndex, gameData?.soundtracks, isMuted]);
+
+    // Mute/Unmute Değişikliklerinde Sesi Yumuşak Bir Şekilde Ayarlama (Fade In / Fade Out)
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const soundtracks = gameData?.soundtracks || [];
+        if (soundtracks.length === 0) return;
+
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+
+        const MAX_VOLUME = 0.45;
+        const steps = 20;
+        const intervalTime = 40;
+
+        if (isMuted) {
+            // Sessize alırken sesi yavaşça kıs (Fade Out)
+            let vol = audio.volume;
+            let step = 0;
+            fadeIntervalRef.current = setInterval(() => {
+                step++;
+                audio.volume = Math.max(0, vol * (1 - step / steps));
+                if (step >= steps) {
+                    clearInterval(fadeIntervalRef.current);
+                    audio.volume = 0;
+                    audio.pause();
+                }
+            }, intervalTime);
+        } else {
+            // Sesi açarken müziği başlat ve sesi yavaşça aç (Fade In)
+            const activeTrack = soundtracks[currentTrackIndex];
+            if (!activeTrack) return;
+
+            // Eğer audio kaynağı atanmamış veya farklı ise setle
+            if (!audio.src || (!audio.src.endsWith(activeTrack.path) && !audio.src.includes(activeTrack.path))) {
+                audio.src = activeTrack.path;
+                audio.load();
+            }
+
+            audio.play().then(() => {
+                let stepIn = 0;
+                fadeIntervalRef.current = setInterval(() => {
+                    stepIn++;
+                    audio.volume = Math.min(MAX_VOLUME, (stepIn / steps) * MAX_VOLUME);
+                    if (stepIn >= steps) {
+                        clearInterval(fadeIntervalRef.current);
+                        audio.volume = MAX_VOLUME;
+                    }
+                }, intervalTime);
+            }).catch(err => {
+                console.warn("Müzik oynatma başlatılamadı:", err);
+            });
+        }
+
+        return () => {
+            if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+        };
+    }, [isMuted]);
 
     const t = (key: string, fallback: string = ""): string => gameData?.translations[language]?.[key] || gameData?.translations['tr']?.[key] || fallback || key;
     const addLog = (msg: string): void => setGameState(prev => ({ ...prev, logs: [msg, ...prev.logs].slice(0, 5) }));
@@ -3122,8 +3451,46 @@ export default function App(): React.JSX.Element {
         <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2]">
             {appMode === 'portal' && <PortalScreen setAppMode={setAppMode} setActiveTab={setActiveTab} setIntroPageIndex={setIntroPageIndex} gameData={gameData} language={language} />}
             {appMode === 'intro' && <IntroScreen gameData={gameData} pageIndex={introPageIndex} setPageIndex={setIntroPageIndex} setAppMode={setAppMode} language={language} t={t} />}
-            {appMode === 'client' && <div className="p-4 md:p-8 max-w-6xl mx-auto"><GameClient gameData={gameData} gameState={gameState} playerState={playerState} cauldron={cauldron} brewState={brewState} treatmentBench={treatmentBench} treatmentStatus={treatmentStatus} language={language} setLanguage={setLanguage} setAppMode={setAppMode} activeTab={activeTab} setActiveTab={setActiveTab} t={t} handlers={handlers} /></div>}
-            {appMode === 'studio' && <div className="p-4 md:p-8 max-w-6xl mx-auto"><DeveloperStudio gameData={gameData} setGameData={setGameData} setGameState={setGameState} setPlayerState={setPlayerState} setAppMode={setAppMode} t={t} /></div>}
+            {appMode === 'client' && (
+                <div className="p-4 md:p-8 max-w-6xl mx-auto">
+                    <GameClient
+                        gameData={gameData}
+                        gameState={gameState}
+                        playerState={playerState}
+                        cauldron={cauldron}
+                        brewState={brewState}
+                        treatmentBench={treatmentBench}
+                        treatmentStatus={treatmentStatus}
+                        language={language}
+                        setLanguage={setLanguage}
+                        setAppMode={setAppMode}
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        t={t}
+                        handlers={handlers}
+                        isMuted={isMuted}
+                        setIsMuted={setIsMuted}
+                        currentTrackIndex={currentTrackIndex}
+                        changeTrack={changeTrack}
+                    />
+                </div>
+            )}
+            {appMode === 'studio' && (
+                <div className="p-4 md:p-8 max-w-6xl mx-auto">
+                    <DeveloperStudio
+                        gameData={gameData}
+                        setGameData={setGameData}
+                        setGameState={setGameState}
+                        setPlayerState={setPlayerState}
+                        setAppMode={setAppMode}
+                        t={t}
+                        currentTrackIndex={currentTrackIndex}
+                        changeTrack={changeTrack}
+                        isMuted={isMuted}
+                        setIsMuted={setIsMuted}
+                    />
+                </div>
+            )}
 
             {rentPopup.show && (
                 <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center font-parchment text-slate-900">
