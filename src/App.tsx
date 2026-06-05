@@ -108,6 +108,12 @@ interface Soundtrack {
     path: string;
 }
 
+interface NewsItem {
+    id: string;
+    day: number;
+    text: string;
+}
+
 type Translations = Record<string, Record<string, string>>;
 
 interface GameData {
@@ -122,6 +128,7 @@ interface GameData {
     translations: Translations;
     introPages: IntroPage[]; // JSON içinde hikaye giriş sayfaları verisi
     soundtracks: Soundtrack[]; // Dinamik müzik/soundtrack listesi
+    news: NewsItem[]; // Günlük haberler
 }
 
 interface PlayerState {
@@ -316,6 +323,10 @@ const INITIAL_DATA: GameData = {
         { id: 'track_2', title: 'Fısıldayan Gölgeler', path: 'Assets/forestTrack.mp3' },
         { id: 'track_3', title: 'Simya Ateşi Sesi', path: 'Assets/alchemyTrack.mp3' }
     ],
+    news: [
+        { id: 'news_1', day: 1, text: 'Vadide yeni bir şifacı kulübesi açıldı! Köylüler umutla dedenden kalan bu mirasın canlanmasını bekliyor.' },
+        { id: 'news_2', day: 2, text: 'Orman sınırında garip sesler duyulduğu söyleniyor. Druidlerin endişeli bakışları sıklaştı.' }
+    ],
     translations: {
         tr: {
             "ui.gold": "Altın", "ui.day": "Gün", "ui.rent_debt": "Kira Borcu", "ui.end_day": "Günü Bitir", "ui.call_customer": "Kapıya Bak!",
@@ -347,7 +358,16 @@ const INITIAL_DATA: GameData = {
             "intro.text.intro_3": "Unutma, bu dünyada hayatta kalmak sadece şifa dağıtmaktan ibaret değil. Her 7 günde bir Tahsildar Kazım kapını çalarak dükkan kirasını (100 Altın) isteyecek. Kasandaki altınları iyi yönet, aksi takdirde dükkanın mühürlenebilir!",
             "soundtrack.track_1.title": "Kadim Kulübe Melodisi",
             "soundtrack.track_2.title": "Fısıldayan Gölgeler",
-            "soundtrack.track_3.title": "Simya Ateşi Sesi"
+            "soundtrack.track_3.title": "Simya Ateşi Sesi",
+            "ui.news_title": "Köy Haberleri",
+            "ui.news_popup_title": "📜 Günlük Havadisler",
+            "ui.news_close": "Haberi Oku ve Kapat",
+            "ui.news_empty": "Henüz bir haber yok.",
+            "ui.news_tab": "📰 Haber Düzenleyici",
+            "ui.news_add": "Haber Ekle",
+            "ui.news_id": "Haber ID",
+            "ui.news_text": "Haber Metni",
+            "ui.news_day": "Gösterilecek Gün"
         },
         en: {
             "ui.gold": "Gold", "ui.day": "Day", "ui.rent_debt": "Rent Debt", "ui.end_day": "End Day", "ui.call_customer": "Check Door!",
@@ -369,7 +389,16 @@ const INITIAL_DATA: GameData = {
             "intro.text.intro_3": "Remember, surviving in this world is not just about healing. Every 7 days, Kazim the Tax Collector will knock on your door to collect rent (100 Gold). Manage your gold wisely, or your shop might be sealed!",
             "soundtrack.track_1.title": "Ancient Cabin Melody",
             "soundtrack.track_2.title": "Whispering Shadows",
-            "soundtrack.track_3.title": "Alchemy Fire Soundtrack"
+            "soundtrack.track_3.title": "Alchemy Fire Soundtrack",
+            "ui.news_title": "Village News",
+            "ui.news_popup_title": "📜 Daily News",
+            "ui.news_close": "Read and Close",
+            "ui.news_empty": "No news yet.",
+            "ui.news_tab": "📰 News Editor",
+            "ui.news_add": "Add News",
+            "ui.news_id": "News ID",
+            "ui.news_text": "News Text",
+            "ui.news_day": "Display Day"
         }
     }
 };
@@ -545,6 +574,21 @@ function SidePanel({ playerState, gameState, gameData, t, language }: SidePanelP
                 <div className="space-y-2 max-h-40 overflow-y-auto">
                     {gameState.logs.map((log, index) => <div key={index}
                                                              className="text-sm bg-amber-50/50 p-2 rounded border border-slate-400 text-slate-955 font-semibold">{log}</div>)}
+                </div>
+            </div>
+
+            <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                <h2 className="text-2xl font-magic text-slate-900 mb-3">📰 {t('ui.news_title')}</h2>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {(gameData.news || []).filter(n => n.day <= gameState.day).sort((a, b) => b.day - a.day).map((news) => (
+                        <div key={news.id} className="text-sm bg-indigo-50/50 p-2 rounded border border-indigo-400 text-slate-955 font-semibold">
+                            <span className="text-[10px] text-indigo-800 block mb-1">📅 {t('ui.day')} {news.day}</span>
+                            {news.text}
+                        </div>
+                    ))}
+                    {(gameData.news || []).filter(n => n.day <= gameState.day).length === 0 && (
+                        <div className="text-sm italic text-slate-500">{t('ui.news_empty')}</div>
+                    )}
                 </div>
             </div>
         </div>
@@ -1206,6 +1250,32 @@ function DeveloperStudio({
     // Soundtrack Atölye State'leri
     const [newTrack, setNewTrack] = useState<Soundtrack>({ id: '', title: '', path: '' });
 
+    const [newNews, setNewNews] = useState<NewsItem>({ id: '', day: 1, text: '' });
+
+    const handleAddNews = (): void => {
+        if (!newNews.id || !newNews.text) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            const alreadyExists = (prev.news || []).some(n => n.id === newNews.id);
+            if (alreadyExists) return prev;
+            return {
+                ...prev,
+                news: [...(prev.news || []), { ...newNews, day: Number(newNews.day) }]
+            };
+        });
+        setNewNews({ id: '', day: 1, text: '' });
+    };
+
+    const handleRemoveNews = (id: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                news: (prev.news || []).filter(n => n.id !== id)
+            };
+        });
+    };
+
     const handleExportJSON = (): void => {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData, null, 2));
         const downloadAnchor = document.createElement('a');
@@ -1224,7 +1294,8 @@ function DeveloperStudio({
                     marketPlants: parsed.marketPlants || [],
                     marketRecipes: parsed.marketRecipes || [],
                     introPages: parsed.introPages || INITIAL_DATA.introPages || [],
-                    soundtracks: parsed.soundtracks || INITIAL_DATA.soundtracks || []
+                    soundtracks: parsed.soundtracks || INITIAL_DATA.soundtracks || [],
+                    news: parsed.news || INITIAL_DATA.news || []
                 };
                 setGameData(validatedData);
                 setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
@@ -2483,6 +2554,82 @@ function DeveloperStudio({
         );
     };
 
+    const renderNewsEditor = (): React.JSX.Element => {
+        const news = gameData.news || [];
+        return (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 font-parchment min-h-[600px]">
+                <div className="lg:col-span-2 bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📰 {t('ui.news_title')} ({news.length})</h2>
+                        <div className="space-y-3 max-h-[480px] overflow-y-auto pr-2">
+                            {news.length === 0 ? (
+                                <p className="italic text-slate-600 font-bold p-4 text-center bg-amber-50 rounded-xl border border-dashed border-slate-400">{t('ui.news_empty')}</p>
+                            ) : (
+                                [...news].sort((a,b) => a.day - b.day).map((n) => (
+                                    <div key={n.id} className="bg-amber-50/70 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center gap-4 hover:shadow-md transition-shadow relative">
+                                        <div className="flex-1 space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded-full font-sans font-bold">{t('ui.day')} {n.day}</span>
+                                                <h3 className="font-bold text-lg text-slate-900 leading-none">#{n.id}</h3>
+                                            </div>
+                                            <p className="text-sm text-slate-600 leading-tight">{n.text}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleRemoveNews(n.id)}
+                                            className="bg-red-800 text-white font-sans text-xs font-bold px-3 py-1.5 rounded border border-black shadow animate-pulse"
+                                        >
+                                            Sil
+                                        </button>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900 border-b border-slate-900/10 pb-1.5">📰 {t('ui.news_add')}</h2>
+                    <div className="space-y-3">
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">{t('ui.news_id')}:</label>
+                            <input
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-mono font-bold text-slate-900"
+                                placeholder="news_unique_id"
+                                value={newNews.id}
+                                onChange={e => setNewNews({ ...newNews, id: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">{t('ui.news_day')}:</label>
+                            <input
+                                type="number"
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-slate-900"
+                                value={newNews.day}
+                                onChange={e => setNewNews({ ...newNews, day: Number(e.target.value) })}
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-bold block mb-1 text-slate-700">{t('ui.news_text')}:</label>
+                            <textarea
+                                className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-sans font-semibold text-slate-900 h-32 resize-none leading-relaxed"
+                                placeholder="Köyde neler oldu?"
+                                value={newNews.text}
+                                onChange={e => setNewNews({ ...newNews, text: e.target.value })}
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleAddNews}
+                            className="w-full bg-emerald-500 text-slate-955 font-bold py-3 rounded-xl border-4 border-black font-magic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-emerald-400 active:translate-y-0.5"
+                        >
+                            {t('ui.news_add')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     const currentStory = gameData.storylines.find(s => s.id === activeEditorStoryId);
 
     return (
@@ -2504,6 +2651,7 @@ function DeveloperStudio({
                     { id: 'dialogueEditor', label: '💬 Diyalog Ağacı & Karakter' },
                     { id: 'introEditor', label: '📖 Hikaye Girişi' },
                     { id: 'musicEditor', label: '🎵 Müzik & Sesler' },
+                    { id: 'newsEditor', label: t('ui.news_tab') },
                     { id: 'marketEditor', label: '🛒 Market Düzenleyici' },
                     { id: 'translationEditor', label: '🌍 Lokalizasyon' },
                     { id: 'jsonHub', label: '📂 JSON Motoru' }
@@ -2526,6 +2674,8 @@ function DeveloperStudio({
             {activeTab === 'introEditor' && renderIntroEditor()}
 
             {activeTab === 'musicEditor' && renderMusicEditor()}
+
+            {activeTab === 'newsEditor' && renderNewsEditor()}
 
             {activeTab === 'marketEditor' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-parchment">
@@ -3059,6 +3209,7 @@ export default function App(): React.JSX.Element {
     const [treatmentStatus, setTreatmentStatus] = useState<TreatmentStatus>({ type: '', message: '' });
     const [gameState, setGameState] = useState<GameState>({ day: 1, currentCustomer: null, rentPaidThisWeek: false, storyProgress: { 'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 }, 'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 } }, logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'] });
     const [rentPopup, setRentPopup] = useState<RentPopup>({ show: false, message: '' });
+    const [newsPopup, setNewsPopup] = useState<{ show: boolean; items: NewsItem[] }>({ show: false, items: [] });
 
     const [introPageIndex, setIntroPageIndex] = useState<number>(0);
 
@@ -3115,7 +3266,8 @@ export default function App(): React.JSX.Element {
                     ...INITIAL_DATA,
                     ...data,
                     introPages: data.introPages || INITIAL_DATA.introPages || [],
-                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || []
+                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || [],
+                    news: data.news || INITIAL_DATA.news || []
                 });
                 setIsLoading(false);
             })
@@ -3216,7 +3368,8 @@ export default function App(): React.JSX.Element {
                     ...INITIAL_DATA,
                     ...data,
                     introPages: data.introPages || INITIAL_DATA.introPages || [],
-                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || []
+                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || [],
+                    news: data.news || INITIAL_DATA.news || []
                 });
                 setIsLoading(false);
                 setIntroPageIndex(0);
@@ -3371,6 +3524,12 @@ export default function App(): React.JSX.Element {
         let nextRentDebt = playerState.rentDebt;
         if (gameState.day % 7 === 0 && !gameState.rentPaidThisWeek) { nextRentDebt += 100; rentOverdue = true; }
         if (rentOverdue) setPlayerState(prev => ({ ...prev, rentDebt: nextRentDebt }));
+
+        const nextDay = gameState.day + 1;
+        const dailyNews = (gameData?.news || []).filter(n => n.day === nextDay);
+        if (dailyNews.length > 0) {
+            setNewsPopup({ show: true, items: dailyNews });
+        }
 
         setGameData(prev => {
             if (!prev) return prev;
@@ -3741,6 +3900,28 @@ export default function App(): React.JSX.Element {
                         <h3 className="text-2xl font-bold font-magic text-red-900">{t('ui.rent_popup_title')}</h3>
                         <p className="text-lg text-slate-900">{rentPopup.message}</p>
                         <button onClick={() => setRentPopup({ show: false, message: '' })} className="bg-red-800 text-white font-magic p-3 rounded-xl">İmzala</button>
+                    </div>
+                </div>
+            )}
+
+            {newsPopup.show && (
+                <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center font-parchment text-slate-900">
+                    <div className="bg-[#f3e8d2] text-slate-955 border-8 border-indigo-900 rounded-3xl p-8 max-w-lg shadow-2xl text-center space-y-6 mx-4 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-indigo-800 to-purple-800"></div>
+                        <h3 className="text-3xl font-bold font-magic text-indigo-900">{t('ui.news_popup_title')}</h3>
+                        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                            {newsPopup.items.map(news => (
+                                <div key={news.id} className="bg-white/50 p-4 rounded-xl border-2 border-indigo-200 text-lg font-semibold italic leading-relaxed">
+                                    "{news.text}"
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            onClick={() => setNewsPopup({ show: false, items: [] })}
+                            className="w-full bg-indigo-800 hover:bg-indigo-700 text-white font-magic font-bold py-3 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform active:translate-y-1"
+                        >
+                            {t('ui.news_close')}
+                        </button>
                     </div>
                 </div>
             )}
