@@ -3253,7 +3253,7 @@ export default function App(): React.JSX.Element {
 
     // 2. AŞAMA: Veritabanını (JSON) Yükleme
     useEffect(() => {
-        fetch('/assets/gameData.json')
+        fetch('assets/gameData.json')
             .then(response => {
                 if (!response.ok) throw new Error("Ağ hatası veya dosya bulunamadı");
 
@@ -3361,7 +3361,7 @@ export default function App(): React.JSX.Element {
 
         // 4. Veritabanını tazelemek için fetch işlemini tekrar tetikle (Fresh gameData)
         setIsLoading(true);
-        fetch('/assets/gameData.json')
+        fetch('assets/gameData.json')
             .then(res => {
                 if (!res.ok) throw new Error();
                 return res.json();
