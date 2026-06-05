@@ -370,6 +370,7 @@ const INITIAL_DATA: GameData = {
             "ui.news_id": "Haber ID",
             "ui.news_text": "Haber Metni",
             "ui.news_day": "Gösterilecek Gün",
+            "ui.sell_price": "Satış Fiyatı",
             "ui.customer_approaching": "Birileri yaklaşıyor...",
             "ui.door_quiet": "Şu an dükkan sessiz çırak.",
             "ui.finish_business": "Önce bugünkü işleri bitir!",
@@ -405,6 +406,7 @@ const INITIAL_DATA: GameData = {
             "ui.news_id": "News ID",
             "ui.news_text": "News Text",
             "ui.news_day": "Display Day",
+            "ui.sell_price": "Sell Price",
             "ui.customer_approaching": "Someone is approaching...",
             "ui.door_quiet": "The shop is quiet...",
             "ui.finish_business": "Finish today's business first!",
@@ -1977,6 +1979,13 @@ function DeveloperStudio({
                 <input className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-slate-900"
                        placeholder="İsim" value={newPotion.name}
                        onChange={e => setNewPotion({...newPotion, name: e.target.value})}/>
+                <div className="flex items-center gap-2 bg-amber-50 border-2 border-slate-900 rounded-lg p-2">
+                    <span className="text-xs font-bold text-slate-700 whitespace-nowrap">{t('ui.sell_price', 'Satış Fiyatı')}:</span>
+                    <input type="number" className="w-full bg-transparent font-bold text-slate-900 outline-none"
+                           placeholder="50" value={newPotion.sellPrice}
+                           onChange={e => setNewPotion({...newPotion, sellPrice: Number(e.target.value)})}/>
+                    <span className="text-xs font-bold text-slate-500">💰</span>
+                </div>
                 <div className="flex gap-2">
                     <select className="bg-amber-50 border-2 border-slate-900 p-2 flex-1 rounded text-xs font-bold font-parchment text-slate-900" value={tempIngredient.id}
                             onChange={e => setTempIngredient({...tempIngredient, id: e.target.value, type: e.target.value.startsWith('pot_') ? 'potion' : 'plant'})}>
