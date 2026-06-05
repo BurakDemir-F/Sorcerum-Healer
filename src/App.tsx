@@ -1251,6 +1251,8 @@ function DeveloperStudio({
     // Soundtrack Atölye State'leri
     const [newTrack, setNewTrack] = useState<Soundtrack>({ id: '', title: '', path: '' });
 
+    const [editingPropertyName, setEditingPropertyName] = useState<string | null>(null);
+
     const [newNews, setNewNews] = useState<NewsItem>({ id: '', day: 1, text: '' });
 
     const handleAddNews = (): void => {
@@ -1273,6 +1275,31 @@ function DeveloperStudio({
             return {
                 ...prev,
                 news: (prev.news || []).filter(n => n.id !== id)
+            };
+        });
+    };
+
+    const handleRemovePlant = (id: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                plants: prev.plants.filter(p => p.id !== id),
+                marketPlants: (prev.marketPlants || []).filter(mp => mp.plantId !== id)
+            };
+        });
+    };
+
+    const handleRemovePlantProperty = (propName: string): void => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                plantProperties: prev.plantProperties.filter(p => p.name !== propName),
+                plants: prev.plants.map(plant => ({
+                    ...plant,
+                    properties: plant.properties.filter(p => p !== propName)
+                }))
             };
         });
     };
@@ -1487,17 +1514,41 @@ function DeveloperStudio({
     const handleAddPlantProperty = (): void => {
         if (!newPlantProperty.name.trim()) return;
         const name = newPlantProperty.name.trim();
-        const alreadyExists = gameData.plantProperties.some(p => p.name === name);
-        if (alreadyExists) return;
-        handleTranslateChange('tr', `prop.${name}`, name);
-        handleTranslateChange('en', `prop.${name}`, name);
-        setGameData(prev => {
-            if (!prev) return prev;
-            return {
-                ...prev,
-                plantProperties: [...prev.plantProperties, { ...newPlantProperty, name }]
-            };
-        });
+
+        if (editingPropertyName) {
+            if (name !== editingPropertyName) {
+                handleTranslateChange('tr', `prop.${name}`, name);
+                handleTranslateChange('en', `prop.${name}`, name);
+            }
+            setGameData(prev => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    plantProperties: prev.plantProperties.map(p =>
+                        p.name === editingPropertyName ? { ...newPlantProperty, name } : p
+                    ),
+                    plants: name !== editingPropertyName
+                        ? prev.plants.map(plant => ({
+                            ...plant,
+                            properties: plant.properties.map(p => p === editingPropertyName ? name : p)
+                        }))
+                        : prev.plants
+                };
+            });
+            setEditingPropertyName(null);
+        } else {
+            const alreadyExists = gameData.plantProperties.some(p => p.name === name);
+            if (alreadyExists) return;
+            handleTranslateChange('tr', `prop.${name}`, name);
+            handleTranslateChange('en', `prop.${name}`, name);
+            setGameData(prev => {
+                if (!prev) return prev;
+                return {
+                    ...prev,
+                    plantProperties: [...prev.plantProperties, { ...newPlantProperty, name }]
+                };
+            });
+        }
         setNewPlantProperty({ name: '', curesSymptoms: [] });
     };
 
@@ -2029,7 +2080,20 @@ function DeveloperStudio({
                 </div>
 
                 <div className="space-y-3 pt-4 border-t-2 border-slate-900/10">
-                    <h2 className="text-2xl font-bold font-magic text-slate-900">🌿 Yeni Bitki Özelliği (Nitelik)</h2>
+                    <div className="flex justify-between items-center border-b border-slate-900/10 pb-1.5">
+                        <h2 className="text-2xl font-bold font-magic text-slate-900">{editingPropertyName ? '✏️ Özelliği Düzenle' : '🌿 Yeni Bitki Özelliği (Nitelik)'}</h2>
+                        {editingPropertyName && (
+                            <button
+                                onClick={() => {
+                                    setEditingPropertyName(null);
+                                    setNewPlantProperty({ name: '', curesSymptoms: [] });
+                                }}
+                                className="bg-red-800 text-white font-sans text-xs font-bold px-2 py-0.5 rounded border border-black shadow"
+                            >
+                                Vazgeç
+                            </button>
+                        )}
+                    </div>
                     <input
                         className="w-full bg-amber-50 border-2 border-slate-900 rounded-lg p-2 font-bold text-sm text-slate-900"
                         placeholder="Özellik İsmi (Örn: Zehir Sökücü)"
@@ -2072,8 +2136,45 @@ function DeveloperStudio({
                         onClick={handleAddPlantProperty}
                         className="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-xl border-4 border-black text-sm"
                     >
-                        Özelliği Kaydet
+                        {editingPropertyName ? 'Özelliği Güncelle' : 'Özelliği Kaydet'}
                     </button>
+                </div>
+
+                <div className="pt-4 border-t-2 border-slate-900/10">
+                    <h3 className="text-xl font-bold font-magic text-slate-900 mb-2">Tanımlı Tüm Özellikler:</h3>
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        {gameData.plantProperties.map(prop => (
+                            <div key={prop.name} className="flex justify-between items-center bg-amber-50/70 p-2 rounded-lg border border-slate-400 text-xs">
+                                <div className="flex-1">
+                                    <span className="font-bold text-slate-900">{t(`prop.${prop.name}`, prop.name)}</span>
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                        {prop.curesSymptoms.map(s => (
+                                            <span key={s} className="bg-emerald-100 text-emerald-800 px-1 rounded-[4px] border border-emerald-300 text-[9px]">
+                                                {t(`symptom.${s}`, s)}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="flex gap-1 ml-2">
+                                    <button
+                                        onClick={() => {
+                                            setNewPlantProperty({ ...prop });
+                                            setEditingPropertyName(prop.name);
+                                        }}
+                                        className="bg-indigo-600 text-white px-2 py-1 rounded border border-black font-bold text-[10px]"
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button
+                                        onClick={() => handleRemovePlantProperty(prop.name)}
+                                        className="bg-red-800 text-white px-2 py-1 rounded border border-black font-bold text-[10px]"
+                                    >
+                                        Sil
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         );
@@ -2142,6 +2243,12 @@ function DeveloperStudio({
                                         className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-2.5 py-0.5 rounded border-2 border-black font-bold font-magic"
                                     >
                                         ✏️ Düzenle
+                                    </button>
+                                    <button
+                                        onClick={() => handleRemovePlant(plant.id)}
+                                        className="bg-red-800 hover:bg-red-700 text-white text-[10px] px-2.5 py-0.5 rounded border-2 border-black font-bold font-magic animate-pulse"
+                                    >
+                                        Sil
                                     </button>
                                 </div>
                             </div>
