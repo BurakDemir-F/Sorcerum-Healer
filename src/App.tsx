@@ -173,6 +173,8 @@ interface GameState {
     rentPaidThisWeek: boolean;
     storyProgress: Record<string, StoryProgressItem>;
     logs: string[];
+    waitingCustomers: string[]; // Kapıda bekleyen müşteri storyId listesi
+    queuedCustomers: string[];  // Gün içinde gelecek (zamanlanmış) müşteri storyId listesi
 }
 
 interface RentPopup {
@@ -367,7 +369,11 @@ const INITIAL_DATA: GameData = {
             "ui.news_add": "Haber Ekle",
             "ui.news_id": "Haber ID",
             "ui.news_text": "Haber Metni",
-            "ui.news_day": "Gösterilecek Gün"
+            "ui.news_day": "Gösterilecek Gün",
+            "ui.customer_approaching": "Birileri yaklaşıyor...",
+            "ui.door_quiet": "Şu an dükkan sessiz çırak.",
+            "ui.finish_business": "Önce bugünkü işleri bitir!",
+            "ui.no_customer_at_door": "Kapıda bekleyen kimse yok."
         },
         en: {
             "ui.gold": "Gold", "ui.day": "Day", "ui.rent_debt": "Rent Debt", "ui.end_day": "End Day", "ui.call_customer": "Check Door!",
@@ -398,7 +404,11 @@ const INITIAL_DATA: GameData = {
             "ui.news_add": "Add News",
             "ui.news_id": "News ID",
             "ui.news_text": "News Text",
-            "ui.news_day": "Display Day"
+            "ui.news_day": "Display Day",
+            "ui.customer_approaching": "Someone is approaching...",
+            "ui.door_quiet": "The shop is quiet...",
+            "ui.finish_business": "Finish today's business first!",
+            "ui.no_customer_at_door": "Nobody is at the door."
         }
     }
 };
@@ -635,13 +645,39 @@ function ShopArea({ gameState, playerState, gameData, language, t, handlers, tre
                     <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-red-800 to-amber-700 border-b-2 border-black"></div>
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-3xl font-bold font-magic text-slate-900 flex items-center gap-2">🚪 Tezgah</h2>
-                        {!activeNode && <button onClick={handlers.handleEndDay} className="bg-red-800 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg border-2 border-black font-magic text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">🌙 {t('ui.end_day')}</button>}
+                        {!activeNode && (
+                            <button
+                                onClick={handlers.handleEndDay}
+                                disabled={gameState.queuedCustomers.length > 0 || gameState.waitingCustomers.length > 0}
+                                title={(gameState.queuedCustomers.length > 0 || gameState.waitingCustomers.length > 0) ? t('ui.finish_business') : ''}
+                                className={`bg-red-800 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg border-2 border-black font-magic text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all ${(gameState.queuedCustomers.length > 0 || gameState.waitingCustomers.length > 0) ? 'opacity-50 grayscale cursor-not-allowed' : 'active:translate-y-1 active:shadow-none'}`}
+                            >
+                                🌙 {t('ui.end_day')}
+                            </button>
+                        )}
                     </div>
 
                     {!activeNode ? (
                         <div className="text-center py-12 bg-amber-100/50 rounded-xl border-2 border-dashed border-slate-800">
-                            <p className="text-slate-700 text-xl mb-6">{language === 'en' ? 'The shop is quiet...' : 'Şu an dükkan sessiz çırak.'}</p>
-                            <button onClick={handlers.handleCallCustomer} className="bg-amber-500 hover:bg-amber-400 text-slate-955 font-magic font-bold py-4 px-10 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xl">🚪 {t('ui.call_customer')}</button>
+                            <p className="text-slate-700 text-xl mb-6">
+                                {gameState.queuedCustomers.length > 0 
+                                    ? t('ui.customer_approaching') 
+                                    : t('ui.door_quiet')}
+                            </p>
+                            <div className="relative inline-block">
+                                <button
+                                    onClick={handlers.handleCallCustomer}
+                                    disabled={gameState.waitingCustomers.length === 0}
+                                    className={`bg-amber-500 hover:bg-amber-400 text-slate-955 font-magic font-bold py-4 px-10 rounded-xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-xl transition-all ${gameState.waitingCustomers.length === 0 ? 'opacity-50 grayscale cursor-not-allowed scale-95' : 'active:translate-y-1 active:shadow-none hover:-translate-y-1'}`}
+                                >
+                                    🚪 {t('ui.call_customer')}
+                                </button>
+                                {gameState.waitingCustomers.length > 0 && (
+                                    <span className="absolute -top-3 -right-3 bg-red-600 text-white text-sm font-bold w-8 h-8 rounded-full border-4 border-black flex items-center justify-center shadow-lg animate-bounce">
+                                        {gameState.waitingCustomers.length}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     ) : (
                         <div>
@@ -3317,7 +3353,7 @@ export default function App(): React.JSX.Element {
     const [brewState, setBrewState] = useState<BrewState>({ status: 'idle', message: '' });
     const [treatmentBench, setTreatmentBench] = useState<TreatmentBenchItem[]>([]);
     const [treatmentStatus, setTreatmentStatus] = useState<TreatmentStatus>({ type: '', message: '' });
-    const [gameState, setGameState] = useState<GameState>({ day: 1, currentCustomer: null, rentPaidThisWeek: false, storyProgress: { 'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 }, 'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 } }, logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'] });
+    const [gameState, setGameState] = useState<GameState>({ day: 1, currentCustomer: null, rentPaidThisWeek: false, storyProgress: { 'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 }, 'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 } }, logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'], waitingCustomers: [], queuedCustomers: [] });
     const [rentPopup, setRentPopup] = useState<RentPopup>({ show: false, message: '' });
     const [newsPopup, setNewsPopup] = useState<{ show: boolean; items: NewsItem[] }>({ show: false, items: [] });
 
@@ -3411,6 +3447,54 @@ export default function App(): React.JSX.Element {
         }
     }, [playerState, gameState, gameData, language, isMuted, appMode, isLoading]);
 
+    // 4. AŞAMA: MÜŞTERİ KUYRUK SİSTEMİ (CUSTOMER QUEUE SYSTEM)
+    // 1. GÜN BAŞINDA MÜŞTERİLERİ SIRALA (QUEUING)
+    useEffect(() => {
+        if (!gameData || isLoading || appMode === 'portal' || appMode === 'intro') return;
+
+        // Eğer kuyruk ve bekleyenler zaten boşsa ve aktif müşteri yoksa (gün yeni başladı demektir)
+        // Not: handleEndDay bu listeleri sıfırlar, böylece her yeni gün başında bu blok çalışır.
+        if (gameState.queuedCustomers.length === 0 && gameState.waitingCustomers.length === 0 && !gameState.currentCustomer) {
+            const availableToday = Object.entries(gameState.storyProgress)
+                .filter(([sId, prog]) => {
+                    if (prog.currentNodeId === 'END') return false;
+                    if (prog.availableDay > gameState.day) return false;
+
+                    const storyDef = gameData.storylines.find(s => s.id === sId);
+                    const nodeDef = storyDef?.nodes.find(n => n.id === prog.currentNodeId);
+                    const nodeDayReq = nodeDef?.day ?? 1;
+
+                    return gameState.day >= nodeDayReq;
+                })
+                .map(([sId]) => sId);
+
+            if (availableToday.length > 0) {
+                // Karıştırarak sıraya dizelim (her gün farklı sıra olması için)
+                const shuffled = [...availableToday].sort(() => Math.random() - 0.5);
+                setGameState(prev => ({ ...prev, queuedCustomers: shuffled }));
+            }
+        }
+    }, [gameState.day, gameData, isLoading, appMode, gameState.currentCustomer]);
+
+    // 2. KUYRUKTAKİLERİ BELLİ ARALIKLA KAPIYA GETİR (ARRIVAL TIMER)
+    useEffect(() => {
+        if (gameState.queuedCustomers.length === 0) return;
+
+        const timer = setTimeout(() => {
+            setGameState(prev => {
+                if (prev.queuedCustomers.length === 0) return prev;
+                const [nextCustomer, ...remainingQueue] = prev.queuedCustomers;
+                return {
+                    ...prev,
+                    queuedCustomers: remainingQueue,
+                    waitingCustomers: [...prev.waitingCustomers, nextCustomer]
+                };
+            });
+        }, 5000); // 5 saniye bekleme süresi (Gereksinim: "5 saniye sonra ilk müşteri gelsin")
+
+        return () => clearTimeout(timer);
+    }, [gameState.queuedCustomers]);
+
     // KAYIT SİSTEMİ ÇALIŞTIRICILARI (SAVE HANDLERS)
     const handleContinueGame = () => {
         const rawSave = localStorage.getItem('buyu_mirasi_save');
@@ -3418,7 +3502,14 @@ export default function App(): React.JSX.Element {
             try {
                 const parsed = JSON.parse(rawSave);
                 setPlayerState(parsed.playerState);
-                setGameState(parsed.gameState);
+                
+                // Eski kayıtlarla uyumluluk için eksik alanları doldur
+                const loadedGameState = {
+                    ...parsed.gameState,
+                    waitingCustomers: parsed.gameState.waitingCustomers || [],
+                    queuedCustomers: parsed.gameState.queuedCustomers || []
+                };
+                setGameState(loadedGameState);
                 if (parsed.gameData) {
                     setGameData(parsed.gameData);
                 }
@@ -3458,7 +3549,9 @@ export default function App(): React.JSX.Element {
                 'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 },
                 'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 }
             },
-            logs: ['🧙‍♂️ Yeni bir miras başladı. Kulübeye hoş geldin şifacı!']
+            logs: ['🧙‍♂️ Yeni bir miras başladı. Kulübeye hoş geldin şifacı!'],
+            waitingCustomers: [],
+            queuedCustomers: []
         });
 
         // 3. Tarayıcıdaki eski kaydı temizle
@@ -3652,7 +3745,7 @@ export default function App(): React.JSX.Element {
         setGameState(prev => {
             const nextLogs = [language === 'en' ? `🌙 Day ${prev.day + 1} started.` : `🌙 ${prev.day + 1}. güne uyandın.`];
             if (rentOverdue) nextLogs.push(language === 'en' ? `⚠️ Rent Overdue! +100 Gold fee.` : `⚠️ Kira Ödenmedi! 100 Altın ceza.`);
-            return { ...prev, day: prev.day + 1, currentCustomer: null, rentPaidThisWeek: false, logs: [...nextLogs, ...prev.logs].slice(0, 5) };
+            return { ...prev, day: prev.day + 1, currentCustomer: null, rentPaidThisWeek: false, logs: [...nextLogs, ...prev.logs].slice(0, 5), waitingCustomers: [], queuedCustomers: [] };
         });
         setTreatmentBench([]); setTreatmentStatus({ type: '', message: '' });
     };
@@ -3660,26 +3753,25 @@ export default function App(): React.JSX.Element {
     const handleCallCustomer = (): void => {
         if (!gameData) return;
 
-        const availableStories = Object.entries(gameState.storyProgress)
-            .filter(([sId, prog]) => {
-                if (prog.currentNodeId === 'END') return false;
-                if (prog.availableDay > gameState.day) return false;
-
-                const storyDef = gameData.storylines.find(s => s.id === sId);
-                const nodeDef = storyDef?.nodes.find(n => n.id === prog.currentNodeId);
-                const nodeDayReq = nodeDef?.day ?? 1;
-
-                return gameState.day >= nodeDayReq;
-            })
-            .map(([sId, prog]) => ({ storyId: sId, nodeId: prog.currentNodeId }));
-
-        if (availableStories.length === 0) {
-            addLog(language === 'en' ? 'Nobody is visiting today.' : 'Şu an gelecek kimse yok. (Yarın yeni hikayeler açılabilir!)');
+        if (gameState.waitingCustomers.length === 0) {
+            addLog(t('ui.no_customer_at_door'));
             return;
         }
-        const selected = availableStories[Math.floor(Math.random() * availableStories.length)];
-        setGameState(prev => ({ ...prev, currentCustomer: selected }));
-        setTreatmentBench([]); setTreatmentStatus({ type: '', message: '' });
+
+        const nextStoryId = gameState.waitingCustomers[0];
+        const remainingWaiting = gameState.waitingCustomers.slice(1);
+
+        const prog = gameState.storyProgress[nextStoryId];
+        if (!prog) return;
+
+        setGameState(prev => ({
+            ...prev,
+            waitingCustomers: remainingWaiting,
+            currentCustomer: { storyId: nextStoryId, nodeId: prog.currentNodeId }
+        }));
+
+        setTreatmentBench([]);
+        setTreatmentStatus({ type: '', message: '' });
     };
 
     const handleCustomerChoice = (choice: Choice, idx: number, activeNode: StoryNode, storyId: string): void => {
