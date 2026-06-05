@@ -206,6 +206,7 @@
     {
       "id": "story_baran",
       "characterName": "Genç Druid Baran",
+      "description": "Zihnindeki acı verici fısıltılardan kurtulmak isteyen ve ormanda yolunu kaybetmiş acemi şifacı.",
       "avatarUrl": "",
       "nodes": [
         {
@@ -214,6 +215,7 @@
           "diseaseId": "d_alkarisi",
           "dynamicSuccessNodeId": "node_baran_poyraz",
           "dynamicFailNodeId": "node_baran_dead",
+          "day": 1,
           "choices": [
             {
               "text": "Sana göre bir ilacım yok Baran, üzgünüm.",
@@ -225,11 +227,13 @@
         {
           "id": "node_baran_poyraz",
           "npcText": "Aklım yerine geldi, zihnimdeki o uğursuz çığlıklar kesildi! Atım Poyraz bile senin şifanı övdü... Şimdi İlayda ve Derya adındaki küs nehir ruhlarını barıştırma görevim var. Bana bir parça Naiad Nefesi verirsen minnettar olurum.",
+          "day": 1,
           "choices": [
             {
               "text": "Naiad Nefesi İksirini Al (İksiri Ver)",
               "nextNodeId": "node_baran_reconciled",
               "reqPotion": "pot_naiad_nefesi",
+              "reqPotionCount": 1,
               "delayDays": 5
             },
             {
@@ -242,18 +246,21 @@
         {
           "id": "node_baran_reconciled",
           "npcText": "Şifacı! Senin iksirin sayesinde nehre girdim ve İlayda ile Derya yı barıştırdım. Sana teşekkür etmek için nehrin dibinden çıkardığım bu Sihirli Buğdayı hediye ediyoruz!",
+          "day": 6,
           "choices": [
             {
               "text": "Kendine çok iyi bak Baran.",
               "nextNodeId": null,
               "rewardPlantId": "p_sihirli_bugday",
-              "rewardPlantCount": 1
+              "rewardPlantCount": 1,
+              "rewardGold": 50
             }
           ]
         },
         {
           "id": "node_baran_dead",
           "npcText": "Baran karanlığa teslim oldu... Alkarısı zihnini tamamen ele geçirdi. Çığlıklar atarak vahşi ormana karışıp kayboldu.",
+          "day": 2,
           "choices": [
             {
               "text": "Çok yazık oldu...",
@@ -266,11 +273,13 @@
     {
       "id": "story_landlord",
       "characterName": "Tahsildar Kazım",
+      "description": "Köyün beyine çalışan, palankadaki kiraları toplayan ve borç affetmeyen kurallara bağlı devlet görevlisi.",
       "avatarUrl": "",
       "nodes": [
         {
           "id": "node_landlord_demand",
           "npcText": "Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını (100 Altın) tahsil etmeye geldim.",
+          "day": 7,
           "choices": [
             {
               "text": "Kiramı Öde (100 Altın Öde)",
@@ -286,6 +295,7 @@
         {
           "id": "node_landlord_thanks",
           "npcText": "Güzel, akıllı bir şifacı. Palankamızın kapısı sana her zaman açık kalacaktır. İyi çalışmalar.",
+          "day": 7,
           "choices": [
             {
               "text": "Teşekkürler, iyi günler Kazım Bey.",
@@ -296,6 +306,7 @@
         {
           "id": "node_landlord_angry",
           "npcText": "Yine mi borç?! Bak burası devlet kapısı. Kazandığın her altın doğrudan benim borç defterime kesilecek, palanka kanunudur bu!",
+          "day": 7,
           "choices": [
             {
               "text": "Anlıyorum, yapacak bir şey yok...",
@@ -345,6 +356,61 @@
       "availableDay": 1
     }
   ],
+  "introPages": [
+    {
+      "id": "intro_welcome_1",
+      "title": "Sınır Söğüt Köyüne Hoş Geldin",
+      "text": "Hoş geldin şifacı. Uzun zamandır köyümüze bir şifacı bulunmadı. Köyün sınırında bir druid bulunur ama o bizle çok ilgilenmez. Sınır Söğüt eski bir palanka tahkimatı içinde ufak bir köydür. Çoğunlukla hayvancılıkla uğraşır ve tahıl yetiştiririz. ",
+      "imageUrl": ""
+    },
+    {
+      "id": "intro_welcome_2",
+      "title": "Canavarlar",
+      "text": "Hayvan otlakları palanka dışında kaldığı için hayvanlarımızı otlatmaya çıkardığımızda çok sayıda canavar saldırır. Bu sebeple senin şifacı yeteneklerin ve iksirlerin bize merhem olacak.",
+      "imageUrl": ""
+    },
+    {
+      "id": "intro_welcome_3",
+      "title": "Druid Seren",
+      "text": "Köyümüzün kıyısında ufak bir kulübede yaşayan Seren adında bir druid vardır. Köye hiç girmez ama eğer onu görürsen saygılı olmanda yarar var. ",
+      "imageUrl": ""
+    },
+    {
+      "id": "intro_welcome_4",
+      "title": "Kulübe Kirası",
+      "text": "Her haftanın 7. günü 100 altınlık kulübe kirasını almak için biri gelecek. Parayı hazırlamayı ve kirayı ödemeyi unutma. ",
+      "imageUrl": ""
+    }
+  ],
+  "soundtracks": [
+    {
+      "id": "track_1",
+      "title": "Kadim Kulübe Melodisi",
+      "path": "Assets/tavernTrack.mp3"
+    },
+    {
+      "id": "track_2",
+      "title": "Fısıldayan Gölgeler",
+      "path": "Assets/forestTrack.mp3"
+    },
+    {
+      "id": "track_3",
+      "title": "Simya Ateşi Sesi",
+      "path": "Assets/alchemyTrack.mp3"
+    }
+  ],
+  "news": [
+    {
+      "id": "news_1",
+      "day": 1,
+      "text": "Vadide yeni bir şifacı kulübesi açıldı! Köylüler umutla dedenden kalan bu mirasın canlanmasını bekliyor."
+    },
+    {
+      "id": "news_2",
+      "day": 2,
+      "text": "Orman sınırında garip sesler duyulduğu söyleniyor. Druidlerin endişeli bakışları sıklaştı."
+    }
+  ],
   "translations": {
     "tr": {
       "ui.gold": "Altın",
@@ -372,7 +438,9 @@
       "ui.diagnosis": "Teşhis",
       "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
       "char.story_baran": "Genç Druid Baran",
+      "char.story_baran.desc": "Zihnindeki acı verici fısıltılardan kurtulmak isteyen ve ormanda yolunu kaybetmiş acemi şifacı.",
       "char.story_landlord": "Tahsildar Kazım",
+      "char.story_landlord.desc": "Köyün beyine çalışan, palankadaki kiraları toplayan ve borç affetmeyen kurallara bağlı devlet görevlisi.",
       "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı",
       "plant.p_gumus_kok.name": "Gümüş Kök",
       "plant.p_isildak_otu.name": "Işıldak Otu",
@@ -382,8 +450,49 @@
       "potion.pot_naiad_nefesi.name": "Naiad Nefesi İksiri",
       "symptom.Alkarısı Karabasanı": "Alkarısı Karabasanı",
       "symptom.Kirli Büyü Zehirlenmesi": "Kirli Büyü Zehirlenmesi",
+      "symptom.Bataklık Çürümesi": "Bataklık Çürümesi",
+      "symptom.Işıldak Çırmığı": "Işıldak Çırmığı",
+      "symptom.Ateş": "Ateş",
+      "symptom.Kanama": "Kanama",
+      "symptom.Halsizlik": "Halsizlik",
+      "symptom.Baş Dönmesi": "Baş Dönmesi",
+      "symptom.Titreme": "Titreme",
+      "symptom.Zehirlenme": "Zehirlenme",
       "disease.d_alkarisi.name": "Alkarısı Musallatı",
-      "disease.d_kirli_buyu.name": "Kirli Büyü Çürümesi"
+      "disease.d_kirli_buyu.name": "Kirli Büyü Çürümesi",
+      "disease.d_isildak_isirigi.name": "Işıldak Tırmalaması",
+      "disease.d_bataklik_vebasi.name": "Bataklık Çürümesi",
+      "prop.Demir Özlü": "Demir Özlü",
+      "prop.Gümüşlü": "Gümüşlü",
+      "prop.Sihirli": "Sihirli",
+      "prop.Tuzlu": "Tuzlu",
+      "prop.Sakinleştirici": "Sakinleştirici",
+      "intro.title.intro_1": "Mirasın Başlangıcı",
+      "intro.text.intro_1": "Dedenden kalan eski, tozlu kulübenin kapısını aralıyorsun. Havada asılı duran kurutulmuş bitki kokuları ve simya kazanından yükselen hafif dumanlar seni çocukluğuna götürüyor. Artık bu vadideki tek umut sensin.",
+      "intro.title.intro_2": "Vahşi Ormanın Fısıltıları",
+      "intro.text.intro_2": "Ancak vadi artık eskisi gibi huzurlu değil. Ormandan yükselen kirli büyüler nehir ruhlarını delirtiyor, Alkarıları masum köylülerin rüyalarına musallat oluyor. Şifalı ellerinle doğru bitkileri bir araya getirmeli, her derde deva iksirler kaynatmalısın.",
+      "intro.title.intro_3": "Tahsildarın Gölgesi",
+      "intro.text.intro_3": "Unutma, bu dünyada hayatta kalmak sadece şifa dağıtmaktan ibaret değil. Her 7 günde bir Tahsildar Kazım kapını çalarak dükkan kirasını (100 Altın) isteyecek. Kasandaki altınları iyi yönet, aksi takdirde dükkanın mühürlenebilir!",
+      "soundtrack.track_1.title": "Kadim Kulübe Melodisi",
+      "soundtrack.track_2.title": "Fısıldayan Gölgeler",
+      "soundtrack.track_3.title": "Simya Ateşi Sesi",
+      "ui.news_title": "Köy Haberleri",
+      "ui.news_popup_title": "📜 Günlük Havadisler",
+      "ui.news_close": "Haberi Oku ve Kapat",
+      "ui.news_empty": "Henüz bir haber yok.",
+      "ui.news_tab": "📰 Haber Düzenleyici",
+      "ui.news_add": "Haber Ekle",
+      "ui.news_id": "Haber ID",
+      "ui.news_text": "Haber Metni",
+      "ui.news_day": "Gösterilecek Gün",
+      "intro.title.intro_welcome_1": "Sınır Söğüt Köyüne Hoş Geldin",
+      "intro.text.intro_welcome_1": "Hoş geldin şifacı. Uzun zamandır köyümüze bir şifacı bulunmadı. Köyün sınırında bir druid bulunur ama o bizle çok ilgilenmez. Sınır Söğüt eski bir palanka tahkimatı içinde ufak bir köydür. Çoğunlukla hayvancılıkla uğraşır ve tahıl yetiştiririz. ",
+      "intro.title.intro_welcome_2": "Canavarlar",
+      "intro.text.intro_welcome_2": "Hayvan otlakları palanka dışında kaldığı için hayvanlarımızı otlatmaya çıkardığımızda çok sayıda canavar saldırır. Bu sebeple senin şifacı yeteneklerin ve iksirlerin bize merhem olacak.",
+      "intro.title.intro_welcome_3": "Druid Seren",
+      "intro.text.intro_welcome_3": "Köyümüzün kıyısında ufak bir kulübede yaşayan Seren adında bir druid vardır. Köye hiç girmez ama eğer onu görürsen saygılı olmanda yarar var. ",
+      "intro.title.intro_welcome_4": "Kulübe Kirası",
+      "intro.text.intro_welcome_4": "Her haftanın 7. günü 100 altınlık kulübe kirasını almak için biri gelecek. Parayı hazırlamayı ve kirayı ödemeyi unutma. "
     },
     "en": {
       "ui.gold": "Gold",
@@ -411,10 +520,30 @@
       "ui.diagnosis": "Diagnosis",
       "ui.market_title": "City Market",
       "char.story_baran": "Young Druid Baran",
+      "char.story_baran.desc": "An apprentice druid trying to escape auditory whispers, lost in the wildwoods.",
       "char.story_landlord": "Tax Collector Kazim",
+      "char.story_landlord.desc": "The local lord's strict bailiff who extracts rent weekly without mercy.",
       "plant.p_demir_ardic.name": "Iron-Juniper Leaf",
       "plant.p_gumus_kok.name": "Silver Root",
-      "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion"
+      "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion",
+      "intro.title.intro_1": "Beginning of the Legacy",
+      "intro.text.intro_1": "You open the door of the old, dusty cabin left by your grandfather. The scent of dried herbs and the faint steam rising from the cauldron take you back to your childhood. You are the last hope in this valley now.",
+      "intro.title.intro_2": "Whispers of the Wildwood",
+      "intro.text.intro_2": "But the valley is no longer peaceful. Vile spells rising from the forest drive river spirits mad, and Alkarisi haunt the dreams of innocent villagers. You must combine the right herbs with healing hands and brew potions to cure all ailments.",
+      "intro.title.intro_3": "The Shadow of the Tax Collector",
+      "intro.text.intro_3": "Remember, surviving in this world is not just about healing. Every 7 days, Kazim the Tax Collector will knock on your door to collect rent (100 Gold). Manage your gold wisely, or your shop might be sealed!",
+      "soundtrack.track_1.title": "Ancient Cabin Melody",
+      "soundtrack.track_2.title": "Whispering Shadows",
+      "soundtrack.track_3.title": "Alchemy Fire Soundtrack",
+      "ui.news_title": "Village News",
+      "ui.news_popup_title": "📜 Daily News",
+      "ui.news_close": "Read and Close",
+      "ui.news_empty": "No news yet.",
+      "ui.news_tab": "📰 News Editor",
+      "ui.news_add": "Add News",
+      "ui.news_id": "News ID",
+      "ui.news_text": "News Text",
+      "ui.news_day": "Display Day"
     }
   }
 }

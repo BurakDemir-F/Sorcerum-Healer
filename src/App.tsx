@@ -1170,6 +1170,7 @@ interface DeveloperStudioProps {
     setPlayerState: React.Dispatch<React.SetStateAction<PlayerState>>;
     setAppMode: React.Dispatch<React.SetStateAction<string>>;
     t: (key: string, fallback?: string) => string;
+    language: string;
     currentTrackIndex: number;
     changeTrack: (idx: number) => void;
     isMuted: boolean;
@@ -1177,7 +1178,7 @@ interface DeveloperStudioProps {
 }
 
 function DeveloperStudio({
-                             gameData, setGameData, setGameState, setPlayerState, setAppMode, t,
+                             gameData, setGameData, setGameState, setPlayerState, setAppMode, t, language,
                              currentTrackIndex, changeTrack, isMuted, setIsMuted
                          }: DeveloperStudioProps): React.JSX.Element {
     const [activeTab, setActiveTab] = useState<string>('dataEditor');
@@ -3132,16 +3133,18 @@ function PortalScreen({
                         <span className="text-2xl group-hover:translate-x-1">➡️</span>
                     </button>
 
-                    {/* Geliştirici Stüdyosu Butonu */}
-                    <button
-                        onClick={() => { setAppMode('studio'); }}
-                        className="group p-5 rounded-2xl border-4 border-black bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between"
-                    >
-                        <div>
-                            <span className="font-magic block text-lg">🧙‍♂️ Geliştirici Stüdyosu</span>
-                        </div>
-                        <span className="text-2xl group-hover:translate-x-1">➡️</span>
-                    </button>
+                    {/* Geliştirici Stüdyosu Butonu (Sadece Geliştirme Modunda Görünür) */}
+                    {import.meta.env.DEV && (
+                        <button
+                            onClick={() => { setAppMode('studio'); }}
+                            className="group p-5 rounded-2xl border-4 border-black bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between"
+                        >
+                            <div>
+                                <span className="font-magic block text-lg">🧙‍♂️ Geliştirici Stüdyosu</span>
+                            </div>
+                            <span className="text-2xl group-hover:translate-x-1">➡️</span>
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -3877,7 +3880,7 @@ export default function App(): React.JSX.Element {
                     />
                 </div>
             )}
-            {appMode === 'studio' && (
+            {appMode === 'studio' && import.meta.env.DEV && (
                 <div className="p-4 md:p-8 max-w-6xl mx-auto">
                     <DeveloperStudio
                         gameData={gameData}
@@ -3886,6 +3889,7 @@ export default function App(): React.JSX.Element {
                         setPlayerState={setPlayerState}
                         setAppMode={setAppMode}
                         t={t}
+                        language={language}
                         currentTrackIndex={currentTrackIndex}
                         changeTrack={changeTrack}
                         isMuted={isMuted}
