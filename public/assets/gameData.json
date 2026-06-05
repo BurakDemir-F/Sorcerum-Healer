@@ -1029,5 +1029,24 @@
       "prop.Denge Şifası": "Denge Şifası",
       "prop.Zehir Sökücü": "Zehir Sökücü"
     }
+  },
+  "initialPlayerState": {
+    "gold": 200,
+    "inventory": {
+      "plants": {
+        "d_willowShell": 5,
+        "d_honey": 2,
+        "d_rosehit": 2,
+        "d_blackberry": 3,
+        "d_mint": 2,
+        "d_hotWater": 10
+      },
+      "potions": {
+        "d_burnElixir": 1
+      }
+    },
+    "knownPotions": [
+      "pot_alkarisi_savar"
+    ]
   }
 }

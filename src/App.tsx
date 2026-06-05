@@ -114,6 +114,15 @@ interface NewsItem {
     text: string;
 }
 
+interface InitialPlayerState {
+    gold: number;
+    inventory: {
+        plants: Record<string, number>;
+        potions: Record<string, number>;
+    };
+    knownPotions: string[];
+}
+
 type Translations = Record<string, Record<string, string>>;
 
 interface GameData {
@@ -129,6 +138,7 @@ interface GameData {
     introPages: IntroPage[]; // JSON içinde hikaye giriş sayfaları verisi
     soundtracks: Soundtrack[]; // Dinamik müzik/soundtrack listesi
     news: NewsItem[]; // Günlük haberler
+    initialPlayerState: InitialPlayerState;
 }
 
 interface PlayerState {
@@ -374,7 +384,12 @@ const INITIAL_DATA: GameData = {
             "ui.customer_approaching": "Birileri yaklaşıyor...",
             "ui.door_quiet": "Şu an dükkan sessiz çırak.",
             "ui.finish_business": "Önce bugünkü işleri bitir!",
-            "ui.no_customer_at_door": "Kapıda bekleyen kimse yok."
+            "ui.no_customer_at_door": "Kapıda bekleyen kimse yok.",
+            "ui.initial_state_tab": "⚙️ Başlangıç Ayarları",
+            "ui.starting_gold": "Başlangıç Altını",
+            "ui.starting_plants": "Başlangıç Bitkileri",
+            "ui.starting_potions": "Başlangıç İksirleri",
+            "ui.known_potions": "Bilinen İksirler"
         },
         en: {
             "ui.gold": "Gold", "ui.day": "Day", "ui.rent_debt": "Rent Debt", "ui.end_day": "End Day", "ui.call_customer": "Check Door!",
@@ -410,8 +425,21 @@ const INITIAL_DATA: GameData = {
             "ui.customer_approaching": "Someone is approaching...",
             "ui.door_quiet": "The shop is quiet...",
             "ui.finish_business": "Finish today's business first!",
-            "ui.no_customer_at_door": "Nobody is at the door."
+            "ui.no_customer_at_door": "Nobody is at the door.",
+            "ui.initial_state_tab": "⚙️ Initial Settings",
+            "ui.starting_gold": "Starting Gold",
+            "ui.starting_plants": "Starting Plants",
+            "ui.starting_potions": "Starting Potions",
+            "ui.known_potions": "Known Potions"
         }
+    },
+    initialPlayerState: {
+        gold: 200,
+        inventory: {
+            plants: { 'p_demir_ardic': 4, 'p_gumus_kok': 1, 'p_isildak_otu': 2, 'p_kara_kabuk': 3 },
+            potions: { 'pot_alkarisi_savar': 1 }
+        },
+        knownPotions: ['pot_alkarisi_savar']
     }
 };
 
@@ -1205,7 +1233,6 @@ interface DeveloperStudioProps {
     gameData: GameData;
     setGameData: React.Dispatch<React.SetStateAction<GameData | null>>;
     setGameState: React.Dispatch<React.SetStateAction<GameState>>;
-    setPlayerState: React.Dispatch<React.SetStateAction<PlayerState>>;
     setAppMode: React.Dispatch<React.SetStateAction<string>>;
     t: (key: string, fallback?: string) => string;
     language: string;
@@ -1216,7 +1243,7 @@ interface DeveloperStudioProps {
 }
 
 function DeveloperStudio({
-                             gameData, setGameData, setGameState, setPlayerState, setAppMode, t, language,
+                             gameData, setGameData, setGameState, setAppMode, t, language,
                              currentTrackIndex, changeTrack, isMuted, setIsMuted
                          }: DeveloperStudioProps): React.JSX.Element {
     const [activeTab, setActiveTab] = useState<string>('dataEditor');
@@ -1293,6 +1320,119 @@ function DeveloperStudio({
 
     const [newNews, setNewNews] = useState<NewsItem>({ id: '', day: 1, text: '' });
 
+    // Başlangıç Ayarları State'leri
+    const [initPlantId, setInitPlantId] = useState<string>('');
+    const [initPlantCount, setInitPlantCount] = useState<number>(1);
+    const [initPotionId, setInitPotionId] = useState<string>('');
+    const [initPotionCount, setInitPotionCount] = useState<number>(1);
+
+    const handleUpdateInitialGold = (gold: number) => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                initialPlayerState: {
+                    ...prev.initialPlayerState,
+                    gold
+                }
+            };
+        });
+    };
+
+    const handleAddInitialPlant = () => {
+        if (!initPlantId) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentPlants = { ...prev.initialPlayerState.inventory.plants };
+            currentPlants[initPlantId] = (currentPlants[initPlantId] || 0) + initPlantCount;
+            return {
+                ...prev,
+                initialPlayerState: {
+                    ...prev.initialPlayerState,
+                    inventory: {
+                        ...prev.initialPlayerState.inventory,
+                        plants: currentPlants
+                    }
+                }
+            };
+        });
+    };
+
+    const handleRemoveInitialPlant = (id: string) => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentPlants = { ...prev.initialPlayerState.inventory.plants };
+            delete currentPlants[id];
+            return {
+                ...prev,
+                initialPlayerState: {
+                    ...prev.initialPlayerState,
+                    inventory: {
+                        ...prev.initialPlayerState.inventory,
+                        plants: currentPlants
+                    }
+                }
+            };
+        });
+    };
+
+    const handleAddInitialPotion = () => {
+        if (!initPotionId) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentPotions = { ...prev.initialPlayerState.inventory.potions };
+            currentPotions[initPotionId] = (currentPotions[initPotionId] || 0) + initPotionCount;
+            return {
+                ...prev,
+                initialPlayerState: {
+                    ...prev.initialPlayerState,
+                    inventory: {
+                        ...prev.initialPlayerState.inventory,
+                        potions: currentPotions
+                    }
+                }
+            };
+        });
+    };
+
+    const handleRemoveInitialPotion = (id: string) => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentPotions = { ...prev.initialPlayerState.inventory.potions };
+            delete currentPotions[id];
+            return {
+                ...prev,
+                initialPlayerState: {
+                    ...prev.initialPlayerState,
+                    inventory: {
+                        ...prev.initialPlayerState.inventory,
+                        potions: currentPotions
+                    }
+                }
+            };
+        });
+    };
+
+    const handleToggleKnownPotion = (id: string) => {
+        setGameData(prev => {
+            if (!prev) return prev;
+            const currentKnown = [...prev.initialPlayerState.knownPotions];
+            const index = currentKnown.indexOf(id);
+            if (index > -1) {
+                currentKnown.splice(index, 1);
+            } else {
+                currentKnown.push(id);
+            }
+            return {
+                ...prev,
+                initialPlayerState: {
+                    ...prev.initialPlayerState,
+                    knownPotions: currentKnown
+                }
+            };
+        });
+    };
+
     const handleAddNews = (): void => {
         if (!newNews.id || !newNews.text) return;
         setGameData(prev => {
@@ -1361,7 +1501,8 @@ function DeveloperStudio({
                     marketRecipes: parsed.marketRecipes || [],
                     introPages: parsed.introPages || INITIAL_DATA.introPages || [],
                     soundtracks: parsed.soundtracks || INITIAL_DATA.soundtracks || [],
-                    news: parsed.news || INITIAL_DATA.news || []
+                    news: parsed.news || INITIAL_DATA.news || [],
+                    initialPlayerState: parsed.initialPlayerState || INITIAL_DATA.initialPlayerState
                 };
                 setGameData(validatedData);
                 setImportStatus('✅ Başarılı! Veritabanı yüklendi.');
@@ -2707,6 +2848,126 @@ function DeveloperStudio({
         );
     };
 
+    const renderInitialStateEditor = (): React.JSX.Element => {
+        const init = gameData.initialPlayerState || INITIAL_DATA.initialPlayerState;
+        return (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 font-parchment min-h-[600px]">
+                {/* Sol Kolon: Başlangıç Envanteri Listesi */}
+                <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col">
+                    <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2 mb-4">⚙️ {t('ui.initial_state_tab')}</h2>
+                    
+                    <div className="space-y-6 overflow-y-auto pr-2 max-h-[500px]">
+                        <div>
+                            <h3 className="font-bold text-lg text-indigo-900 mb-2 border-b border-indigo-200">💰 {t('ui.starting_gold')}</h3>
+                            <div className="flex items-center gap-3 bg-amber-50 p-3 rounded-xl border-2 border-slate-900 shadow-sm">
+                                <input 
+                                    type="number" 
+                                    className="bg-transparent text-2xl font-bold text-slate-900 outline-none w-full"
+                                    value={init.gold}
+                                    onChange={e => handleUpdateInitialGold(Number(e.target.value))}
+                                />
+                                <span className="text-2xl">💰</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-lg text-emerald-900 mb-2 border-b border-emerald-200">🌿 {t('ui.starting_plants')}</h3>
+                            <div className="space-y-2">
+                                {Object.entries(init.inventory.plants).map(([id, count]) => {
+                                    const p = gameData.plants.find(item => item.id === id);
+                                    return (
+                                        <div key={id} className="flex justify-between items-center bg-emerald-50/50 p-2 rounded-lg border border-emerald-200">
+                                            <span className="font-bold text-slate-900">{t(`plant.${id}.name`, p?.name)} (x{count})</span>
+                                            <button onClick={() => handleRemoveInitialPlant(id)} className="bg-red-800 text-white text-[10px] px-2 py-1 rounded border border-black font-bold">Kaldır</button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-lg text-purple-900 mb-2 border-b border-purple-200">🧪 {t('ui.starting_potions')}</h3>
+                            <div className="space-y-2">
+                                {Object.entries(init.inventory.potions).map(([id, count]) => {
+                                    const p = gameData.potions.find(item => item.id === id);
+                                    return (
+                                        <div key={id} className="flex justify-between items-center bg-purple-50/50 p-2 rounded-lg border border-purple-200">
+                                            <span className="font-bold text-slate-900">{t(`potion.${id}.name`, p?.name)} (x{count})</span>
+                                            <button onClick={() => handleRemoveInitialPotion(id)} className="bg-red-800 text-white text-[10px] px-2 py-1 rounded border border-black font-bold">Kaldır</button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-lg text-amber-900 mb-2 border-b border-amber-200">📜 {t('ui.known_potions')}</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {gameData.potions.map(p => {
+                                    const isKnown = init.knownPotions.includes(p.id);
+                                    return (
+                                        <button 
+                                            key={p.id}
+                                            onClick={() => handleToggleKnownPotion(p.id)}
+                                            className={`px-3 py-1.5 rounded-lg border-2 font-bold text-xs transition-colors ${isKnown ? 'bg-amber-500 border-black text-slate-955' : 'bg-slate-200 border-slate-400 text-slate-500'}`}
+                                        >
+                                            {t(`potion.${p.id}.name`, p.name)}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Sağ Kolon: Envantere Ekleme Formu */}
+                <div className="space-y-6">
+                    <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                        <h2 className="text-xl font-bold font-magic text-slate-900 border-b border-slate-900/10 pb-1.5">🌿 Başlangıç Bitkisi Ekle</h2>
+                        <div className="flex gap-2">
+                            <select 
+                                className="flex-1 bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm"
+                                value={initPlantId}
+                                onChange={e => setInitPlantId(e.target.value)}
+                            >
+                                <option value="">Bitki Seç...</option>
+                                {gameData.plants.map(p => <option key={p.id} value={p.id}>{t(`plant.${p.id}.name`, p.name)}</option>)}
+                            </select>
+                            <input 
+                                type="number" 
+                                className="w-20 bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold"
+                                value={initPlantCount}
+                                onChange={e => setInitPlantCount(Number(e.target.value))}
+                            />
+                        </div>
+                        <button onClick={handleAddInitialPlant} className="w-full bg-emerald-600 text-white font-bold py-2 rounded-xl border-4 border-black font-magic">Bitkiyi Başlangıca Ekle</button>
+                    </div>
+
+                    <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4">
+                        <h2 className="text-xl font-bold font-magic text-slate-900 border-b border-slate-900/10 pb-1.5">🧪 Başlangıç İksiri Ekle</h2>
+                        <div className="flex gap-2">
+                            <select 
+                                className="flex-1 bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold font-parchment text-sm"
+                                value={initPotionId}
+                                onChange={e => setInitPotionId(e.target.value)}
+                            >
+                                <option value="">İksir Seç...</option>
+                                {gameData.potions.map(p => <option key={p.id} value={p.id}>{t(`potion.${p.id}.name`, p.name)}</option>)}
+                            </select>
+                            <input 
+                                type="number" 
+                                className="w-20 bg-amber-50 border-2 border-slate-900 p-2 rounded-lg font-bold"
+                                value={initPotionCount}
+                                onChange={e => setInitPotionCount(Number(e.target.value))}
+                            />
+                        </div>
+                        <button onClick={handleAddInitialPotion} className="w-full bg-purple-600 text-white font-bold py-2 rounded-xl border-4 border-black font-magic">İksiri Başlangıca Ekle</button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     const renderNewsEditor = (): React.JSX.Element => {
         const news = gameData.news || [];
         return (
@@ -2803,6 +3064,7 @@ function DeveloperStudio({
                     { id: 'dataEditor', label: '🌿 Element & Reçete' },
                     { id: 'dialogueEditor', label: '💬 Diyalog Ağacı & Karakter' },
                     { id: 'introEditor', label: '📖 Hikaye Girişi' },
+                    { id: 'initialStateEditor', label: t('ui.initial_state_tab') },
                     { id: 'musicEditor', label: '🎵 Müzik & Sesler' },
                     { id: 'newsEditor', label: t('ui.news_tab') },
                     { id: 'marketEditor', label: '🛒 Market Düzenleyici' },
@@ -2825,6 +3087,8 @@ function DeveloperStudio({
             )}
 
             {activeTab === 'introEditor' && renderIntroEditor()}
+
+            {activeTab === 'initialStateEditor' && renderInitialStateEditor()}
 
             {activeTab === 'musicEditor' && renderMusicEditor()}
 
@@ -3208,9 +3472,6 @@ function DeveloperStudio({
 
 interface PortalScreenProps {
     setAppMode: React.Dispatch<React.SetStateAction<string>>;
-    setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-    setIntroPageIndex: React.Dispatch<React.SetStateAction<number>>;
-    gameData: GameData | null;
     language: string;
     hasSave: boolean;
     savedMeta: { day: number; gold: number } | null;
@@ -3219,7 +3480,7 @@ interface PortalScreenProps {
 }
 
 function PortalScreen({
-                          setAppMode, setActiveTab, setIntroPageIndex, gameData, language,
+                          setAppMode, language,
                           hasSave, savedMeta, handleContinueGame, handleNewGame
                       }: PortalScreenProps): React.JSX.Element {
     const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
@@ -3538,15 +3799,17 @@ export default function App(): React.JSX.Element {
     };
 
     const handleNewGame = () => {
+        const init = gameData?.initialPlayerState || INITIAL_DATA.initialPlayerState;
+
         // 1. Oyuncu verilerini sıfırla
         setPlayerState({
-            gold: 200,
+            gold: init.gold,
             rentDebt: 0,
             inventory: {
-                plants: { 'p_demir_ardic': 4, 'p_gumus_kok': 1, 'p_isildak_otu': 2, 'p_kara_kabuk': 3 },
-                potions: { 'pot_alkarisi_savar': 1 }
+                plants: { ...init.inventory.plants },
+                potions: { ...init.inventory.potions }
             },
-            knownPotions: ['pot_alkarisi_savar']
+            knownPotions: [...init.knownPotions]
         });
 
         // 2. Günlük ve müşteri ilerlemelerini sıfırla
@@ -3783,7 +4046,7 @@ export default function App(): React.JSX.Element {
         setTreatmentStatus({ type: '', message: '' });
     };
 
-    const handleCustomerChoice = (choice: Choice, idx: number, activeNode: StoryNode, storyId: string): void => {
+    const handleCustomerChoice = (choice: Choice, _idx: number, _activeNode: StoryNode, storyId: string): void => {
         const cur = { ...playerState };
 
         const reqGoldCount = choice.reqGold || 0;
@@ -4053,9 +4316,6 @@ export default function App(): React.JSX.Element {
             {appMode === 'portal' && (
                 <PortalScreen
                     setAppMode={setAppMode}
-                    setActiveTab={setActiveTab}
-                    setIntroPageIndex={setIntroPageIndex}
-                    gameData={gameData}
                     language={language}
                     hasSave={hasSave}
                     savedMeta={savedMeta}
@@ -4094,7 +4354,6 @@ export default function App(): React.JSX.Element {
                         gameData={gameData}
                         setGameData={setGameData}
                         setGameState={setGameState}
-                        setPlayerState={setPlayerState}
                         setAppMode={setAppMode}
                         t={t}
                         language={language}
