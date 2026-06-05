@@ -1949,7 +1949,7 @@ function DeveloperStudio({
                     </div>
                     <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-2 border-2 border-slate-900/30 rounded-lg bg-amber-100/10">
                         {gameData.diseaseSymptoms.map(symp => (
-                            <span key={symp} className="bg-amber-100 text-slate-850 text-xs px-2.5 py-0.5 rounded-full border border-slate-400 font-bold font-sans">
+                            <span key={symp} className="bg-amber-100 text-slate-855 text-xs px-2.5 py-0.5 rounded-full border border-slate-400 font-bold font-sans">
                 {t(`symptom.${symp}`, symp)}
               </span>
                         ))}
@@ -2010,7 +2010,7 @@ function DeveloperStudio({
     const renderStudioPlantsListLocal = (): React.JSX.Element => {
         return (
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-4 col-span-1 lg:col-span-2 font-parchment">
-                <h2 className="text-2xl font-bold font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2 flex items-center gap-2">
+                <h2 className="text-2xl font-bold font-magic text-slate-950 border-b-2 border-slate-900/20 pb-2 flex items-center gap-2">
                     📦 Sistem Veritabanındaki Kayıtlı Tüm Bitkiler ({gameData.plants.length})
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[360px] overflow-y-auto pr-2">
@@ -2909,17 +2909,24 @@ interface PortalScreenProps {
     setIntroPageIndex: React.Dispatch<React.SetStateAction<number>>;
     gameData: GameData | null;
     language: string;
+    hasSave: boolean;
+    savedMeta: { day: number; gold: number } | null;
+    handleContinueGame: () => void;
+    handleNewGame: () => void;
 }
 
-function PortalScreen({ setAppMode, setActiveTab, setIntroPageIndex, gameData, language }: PortalScreenProps): React.JSX.Element {
-    const handleStartGame = () => {
-        const pages = gameData?.introPages || [];
-        if (pages.length > 0) {
-            setIntroPageIndex(0);
-            setAppMode('intro');
+function PortalScreen({
+                          setAppMode, setActiveTab, setIntroPageIndex, gameData, language,
+                          hasSave, savedMeta, handleContinueGame, handleNewGame
+                      }: PortalScreenProps): React.JSX.Element {
+    const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
+
+    const handleNewGameClick = () => {
+        if (hasSave) {
+            // Kayıt varsa önce parchment stilinde onay modalı gösteriyoruz
+            setShowConfirmReset(true);
         } else {
-            setAppMode('client');
-            setActiveTab('shopArea');
+            handleNewGame();
         }
     };
 
@@ -2932,15 +2939,103 @@ function PortalScreen({ setAppMode, setActiveTab, setIntroPageIndex, gameData, l
                     <h1 className="text-4xl md:text-5xl font-bold font-magic text-amber-400">Simyacı & Şifacı</h1>
                     <p className="font-parchment text-lg text-amber-100/70">{language === 'en' ? 'Büyü Mirası World Portal' : 'Büyü Mirası ve Döngüsü Portal'}</p>
                 </div>
-                <div className="grid grid-cols-1 gap-4 pt-4 font-parchment">
-                    <button onClick={handleStartGame} className="group p-5 rounded-2xl border-4 border-black bg-amber-500 hover:bg-amber-400 text-slate-955 font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between">
-                        <div><span className="font-magic block text-lg">🏪 Oyuna Gir</span></div><span className="text-2xl group-hover:translate-x-1">➡️</span>
+
+                <div className="grid grid-cols-1 gap-4 pt-4 font-parchment max-w-md mx-auto">
+                    {/* Kayıt Varsa Devam Et Butonunu Göster */}
+                    {hasSave && savedMeta && (
+                        <button
+                            onClick={handleContinueGame}
+                            className="group p-5 rounded-2xl border-4 border-black bg-emerald-500 hover:bg-emerald-400 text-slate-955 font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between"
+                        >
+                            <div className="flex flex-col">
+                                <span className="font-magic block text-lg">✨ Devam Et</span>
+                                <span className="text-xs font-sans font-bold text-slate-900 block mt-0.5">
+                                    {language === 'en'
+                                        ? `Saved: Day ${savedMeta.day} | ${savedMeta.gold} Gold`
+                                        : `Kayıtlı: ${savedMeta.day}. Gün | ${savedMeta.gold} Altın`}
+                                </span>
+                            </div>
+                            <span className="text-2xl group-hover:translate-x-1">➡️</span>
+                        </button>
+                    )}
+
+                    {/* Oyuna Başla / Yeni Oyun Butonu */}
+                    <button
+                        onClick={handleNewGameClick}
+                        className={`group p-5 rounded-2xl border-4 border-black font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between ${
+                            hasSave ? 'bg-amber-600 hover:bg-amber-500 text-[#f3e8d2]' : 'bg-amber-500 hover:bg-amber-400 text-slate-955'
+                        }`}
+                    >
+                        <div className="flex flex-col">
+                            <span className="font-magic block text-lg">
+                                {hasSave
+                                    ? (language === 'en' ? '🆕 Start New Game' : '🆕 Yeni Hikaye Başlat')
+                                    : (language === 'en' ? '🏪 Start Journey' : '🏪 Oyuna Başla')
+                                }
+                            </span>
+                            {hasSave && (
+                                <span className="text-[10px] font-sans font-bold opacity-80 block mt-0.5">
+                                    {language === 'en' ? 'Wipes existing save progress' : 'Mevcut ilerlemenizi sıfırlar'}
+                                </span>
+                            )}
+                        </div>
+                        <span className="text-2xl group-hover:translate-x-1">➡️</span>
                     </button>
-                    <button onClick={() => { setAppMode('studio'); }} className="group p-5 rounded-2xl border-4 border-black bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between">
-                        <div><span className="font-magic block text-lg">🧙‍♂️ Geliştirici Stüdyosu</span></div><span className="text-2xl group-hover:translate-x-1">➡️</span>
+
+                    {/* Geliştirici Stüdyosu Butonu */}
+                    <button
+                        onClick={() => { setAppMode('studio'); }}
+                        className="group p-5 rounded-2xl border-4 border-black bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 active:translate-y-1 active:shadow-none text-left flex items-center justify-between"
+                    >
+                        <div>
+                            <span className="font-magic block text-lg">🧙‍♂️ Geliştirici Stüdyosu</span>
+                        </div>
+                        <span className="text-2xl group-hover:translate-x-1">➡️</span>
                     </button>
                 </div>
             </div>
+
+            {/* Custom Parchment Onay Modalı (Yeni Oyun Onayı) */}
+            {showConfirmReset && savedMeta && (
+                <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center font-parchment text-slate-900">
+                    <div className="bg-[#f3e8d2] text-slate-955 border-8 border-red-800 rounded-3xl p-8 max-w-md shadow-2xl text-center space-y-6 mx-4 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-800 to-amber-700"></div>
+                        <h3 className="text-3xl font-bold font-magic text-red-900">⚠️ {language === 'en' ? 'Wipe Progress?' : 'Kaydı Sıfırla?'}</h3>
+
+                        <div className="bg-amber-50 p-4 rounded-xl border-2 border-slate-900/30 text-base leading-relaxed font-semibold">
+                            {language === 'en' ? (
+                                <>
+                                    Are you sure you want to start a <strong>New Story</strong>?<br />
+                                    Your current progress <strong>(Day {savedMeta.day} with {savedMeta.gold} Gold)</strong> will be permanently deleted. This action cannot be undone!
+                                </>
+                            ) : (
+                                <>
+                                    Yeni bir <strong>Şifacı Mirası</strong> başlatmak istediğinize emin misiniz?<br />
+                                    Mevcut kaydınızda bulunan tüm ilerlemeler <strong>({savedMeta.day}. Gün, {savedMeta.gold} Altın)</strong> kalıcı olarak silinecektir!
+                                </>
+                            )}
+                        </div>
+
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowConfirmReset(false)}
+                                className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-magic font-bold py-3 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-sm"
+                            >
+                                {language === 'en' ? 'Cancel' : 'Vazgeç'}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowConfirmReset(false);
+                                    handleNewGame();
+                                }}
+                                className="flex-1 bg-red-800 hover:bg-red-700 text-white font-magic font-bold py-3 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-sm animate-pulse"
+                            >
+                                {language === 'en' ? 'Yes, Reset!' : 'Evet, Sıfırla!'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
@@ -2955,6 +3050,8 @@ export default function App(): React.JSX.Element {
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [language, setLanguage] = useState<string>('tr');
+
+    // Temel Oyun State'leri
     const [playerState, setPlayerState] = useState<PlayerState>({ gold: 200, rentDebt: 0, inventory: { plants: { 'p_demir_ardic': 4, 'p_gumus_kok': 1, 'p_isildak_otu': 2, 'p_kara_kabuk': 3 }, potions: { 'pot_alkarisi_savar': 1 } }, knownPotions: ['pot_alkarisi_savar'] });
     const [cauldron, setCauldron] = useState<CauldronItem[]>([]);
     const [brewState, setBrewState] = useState<BrewState>({ status: 'idle', message: '' });
@@ -2965,12 +3062,42 @@ export default function App(): React.JSX.Element {
 
     const [introPageIndex, setIntroPageIndex] = useState<number>(0);
 
+    // Yerel Kayıt Durumu State'leri
+    const [hasSave, setHasSave] = useState<boolean>(false);
+    const [savedMeta, setSavedMeta] = useState<{ day: number; gold: number } | null>(null);
+
     // Müzik ve Soundtrack State/Ref Tanımlamaları
     const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
     const [isMuted, setIsMuted] = useState<boolean>(true); // Tarayıcı engellemelerini aşmak için varsayılan olarak mute başlar
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const fadeIntervalRef = useRef<any>(null);
 
+    // 1. AŞAMA: Tarayıcıda Kayıtlı Bir Oyun Olup Olmadığını Kontrol Etme (On Mount)
+    useEffect(() => {
+        const rawSave = localStorage.getItem('buyu_mirasi_save');
+        if (rawSave) {
+            try {
+                const parsed = JSON.parse(rawSave);
+                if (parsed.playerState && parsed.gameState) {
+                    setHasSave(true);
+                    setSavedMeta({
+                        day: parsed.gameState.day,
+                        gold: parsed.playerState.gold
+                    });
+                    if (parsed.language) {
+                        setLanguage(parsed.language);
+                    }
+                    if (parsed.isMuted !== undefined) {
+                        setIsMuted(parsed.isMuted);
+                    }
+                }
+            } catch (e) {
+                console.warn("Kayıtlı veri okunamadı veya bozuk.", e);
+            }
+        }
+    }, []);
+
+    // 2. AŞAMA: Veritabanını (JSON) Yükleme
     useEffect(() => {
         fetch('/assets/gameData.json')
             .then(response => {
@@ -2998,6 +3125,110 @@ export default function App(): React.JSX.Element {
                 setIsLoading(false);
             });
     }, []);
+
+    // 3. AŞAMA: Gerçek Zamanlı Otomatik Kayıt (Autosave Effect)
+    useEffect(() => {
+        // Oyun yükleme aşamasında değilse ve ana portalda veya giriş sayfalarında değilsek kaydı güncelle
+        if (!isLoading && gameData && appMode !== 'portal' && appMode !== 'intro') {
+            const saveData = {
+                playerState,
+                gameState,
+                gameData, // Geliştirici Stüdyosu'nda yapılan değişiklikleri korumak için
+                language,
+                isMuted,
+                savedAt: Date.now()
+            };
+            localStorage.setItem('buyu_mirasi_save', JSON.stringify(saveData));
+
+            // Portaldaki kayıt bilgilerini anlık güncelle
+            setHasSave(true);
+            setSavedMeta({
+                day: gameState.day,
+                gold: playerState.gold
+            });
+        }
+    }, [playerState, gameState, gameData, language, isMuted, appMode, isLoading]);
+
+    // KAYIT SİSTEMİ ÇALIŞTIRICILARI (SAVE HANDLERS)
+    const handleContinueGame = () => {
+        const rawSave = localStorage.getItem('buyu_mirasi_save');
+        if (rawSave) {
+            try {
+                const parsed = JSON.parse(rawSave);
+                setPlayerState(parsed.playerState);
+                setGameState(parsed.gameState);
+                if (parsed.gameData) {
+                    setGameData(parsed.gameData);
+                }
+                if (parsed.language) {
+                    setLanguage(parsed.language);
+                }
+                if (parsed.isMuted !== undefined) {
+                    setIsMuted(parsed.isMuted);
+                }
+                setAppMode('client');
+                setActiveTab('shopArea');
+                addLog(language === 'en' ? '🎮 Game Loaded! Welcome back.' : '🎮 Oyun Yüklendi! Kaldığın yerden devam ediyorsun.');
+            } catch (e) {
+                console.error("Kayıt yüklenirken bir hata oluştu:", e);
+            }
+        }
+    };
+
+    const handleNewGame = () => {
+        // 1. Oyuncu verilerini sıfırla
+        setPlayerState({
+            gold: 200,
+            rentDebt: 0,
+            inventory: {
+                plants: { 'p_demir_ardic': 4, 'p_gumus_kok': 1, 'p_isildak_otu': 2, 'p_kara_kabuk': 3 },
+                potions: { 'pot_alkarisi_savar': 1 }
+            },
+            knownPotions: ['pot_alkarisi_savar']
+        });
+
+        // 2. Günlük ve müşteri ilerlemelerini sıfırla
+        setGameState({
+            day: 1,
+            currentCustomer: null,
+            rentPaidThisWeek: false,
+            storyProgress: {
+                'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 },
+                'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 }
+            },
+            logs: ['🧙‍♂️ Yeni bir miras başladı. Kulübeye hoş geldin şifacı!']
+        });
+
+        // 3. Tarayıcıdaki eski kaydı temizle
+        localStorage.removeItem('buyu_mirasi_save');
+        setHasSave(false);
+        setSavedMeta(null);
+
+        // 4. Veritabanını tazelemek için fetch işlemini tekrar tetikle (Fresh gameData)
+        setIsLoading(true);
+        fetch('/assets/gameData.json')
+            .then(res => {
+                if (!res.ok) throw new Error();
+                return res.json();
+            })
+            .then(data => {
+                setGameData({
+                    ...INITIAL_DATA,
+                    ...data,
+                    introPages: data.introPages || INITIAL_DATA.introPages || [],
+                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || []
+                });
+                setIsLoading(false);
+                setIntroPageIndex(0);
+                setAppMode('intro'); // Giriş hikayesi sayfalarını aç
+            })
+            .catch(() => {
+                setGameData(INITIAL_DATA);
+                setIsLoading(false);
+                setIntroPageIndex(0);
+                setAppMode('intro');
+            });
+    };
 
     // Soundtrack Çalma Ve Yavaşça Geçiş Yapma (Fade In / Fade Out) Mekanizması
     const changeTrack = (targetIndex: number) => {
@@ -3449,7 +3680,19 @@ export default function App(): React.JSX.Element {
 
     return (
         <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2]">
-            {appMode === 'portal' && <PortalScreen setAppMode={setAppMode} setActiveTab={setActiveTab} setIntroPageIndex={setIntroPageIndex} gameData={gameData} language={language} />}
+            {appMode === 'portal' && (
+                <PortalScreen
+                    setAppMode={setAppMode}
+                    setActiveTab={setActiveTab}
+                    setIntroPageIndex={setIntroPageIndex}
+                    gameData={gameData}
+                    language={language}
+                    hasSave={hasSave}
+                    savedMeta={savedMeta}
+                    handleContinueGame={handleContinueGame}
+                    handleNewGame={handleNewGame}
+                />
+            )}
             {appMode === 'intro' && <IntroScreen gameData={gameData} pageIndex={introPageIndex} setPageIndex={setIntroPageIndex} setAppMode={setAppMode} language={language} t={t} />}
             {appMode === 'client' && (
                 <div className="p-4 md:p-8 max-w-6xl mx-auto">
