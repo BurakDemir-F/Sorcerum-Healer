@@ -65,25 +65,26 @@ export function MarketArea({ gameData, t, handlers, currentDay, playerState }: M
                     <div className="space-y-4">
                         {availableRecipes.map(mr => {
                             const potion = gameData.potions.find(p => p.id === mr.potionId);
-                            if (!potion) return null;
+                            const potionName = potion ? t(`potion.${potion.id}.name`, potion.name) : `Bilinmeyen Tarif (${mr.potionId})`;
                             const alreadyKnown = playerState.knownPotions.includes(mr.potionId);
+                            
                             return (
                                 <div key={mr.potionId} className="relative group bg-purple-100/50 p-4 rounded-xl border-2 border-slate-900 flex justify-between items-center cursor-help">
                                     <div className="flex items-center gap-3">
                                         <span className="text-3xl">📜</span>
                                         <div>
-                                            <h3 className="text-xl font-bold text-slate-955">{t(`potion.${potion.id}.name`, potion.name)} Formülü</h3>
+                                            <h3 className="text-xl font-bold text-slate-955">{potionName} Formülü</h3>
                                             <p className="text-sm font-bold text-red-900 font-magic">{mr.cost} {t('ui.gold')}</p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => handlers.handleBuyRecipe(mr.potionId, mr.cost)}
-                                        disabled={mr.stock <= 0 || alreadyKnown}
+                                        disabled={mr.stock <= 0 || alreadyKnown || !potion}
                                         className="bg-purple-500 text-white font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50"
                                     >
-                                        {alreadyKnown ? "Biliyorsun" : `${t('ui.buy')}`}
+                                        {!potion ? "Hata" : (alreadyKnown ? "Biliyorsun" : `${t('ui.buy')}`)}
                                     </button>
-                                    <TooltipPotion potionId={mr.potionId} gameData={gameData} t={t} />
+                                    {potion && <TooltipPotion potionId={mr.potionId} gameData={gameData} t={t} />}
                                 </div>
                             );
                         })}

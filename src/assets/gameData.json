@@ -1,38 +1,75 @@
 {
   "plantProperties": [
     {
-      "name": "Demir Özlü",
+      "name": "Uykusuzluk Şifası",
       "curesSymptoms": [
-        "Bataklık Çürümesi",
-        "Kanama"
+        "Uykusuzluk"
       ]
     },
     {
-      "name": "Gümüşlü",
+      "name": "Halisünasyon Şifası",
       "curesSymptoms": [
-        "Alkarısı Karabasanı",
-        "Zehirlenme"
+        "Halüsinasyon"
       ]
     },
     {
-      "name": "Sihirli",
+      "name": "Ateş Düşürücü",
       "curesSymptoms": [
-        "Kirli Büyü Zehirlenmesi",
-        "Halsizlik"
-      ]
-    },
-    {
-      "name": "Tuzlu",
-      "curesSymptoms": [
-        "Işıldak Çırmığı",
         "Ateş"
       ]
     },
     {
-      "name": "Sakinleştirici",
+      "name": "Canlandırıcı",
       "curesSymptoms": [
-        "Baş Dönmesi",
-        "Titreme"
+        "Halsizlik"
+      ]
+    },
+    {
+      "name": "Körlüğe Deva",
+      "curesSymptoms": [
+        "Körlük"
+      ]
+    },
+    {
+      "name": "Ferah Nefes",
+      "curesSymptoms": [
+        "Kötü Kokulu Nefes"
+      ]
+    },
+    {
+      "name": "Bulantı Şifası",
+      "curesSymptoms": [
+        "Bulantı"
+      ]
+    },
+    {
+      "name": "Kan Durdurucu",
+      "curesSymptoms": [
+        "Kanama"
+      ]
+    },
+    {
+      "name": "Ağrı Kesici",
+      "curesSymptoms": [
+        "Ağrı"
+      ]
+    },
+    {
+      "name": "Öksürük Sökücü",
+      "curesSymptoms": [
+        "Öksürük"
+      ]
+    },
+    {
+      "name": "Denge Şifası",
+      "curesSymptoms": [
+        "Baş Dönmesi"
+      ]
+    },
+    {
+      "name": "Zehir Sökücü",
+      "curesSymptoms": [
+        "Zehirlenme"
       ]
     }
   ],
@@ -46,230 +83,555 @@
     "Halsizlik",
     "Baş Dönmesi",
     "Titreme",
-    "Zehirlenme"
+    "Zehirlenme",
+    "Kötü Kokulu Nefes",
+    "Ağrı",
+    "Öksürük",
+    "Körlük",
+    "Uykusuzluk",
+    "Halüsinasyon",
+    "İmkansız Aşk",
+    "Yemek Yiyememe",
+    "Sivilce",
+    "Bulantı"
   ],
   "plants": [
     {
-      "id": "p_demir_ardic",
-      "name": "Demir-Ardıç Yaprağı",
-      "rarity": "Yaygın",
-      "cost": 8,
-      "properties": [
-        "Demir Özlü",
-        "Sakinleştirici"
-      ],
-      "imageUrl": ""
-    },
-    {
-      "id": "p_gumus_kok",
-      "name": "Gümüş Kök",
-      "rarity": "Nadir",
-      "cost": 20,
-      "properties": [
-        "Gümüşlü",
-        "Sakinleştirici"
-      ],
-      "imageUrl": ""
-    },
-    {
-      "id": "p_isildak_otu",
-      "name": "Işıldak Otu",
-      "rarity": "Normal",
-      "cost": 12,
-      "properties": [
-        "Sihirli",
-        "Tuzlu"
-      ],
-      "imageUrl": ""
-    },
-    {
-      "id": "p_sihirli_bugday",
-      "name": "Sihirli Buğday",
+      "id": "d_ironJuniperLeaf",
+      "name": "Demir Ardıç Yaprağı",
       "rarity": "Efsanevi",
-      "cost": 45,
+      "cost": 16,
       "properties": [
-        "Sihirli",
-        "Gümüşlü"
+        "Halisünasyon Şifası"
       ],
       "imageUrl": ""
     },
     {
-      "id": "p_kara_kabuk",
-      "name": "Kara-Kabuk Reçinesi",
+      "id": "d_ironJuniperShell",
+      "name": "Demir Ardıç Kabuğu",
+      "rarity": "Efsanevi",
+      "cost": 18,
+      "properties": [
+        "Uykusuzluk Şifası"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_willowShell",
+      "name": "Söğüt Kabuğu",
       "rarity": "Yaygın",
+      "cost": 4,
+      "properties": [
+        "Ateş Düşürücü"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_honey",
+      "name": "Bal",
+      "rarity": "Normal",
+      "cost": 7,
+      "properties": [
+        "Canlandırıcı"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_rosehit",
+      "name": "Kuşburnu",
+      "rarity": "Yaygın",
+      "cost": 2,
+      "properties": [],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_blackberry",
+      "name": "Böğürtlen",
+      "rarity": "Yaygın",
+      "cost": 3,
+      "properties": [],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_riverAlgea",
+      "name": "Irmak Yosunu",
+      "rarity": "Efsanevi",
+      "cost": 18,
+      "properties": [
+        "Körlüğe Deva"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_mint",
+      "name": "Nane",
+      "rarity": "Normal",
+      "cost": 4,
+      "properties": [
+        "Ferah Nefes",
+        "Bulantı Şifası"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_yarrow",
+      "name": "Civanperçemi",
+      "rarity": "Nadir",
+      "cost": 9,
+      "properties": [
+        "Kan Durdurucu"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_nettle",
+      "name": "Isırgan Otu",
+      "rarity": "Normal",
       "cost": 6,
       "properties": [
-        "Demir Özlü"
+        "Ağrı Kesici"
       ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_calendula",
+      "name": "Aynısefa Otu",
+      "rarity": "Nadir",
+      "cost": 9,
+      "properties": [],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_thyme",
+      "name": "Kekik",
+      "rarity": "Nadir",
+      "cost": 8,
+      "properties": [
+        "Öksürük Sökücü"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_sage",
+      "name": "Adaçayı Otu",
+      "rarity": "Nadir",
+      "cost": 9,
+      "properties": [
+        "Denge Şifası"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_hotWater",
+      "name": "Sıcak Su",
+      "rarity": "Yaygın",
+      "cost": 1,
+      "properties": [],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_carlic",
+      "name": "Sarımsak",
+      "rarity": "Normal",
+      "cost": 7,
+      "properties": [
+        "Zehir Sökücü"
+      ],
+      "imageUrl": ""
+    },
+    {
+      "id": "d_honeyWax",
+      "name": "Balmumu",
+      "rarity": "Normal",
+      "cost": 5,
+      "properties": [],
       "imageUrl": ""
     }
   ],
   "diseases": [
     {
-      "id": "d_alkarisi",
-      "name": "Alkarısı Musallatı",
+      "id": "d_badBreath",
+      "name": "Ağız Kokusu",
       "symptoms": [
-        "Alkarısı Karabasanı",
+        "Kötü Kokulu Nefes"
+      ]
+    },
+    {
+      "id": "d_starve",
+      "name": "Açlık",
+      "symptoms": [
+        "Halsizlik"
+      ]
+    },
+    {
+      "id": "d_freezing",
+      "name": "Üşüme",
+      "symptoms": [
+        "Titreme"
+      ]
+    },
+    {
+      "id": "d_wound",
+      "name": "Kesik",
+      "symptoms": [
+        "Kanama",
         "Titreme",
+        "Halsizlik",
+        "Ağrı"
+      ]
+    },
+    {
+      "id": "d_flu",
+      "name": "Nezle",
+      "symptoms": [
+        "Halsizlik",
+        "Titreme",
+        "Öksürük"
+      ]
+    },
+    {
+      "id": "d_magicalWound",
+      "name": "Işıldak Kesiği",
+      "symptoms": [
+        "Kanama",
+        "Titreme",
+        "Halsizlik",
+        "Zehirlenme",
+        "Körlük"
+      ]
+    },
+    {
+      "id": "d_magicalFlu",
+      "name": "Su Perisi Nezlesi",
+      "symptoms": [
+        "Titreme",
+        "Baş Dönmesi",
+        "Uykusuzluk",
+        "İmkansız Aşk",
+        "Sivilce",
+        "Halüsinasyon"
+      ]
+    },
+    {
+      "id": "d_magicalPossess",
+      "name": "Al Karısı Musallatı",
+      "symptoms": [
+        "Titreme",
+        "Yemek Yiyememe",
+        "Baş Dönmesi",
+        "Uykusuzluk",
+        "Halüsinasyon",
+        "Bulantı"
+      ]
+    },
+    {
+      "id": "d_blindFog",
+      "name": "Sis Körlüğü",
+      "symptoms": [
+        "Körlük",
+        "Halüsinasyon",
+        "Uykusuzluk",
         "Baş Dönmesi"
       ]
     },
     {
-      "id": "d_kirli_buyu",
-      "name": "Kirli Büyü Çürümesi",
+      "id": "d_acne",
+      "name": "Kabarcık",
       "symptoms": [
-        "Kirli Büyü Zehirlenmesi",
+        "Sivilce",
+        "Bulantı",
+        "Baş Dönmesi"
+      ]
+    },
+    {
+      "id": "d_burn",
+      "name": "Yanık",
+      "symptoms": [
+        "Zehirlenme",
+        "Ağrı",
         "Ateş",
         "Halsizlik"
       ]
     },
     {
-      "id": "d_isildak_isirigi",
-      "name": "Işıldak Tırmalaması",
-      "symptoms": [
-        "Işıldak Çırmığı",
-        "Kanama"
-      ]
-    },
-    {
-      "id": "d_bataklik_vebasi",
-      "name": "Bataklık Çürümesi",
-      "symptoms": [
-        "Bataklık Çürümesi",
-        "Zehirlenme"
-      ]
+      "id": "d_monsterTrap",
+      "name": "Canavar Tuzağı Ağ",
+      "symptoms": []
     }
   ],
   "potions": [
     {
-      "id": "pot_alkarisi_savar",
-      "name": "Alkarısı Savar İksir",
-      "ingredients": [
-        {
-          "type": "plant",
-          "id": "p_gumus_kok",
-          "count": 2
-        },
-        {
-          "type": "plant",
-          "id": "p_demir_ardic",
-          "count": 1
-        }
-      ],
+      "id": "d_monsterTrapElixir",
+      "name": "Canavar Ağı",
+      "sellPrice": 90,
       "curesDiseaseIds": [
-        "d_alkarisi"
+        "d_monsterTrap"
       ],
-      "sellPrice": 65
-    },
-    {
-      "id": "pot_arindirici",
-      "name": "Arındırıcı Eliksir",
       "ingredients": [
         {
           "type": "plant",
-          "id": "p_sihirli_bugday",
+          "id": "d_ironJuniperLeaf",
           "count": 1
         },
         {
           "type": "plant",
-          "id": "p_demir_ardic",
-          "count": 2
-        }
-      ],
-      "curesDiseaseIds": [
-        "d_kirli_buyu"
-      ],
-      "sellPrice": 90
-    },
-    {
-      "id": "pot_naiad_nefesi",
-      "name": "Naiad Nefesi İksiri",
-      "ingredients": [
-        {
-          "type": "plant",
-          "id": "p_isildak_otu",
-          "count": 2
-        },
-        {
-          "type": "plant",
-          "id": "p_gumus_kok",
+          "id": "d_ironJuniperShell",
           "count": 1
-        }
-      ],
-      "curesDiseaseIds": [
-        "d_bataklik_vebasi"
-      ],
-      "sellPrice": 75
-    }
-  ],
-  "storylines": [
-    {
-      "id": "story_baran",
-      "characterName": "Genç Druid Baran",
-      "description": "Zihnindeki acı verici fısıltılardan kurtulmak isteyen ve ormanda yolunu kaybetmiş acemi şifacı.",
-      "avatarUrl": "",
-      "nodes": [
-        {
-          "id": "node_baran_1",
-          "npcText": "Selam şifacı... Ben Baran. Yolculuk beni perişan etti. Rüyamda yaşlı, kırmızı gözlü korkunç bir kadının kahkahalarını duyuyorum. Ciğerlerim yanıyor. Bana şifa verebilir misin?",
-          "diseaseId": "d_alkarisi",
-          "dynamicSuccessNodeId": "node_baran_poyraz",
-          "dynamicFailNodeId": "node_baran_dead",
-          "day": 1,
-          "choices": [
-            {
-              "text": "Sana göre bir ilacım yok Baran, üzgünüm.",
-              "nextNodeId": "node_baran_dead",
-              "delayDays": 1
-            }
-          ]
         },
         {
-          "id": "node_baran_poyraz",
-          "npcText": "Aklım yerine geldi, zihnimdeki o uğursuz çığlıklar kesildi! Atım Poyraz bile senin şifanı övdü... Şimdi İlayda ve Derya adındaki küs nehir ruhlarını barıştırma görevim var. Bana bir parça Naiad Nefesi verirsen minnettar olurum.",
-          "day": 1,
-          "choices": [
-            {
-              "text": "Naiad Nefesi İksirini Al (İksiri Ver)",
-              "nextNodeId": "node_baran_reconciled",
-              "reqPotion": "pot_naiad_nefesi",
-              "reqPotionCount": 1,
-              "delayDays": 5
-            },
-            {
-              "text": "Uzak dur benden konuşan beygir ve deliler!",
-              "nextNodeId": "node_baran_dead",
-              "delayDays": 1
-            }
-          ]
+          "type": "plant",
+          "id": "d_ironJuniperShell",
+          "count": 1
         },
         {
-          "id": "node_baran_reconciled",
-          "npcText": "Şifacı! Senin iksirin sayesinde nehre girdim ve İlayda ile Derya yı barıştırdım. Sana teşekkür etmek için nehrin dibinden çıkardığım bu Sihirli Buğdayı hediye ediyoruz!",
-          "day": 6,
-          "choices": [
-            {
-              "text": "Kendine çok iyi bak Baran.",
-              "nextNodeId": null,
-              "rewardPlantId": "p_sihirli_bugday",
-              "rewardPlantCount": 1,
-              "rewardGold": 50
-            }
-          ]
-        },
-        {
-          "id": "node_baran_dead",
-          "npcText": "Baran karanlığa teslim oldu... Alkarısı zihnini tamamen ele geçirdi. Çığlıklar atarak vahşi ormana karışıp kayboldu.",
-          "day": 2,
-          "choices": [
-            {
-              "text": "Çok yazık oldu...",
-              "nextNodeId": null
-            }
-          ]
+          "type": "plant",
+          "id": "d_ironJuniperShell",
+          "count": 1
         }
       ]
     },
+    {
+      "id": "d_freezingElixir",
+      "name": "Kış Çayı",
+      "sellPrice": 18,
+      "curesDiseaseIds": [
+        "d_freezing"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_rosehit",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_blackberry",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_honey",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_hotWater",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_woundSerum",
+      "name": "Kesik Merhemi",
+      "sellPrice": 19,
+      "curesDiseaseIds": [
+        "d_wound"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_yarrow",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_honeyWax",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_FluElixir",
+      "name": "Nezle Sökücü Şurup",
+      "sellPrice": 19,
+      "curesDiseaseIds": [
+        "d_flu"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_willowShell",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_sage",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_hotWater",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_magicalWoundSerum",
+      "name": "Büyülü Kesik Kremi",
+      "sellPrice": 52,
+      "curesDiseaseIds": [
+        "d_magicalWound"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_yarrow",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_carlic",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_ironJuniperLeaf",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_naiadBreath",
+      "name": "Naiad Nefesi",
+      "sellPrice": 62,
+      "curesDiseaseIds": [
+        "d_magicalFlu"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_ironJuniperLeaf",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_riverAlgea",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_mint",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_mint",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_possessElixir",
+      "name": "Karabüyü Defetme İksiri",
+      "sellPrice": 64,
+      "curesDiseaseIds": [
+        "d_magicalPossess"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_ironJuniperLeaf",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_riverAlgea",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_honey",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_blackberry",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_seeingElixir",
+      "name": "Göz İksiri",
+      "sellPrice": 55,
+      "curesDiseaseIds": [
+        "d_blindFog"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_ironJuniperLeaf",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_riverAlgea",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_hotWater",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_acneElixir",
+      "name": "Kabarcık Patlatan İksir",
+      "sellPrice": 26,
+      "curesDiseaseIds": [
+        "d_acne"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_carlic",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_mint",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_sage",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_hotWater",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "d_burnElixir",
+      "name": "Yanık Merhemi",
+      "sellPrice": 25,
+      "curesDiseaseIds": [
+        "d_burn"
+      ],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_nettle",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_calendula",
+          "count": 1
+        },
+        {
+          "type": "plant",
+          "id": "d_honeyWax",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "storylines": [
     {
       "id": "story_landlord",
       "characterName": "Tahsildar Kazım",
@@ -315,41 +677,167 @@
           ]
         }
       ]
+    },
+    {
+      "id": "story_d_shepherdNarin",
+      "characterName": "Çoban Kız Narin",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_d_shepherdNarin_1",
+          "npcText": "Merhaba, ben Narin. Köyün koyunlarını güderim. Dükkanın hayırlı olsun.",
+          "day": 1,
+          "choices": [
+            {
+              "text": "Peki. İsimleri pek hatırlamam.",
+              "nextNodeId": null
+            },
+            {
+              "text": "Merhaba, seninle tanıştığıma memnun oldum Narin. Nasılsın?",
+              "nextNodeId": "node_d_shepherdNarin_2300"
+            }
+          ]
+        },
+        {
+          "id": "node_d_shepherdNarin_2300",
+          "npcText": "Bugün bir kuzu doğdu. Üşümesin diye yavruyu sırtımda taşıyıp eve götürdüm. Biraz üşüttüm. Bana iyi gelecek bir içeceğin var mı?",
+          "diseaseId": "d_freezing",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 1,
+          "choices": [
+            {
+              "text": "Tabii, sana güzel bir kış çayı demleyeyim, fiyatı 18 altın.",
+              "nextNodeId": null,
+              "rewardGold": 18
+            },
+            {
+              "text": "Madem bugün bir kuzu doğdu ve sen onu sırtında taşıdın o zaman bir kış çayını hakettin. Zaten ilk müşterim de sensin.",
+              "nextNodeId": "node_d_shepherdNarin_8642",
+              "reqPotion": "d_freezingElixir",
+              "reqPotionCount": 1
+            },
+            {
+              "text": "Elimde böyle bir içecek yok.",
+              "nextNodeId": null
+            }
+          ]
+        },
+        {
+          "id": "node_d_shepherdNarin_8642",
+          "npcText": "Geçen günki kış çayını çok beğendim. Koyun güderken senin için biraz söğüt kabuğu çıkardım.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Teşekkür ederim.",
+              "nextNodeId": null,
+              "rewardPlantId": "d_willowShell",
+              "rewardPlantCount": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "story_d_carpenterDursun",
+      "characterName": "Marangoz Usta Dursun",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_d_carpenterDursun_1",
+          "npcText": "Selam olsun. Ben köyün marangozu Dursun. Bir haftanın iki günü palanka'nın tamiratıyla geçiyor. Eski bir palanka bir tarafı tamir etsen bir tarafı çöküyor.",
+          "day": 1,
+          "choices": [
+            {
+              "text": "Palanka nedir usta?",
+              "nextNodeId": "node_d_carpenterDursun_5531"
+            },
+            {
+              "text": "Nasıl yardımcı olabilirim usta?",
+              "nextNodeId": "node_d_carpenterDursun_1056"
+            }
+          ]
+        },
+        {
+          "id": "node_d_carpenterDursun_1056",
+          "npcText": "Palankayı tamir ederken elimi kestim, elinde biraz kesik merhemi ya da kanı durduracak bir şeyler var mı?",
+          "diseaseId": "d_wound",
+          "day": 1,
+          "choices": [
+            {
+              "text": "Kesik merhemim var usta, 19 altındır.",
+              "nextNodeId": null,
+              "reqPotion": "d_woundSerum",
+              "reqPotionCount": 1,
+              "rewardGold": 19
+            }
+          ]
+        },
+        {
+          "id": "node_d_carpenterDursun_5531",
+          "npcText": "Palanka köyün etrafını saran ahşap tahkimattır. Yani bir nevi köy suru. Demir ardıç dediğimiz büyülü ağaçtan yapılmıştır. Ama çok eski, babamın babası zamanında yapılmış, o yüzden şimdi dökülüyor. Ben de onu tamir ederken elimi kestim. Kesik merhemin var mı?",
+          "diseaseId": "d_wound",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 1,
+          "choices": [
+            {
+              "text": "Kesik merhemim var usta, fiyatı 19 altın.",
+              "nextNodeId": null,
+              "reqPotion": "d_woundSerum",
+              "reqPotionCount": 1,
+              "rewardGold": 19
+            }
+          ]
+        }
+      ]
     }
   ],
   "marketPlants": [
     {
-      "plantId": "p_demir_ardic",
-      "stock": 10,
-      "maxStock": 10,
-      "cost": 6,
-      "availableDay": 1
-    },
-    {
-      "plantId": "p_gumus_kok",
-      "stock": 3,
-      "maxStock": 3,
-      "cost": 18,
-      "availableDay": 1
-    },
-    {
-      "plantId": "p_isildak_otu",
+      "plantId": "d_ironJuniperLeaf",
+      "cost": 10,
       "stock": 5,
       "maxStock": 5,
-      "cost": 10,
       "availableDay": 1
     },
     {
-      "plantId": "p_kara_kabuk",
-      "stock": 8,
-      "maxStock": 8,
-      "cost": 5,
+      "plantId": "d_nettle",
+      "cost": 10,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_yarrow",
+      "cost": 10,
+      "stock": 5,
+      "maxStock": 5,
       "availableDay": 1
     }
   ],
   "marketRecipes": [
     {
-      "potionId": "pot_alkarisi_savar",
+      "potionId": "d_seeingElixir",
+      "cost": 100,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_burnElixir",
+      "cost": 100,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_freezingElixir",
       "cost": 100,
       "stock": 1,
       "maxStock": 1,
@@ -361,7 +849,7 @@
       "id": "intro_welcome_1",
       "title": "Sınır Söğüt Köyüne Hoş Geldin",
       "text": "Hoş geldin şifacı. Uzun zamandır köyümüze bir şifacı bulunmadı. Köyün sınırında bir druid bulunur ama o bizle çok ilgilenmez. Sınır Söğüt eski bir palanka tahkimatı içinde ufak bir köydür. Çoğunlukla hayvancılıkla uğraşır ve tahıl yetiştiririz. ",
-      "imageUrl": ""
+      "imageUrl": "assets/intro_1.png"
     },
     {
       "id": "intro_welcome_2",
@@ -437,8 +925,6 @@
       "ui.fill_bench": "Tezgahı Doldur (Envanterinden Seç):",
       "ui.diagnosis": "Teşhis",
       "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
-      "char.story_baran": "Genç Druid Baran",
-      "char.story_baran.desc": "Zihnindeki acı verici fısıltılardan kurtulmak isteyen ve ormanda yolunu kaybetmiş acemi şifacı.",
       "char.story_landlord": "Tahsildar Kazım",
       "char.story_landlord.desc": "Köyün beyine çalışan, palankadaki kiraları toplayan ve borç affetmeyen kurallara bağlı devlet görevlisi.",
       "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı",
@@ -492,7 +978,86 @@
       "intro.title.intro_welcome_3": "Druid Seren",
       "intro.text.intro_welcome_3": "Köyümüzün kıyısında ufak bir kulübede yaşayan Seren adında bir druid vardır. Köye hiç girmez ama eğer onu görürsen saygılı olmanda yarar var. ",
       "intro.title.intro_welcome_4": "Kulübe Kirası",
-      "intro.text.intro_welcome_4": "Her haftanın 7. günü 100 altınlık kulübe kirasını almak için biri gelecek. Parayı hazırlamayı ve kirayı ödemeyi unutma. "
+      "intro.text.intro_welcome_4": "Her haftanın 7. günü 100 altınlık kulübe kirasını almak için biri gelecek. Parayı hazırlamayı ve kirayı ödemeyi unutma. ",
+      "symptom.Kötü Kokulu Nefes": "Kötü Kokulu Nefes",
+      "symptom.Ağrı": "Ağrı",
+      "symptom.Öksürük": "Öksürük",
+      "symptom.Körlük": "Körlük",
+      "symptom.Uykusuzluk": "Uykusuzluk",
+      "symptom.Halüsinasyon": "Halüsinasyon",
+      "symptom.İmkansız Aşk": "İmkansız Aşk",
+      "symptom.Yemek Yiyememe": "Yemek Yiyememe",
+      "symptom.Sivilce": "Sivilce",
+      "symptom.Bulantı": "Bulantı",
+      "disease.d_badBreath.name": "Ağız Kokusu",
+      "disease.d_starve.name": "Açlık",
+      "disease.d_freezing.name": "Üşüme",
+      "disease.d_wound.name": "Kesik",
+      "disease.d_flu.name": "Nezle",
+      "disease.d_magicalWound.name": "Işıldak Kesiği",
+      "disease.d_magicalFlu.name": "Su Perisi Nezlesi",
+      "disease.d_magicalPossess.name": "Al Karısı Musallatı",
+      "disease.d_blindFog.name": "Sis Körlüğü",
+      "disease.d_acne.name": "Kabarcık",
+      "disease.d_burn.name": "Yanık",
+      "prop.Halisünasyon Giderici": "Halisünasyon Giderici",
+      "prop.Uykusuzluk Şifası": "Uykusuzluk Şifası",
+      "prop.Halisünasyon Şifası": "Halisünasyon Şifası",
+      "prop.Ateş Düşürücü": "Ateş Düşürücü",
+      "prop.Canlandırıcı": "Canlandırıcı",
+      "prop.Körlüğe Deva": "Körlüğe Deva",
+      "prop.Ferah Nefes": "Ferah Nefes",
+      "prop.Bulantı Şifası": "Bulantı Şifası",
+      "prop.Kan Durdurucu": "Kan Durdurucu",
+      "prop.Ağrı Kesici": "Ağrı Kesici",
+      "prop.Öksürük Sökücü": "Öksürük Sökücü",
+      "prop.Denge Şifası": "Denge Şifası",
+      "plant.d_ironJuniperLeaf.name": "Demir Ardıç Yaprağı",
+      "plant.d_ironJuniperShell.name": "Demir Ardıç Kabuğu",
+      "plant.d_willowShell.name": "Söğüt Kabuğu",
+      "plant.d_honey.name": "Bal",
+      "plant.d_rosehit.name": "Kuşburnu",
+      "plant.d_blackberry.name": "Böğürtlen",
+      "plant.d_riverAlgea.name": "Irmak Yosunu",
+      "plant.d_mint.name": "Nane",
+      "plant.d_yarrow.name": "Civanperçemi",
+      "plant.d_nettle.name": "Isırgan Otu",
+      "plant.d_calendula.name": "Aynısefa Otu",
+      "plant.d_thyme.name": "Kekik",
+      "plant.d_sage.name": "Adaçayı Otu",
+      "plant.d_hotWater.name": "Sıcak Su",
+      "prop.Zehir Sökücü": "Zehir Sökücü",
+      "plant.d_carlic.name": "Sarımsak",
+      "disease.d_monsterTrap.name": "Canavar Tuzağı Ağ",
+      "potion.d_monsterTrapElixir.name": "Canavar Ağı",
+      "potion.d_freezingElixir.name": "Kış Çayı",
+      "plant.d_honeyWax.name": "Balmumu",
+      "potion.d_woundSerum.name": "Kesik Merhemi",
+      "potion.d_FluElixir.name": "Nezle Sökücü Şurup",
+      "potion.d_magicalWoundSerum.name": "Büyülü Kesik Kremi",
+      "potion.d_naiadBreath.name": "Naiad Nefesi",
+      "potion.d_possessElixir.name": "Karabüyü Defetme İksiri",
+      "potion.d_seeingElixir.name": "Göz İksiri",
+      "potion.d_acneElixir.name": "Kabarcık Patlatan İksir",
+      "potion.d_burnElixir.name": "Yanık Merhemi",
+      "char.story_d_shepherdNarin": "Çoban Kız Narin",
+      "node.node_d_shepherdNarin_1.npcText": "Merhaba, ben Narin. Köyün koyunlarını güderim. Dükkanın hayırlı olsun.",
+      "choice.node_d_shepherdNarin_1.0": "Peki. İsimleri pek hatırlamam.",
+      "choice.node_d_shepherdNarin_1.1": "Merhaba, seninle tanıştığıma memnun oldum Narin. Nasılsın?",
+      "node.node_d_shepherdNarin_2300.npcText": "Bugün bir kuzu doğdu. Üşümesin diye yavruyu sırtımda taşıyıp eve götürdüm. Biraz üşüttüm. Bana iyi gelecek bir içeceğin var mı?",
+      "choice.node_d_shepherdNarin_2300.0": "Tabii, sana güzel bir kış çayı demleyeyim, fiyatı 18 altın.",
+      "choice.node_d_shepherdNarin_2300.1": "Madem bugün bir kuzu doğdu ve sen onu sırtında taşıdın o zaman bir kış çayını hakettin. Zaten ilk müşterim de sensin.",
+      "choice.node_d_shepherdNarin_2300.2": "Elimde böyle bir içecek yok.",
+      "node.node_d_shepherdNarin_8642.npcText": "Geçen günki kış çayını çok beğendim. Koyun güderken senin için biraz söğüt kabuğu çıkardım.",
+      "choice.node_d_shepherdNarin_8642.0": "Teşekkür ederim.",
+      "char.story_d_carpenterDursun": "Marangoz Usta Dursun",
+      "node.node_d_carpenterDursun_1.npcText": "Selam olsun. Ben köyün marangozu Dursun. Bir haftanın iki günü palanka'nın tamiratıyla geçiyor. Eski bir palanka bir tarafı tamir etsen bir tarafı çöküyor.",
+      "choice.node_d_carpenterDursun_1.0": "Palanka nedir usta?",
+      "choice.node_d_carpenterDursun_1.1": "Nasıl yardımcı olabilirim usta?",
+      "node.node_d_carpenterDursun_1056.npcText": "Palankayı tamir ederken elimi kestim, elinde biraz kesik merhemi ya da kanı durduracak bir şeyler var mı?",
+      "choice.node_d_carpenterDursun_1056.0": "Kesik merhemim var usta, 19 altındır.",
+      "node.node_d_carpenterDursun_5531.npcText": "Palanka köyün etrafını saran ahşap tahkimattır. Yani bir nevi köy suru. Demir ardıç dediğimiz büyülü ağaçtan yapılmıştır. Ama çok eski, babamın babası zamanında yapılmış, o yüzden şimdi dökülüyor. Ben de onu tamir ederken elimi kestim. Kesik merhemin var mı?",
+      "choice.node_d_carpenterDursun_5531.0": "Kesik merhemim var usta, fiyatı 19 altın."
     },
     "en": {
       "ui.gold": "Gold",
@@ -519,8 +1084,6 @@
       "ui.fill_bench": "Fill Desk (Select from Inventory):",
       "ui.diagnosis": "Diagnosis",
       "ui.market_title": "City Market",
-      "char.story_baran": "Young Druid Baran",
-      "char.story_baran.desc": "An apprentice druid trying to escape auditory whispers, lost in the wildwoods.",
       "char.story_landlord": "Tax Collector Kazim",
       "char.story_landlord.desc": "The local lord's strict bailiff who extracts rent weekly without mercy.",
       "plant.p_demir_ardic.name": "Iron-Juniper Leaf",
@@ -543,7 +1106,49 @@
       "ui.news_add": "Add News",
       "ui.news_id": "News ID",
       "ui.news_text": "News Text",
-      "ui.news_day": "Display Day"
+      "ui.news_day": "Display Day",
+      "symptom.Kötü Kokulu Nefes": "Kötü Kokulu Nefes",
+      "symptom.Ağrı": "Ağrı",
+      "symptom.Öksürük": "Öksürük",
+      "symptom.Körlük": "Körlük",
+      "symptom.Uykusuzluk": "Uykusuzluk",
+      "symptom.Halüsinasyon": "Halüsinasyon",
+      "symptom.İmkansız Aşk": "İmkansız Aşk",
+      "symptom.Yemek Yiyememe": "Yemek Yiyememe",
+      "symptom.Sivilce": "Sivilce",
+      "symptom.Bulantı": "Bulantı",
+      "prop.Halisünasyon Giderici": "Halisünasyon Giderici",
+      "prop.Uykusuzluk Şifası": "Uykusuzluk Şifası",
+      "prop.Halisünasyon Şifası": "Halisünasyon Şifası",
+      "prop.Ateş Düşürücü": "Ateş Düşürücü",
+      "prop.Canlandırıcı": "Canlandırıcı",
+      "prop.Körlüğe Deva": "Körlüğe Deva",
+      "prop.Ferah Nefes": "Ferah Nefes",
+      "prop.Bulantı Şifası": "Bulantı Şifası",
+      "prop.Kan Durdurucu": "Kan Durdurucu",
+      "prop.Ağrı Kesici": "Ağrı Kesici",
+      "prop.Öksürük Sökücü": "Öksürük Sökücü",
+      "prop.Denge Şifası": "Denge Şifası",
+      "prop.Zehir Sökücü": "Zehir Sökücü"
     }
+  },
+  "initialPlayerState": {
+    "gold": 200,
+    "inventory": {
+      "plants": {
+        "d_willowShell": 5,
+        "d_honey": 2,
+        "d_rosehit": 2,
+        "d_blackberry": 3,
+        "d_mint": 2,
+        "d_hotWater": 10
+      },
+      "potions": {
+        "d_burnElixir": 1
+      }
+    },
+    "knownPotions": [
+      "pot_alkarisi_savar"
+    ]
   }
 }

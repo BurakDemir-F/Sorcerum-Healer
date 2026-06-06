@@ -798,10 +798,46 @@
       ]
     }
   ],
-  "marketPlants": [],
+  "marketPlants": [
+    {
+      "plantId": "d_ironJuniperLeaf",
+      "cost": 10,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_nettle",
+      "cost": 10,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_yarrow",
+      "cost": 10,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 1
+    }
+  ],
   "marketRecipes": [
     {
-      "potionId": "pot_alkarisi_savar",
+      "potionId": "d_seeingElixir",
+      "cost": 100,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_burnElixir",
+      "cost": 100,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_freezingElixir",
       "cost": 100,
       "stock": 1,
       "maxStock": 1,

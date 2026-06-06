@@ -5,7 +5,7 @@ import {
     NewsItem, PlantProperty, StoryProgressItem 
 } from '../../types';
 import { getHerbCuredSymptoms } from '../../utils/helpers';
-import { INITIAL_DATA } from '../../constants/initialData';
+import gameDataJSON from '../../assets/gameData.json';
 
 interface AdminPanelProps {
     gameData: GameData;
@@ -60,7 +60,7 @@ export function AdminPanel({
 
     const [selectedMarketPlantId, setSelectedMarketPlantId] = useState<string>('');
     const [marketPlantCost, setMarketPlantCost] = useState<number>(10);
-    const [marketPlantStock, setMarketMarketPlantStock] = useState<number>(5);
+    const [marketPlantStock, setMarketPlantStock] = useState<number>(5);
     const [marketPlantDay, setMarketPlantDay] = useState<number>(1);
 
     const [selectedMarketPotionId, setSelectedMarketPotionId] = useState<string>('');
@@ -174,7 +174,16 @@ export function AdminPanel({
         try {
             const parsed = JSON.parse(importText);
             if (parsed.plants && parsed.potions) {
-                const validatedData: GameData = { ...INITIAL_DATA, ...parsed, marketPlants: parsed.marketPlants || [], marketRecipes: parsed.marketRecipes || [], introPages: parsed.introPages || INITIAL_DATA.introPages || [], soundtracks: parsed.soundtracks || INITIAL_DATA.soundtracks || [], news: parsed.news || INITIAL_DATA.news || [], initialPlayerState: parsed.initialPlayerState || INITIAL_DATA.initialPlayerState };
+                const validatedData: GameData = { 
+                    ...gameDataJSON, 
+                    ...parsed, 
+                    marketPlants: parsed.marketPlants || gameDataJSON.marketPlants || [], 
+                    marketRecipes: parsed.marketRecipes || gameDataJSON.marketRecipes || [], 
+                    introPages: parsed.introPages || gameDataJSON.introPages || [], 
+                    soundtracks: parsed.soundtracks || gameDataJSON.soundtracks || [], 
+                    news: parsed.news || gameDataJSON.news || [], 
+                    initialPlayerState: parsed.initialPlayerState || gameDataJSON.initialPlayerState 
+                } as any;
                 setGameData(validatedData);
                 setImportStatus('✅ Başarılı!');
                 const initialProgress: Record<string, StoryProgressItem> = {};
@@ -694,7 +703,7 @@ export function AdminPanel({
                                     </div>
                                     <div className="flex gap-1">
                                         <button onClick={() => {setEditingPotionId(pot.id); setNewPotion(pot);}} className="bg-yellow-500 text-black text-[10px] px-2 py-1 rounded font-bold border border-black">Düzenle</button>
-                                        <button onClick={() => setGameData(prev => prev ? {...prev, potions: prev.potions.filter(p => p.id !== pot.id)} : prev)} className="bg-red-800 text-white text-[10px] px-2 py-1 rounded font-bold border border-black">Sil</button>
+                                        <button onClick={() => setGameData(prev => prev ? {...prev, potions: prev.potions.filter(p => p.id !== pot.id), marketRecipes: (prev.marketRecipes || []).filter(mr => mr.potionId !== pot.id)} : prev)} className="bg-red-800 text-white text-[10px] px-2 py-1 rounded font-bold border border-black">Sil</button>
                                     </div>
                                 </div>
                             ))}
@@ -1149,7 +1158,7 @@ export function AdminPanel({
                                     </div>
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-slate-600">Stok (📦)</label>
-                                        <input type="number" className="w-full p-2 border-2 border-slate-900 rounded-xl font-bold" value={marketPlantStock} onChange={e => setMarketMarketPlantStock(Number(e.target.value))}/>
+                                        <input type="number" className="w-full p-2 border-2 border-slate-900 rounded-xl font-bold" value={marketPlantStock} onChange={e => setMarketPlantStock(Number(e.target.value))}/>
                                     </div>
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-slate-600">Gün (📅)</label>

@@ -1,39 +1,50 @@
 import { useState, useEffect, useRef } from 'react';
 import { GameData, PlayerState, GameState, CauldronItem, BrewState, TreatmentBenchItem, TreatmentStatus, RentPopup, NewsItem, GameHandlers, Choice, StoryNode, Storyline, StoryProgressItem } from '../types';
 import { INITIAL_DATA } from '../constants/initialData';
+import gameDataJSON from '../assets/gameData.json';
 
 export function useAlchemyGame() {
     const [appMode, setAppMode] = useState<string>('portal');
     const [activeTab, setActiveTab] = useState<string>('shopArea');
-    const [gameData, setGameData] = useState<GameData | null>(null);
+    const [gameData, setGameData] = useState<GameData>(gameDataJSON as any);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [language, setLanguage] = useState<string>('tr');
 
     // Temel Oyun State'leri
-    const [playerState, setPlayerState] = useState<PlayerState>({ 
-        gold: 200, 
-        rentDebt: 0, 
-        inventory: { 
-            plants: { 'p_demir_ardic': 4, 'p_gumus_kok': 1, 'p_isildak_otu': 2, 'p_kara_kabuk': 3 }, 
-            potions: { 'pot_alkarisi_savar': 1 } 
-        }, 
-        knownPotions: ['pot_alkarisi_savar'] 
+    const [playerState, setPlayerState] = useState<PlayerState>(() => {
+        const init = gameDataJSON.initialPlayerState;
+        return {
+            gold: init.gold,
+            rentDebt: 0,
+            inventory: {
+                plants: { ...init.inventory.plants },
+                potions: { ...init.inventory.potions }
+            },
+            knownPotions: [...init.knownPotions]
+        };
     });
     const [cauldron, setCauldron] = useState<CauldronItem[]>([]);
     const [brewState, setBrewState] = useState<BrewState>({ status: 'idle', message: '' });
     const [treatmentBench, setTreatmentBench] = useState<TreatmentBenchItem[]>([]);
     const [treatmentStatus, setTreatmentStatus] = useState<TreatmentStatus>({ type: '', message: '' });
-    const [gameState, setGameState] = useState<GameState>({ 
-        day: 1, 
-        currentCustomer: null, 
-        rentPaidThisWeek: false, 
-        storyProgress: { 
-            'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 }, 
-            'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 } 
-        }, 
-        logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'], 
-        waitingCustomers: [], 
-        queuedCustomers: [] 
+    const [gameState, setGameState] = useState<GameState>(() => {
+        const initialProgress: Record<string, StoryProgressItem> = {};
+        gameDataJSON.storylines.forEach(s => {
+            const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
+            initialProgress[s.id] = { 
+                currentNodeId: firstNodeId, 
+                availableDay: s.id === 'story_landlord' ? 7 : (s.nodes?.[0]?.day ?? 1) 
+            };
+        });
+        return {
+            day: 1,
+            currentCustomer: null,
+            rentPaidThisWeek: false,
+            storyProgress: initialProgress,
+            logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'],
+            waitingCustomers: [],
+            queuedCustomers: []
+        };
     });
     const [rentPopup, setRentPopup] = useState<RentPopup>({ show: false, message: '' });
     const [newsPopup, setNewsPopup] = useState<{ show: boolean; items: NewsItem[] }>({ show: false, items: [] });
@@ -87,12 +98,16 @@ export function useAlchemyGame() {
             })
             .then(data => {
                 const mergedData: GameData = {
-                    ...INITIAL_DATA,
+                    ...gameDataJSON,
                     ...data,
-                    introPages: data.introPages || INITIAL_DATA.introPages || [],
-                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || [],
-                    news: data.news || INITIAL_DATA.news || []
-                };
+                    plants: data.plants && data.plants.length > 0 ? data.plants : gameDataJSON.plants,
+                    potions: data.potions && data.potions.length > 0 ? data.potions : gameDataJSON.potions,
+                    marketPlants: data.marketPlants || gameDataJSON.marketPlants || [],
+                    marketRecipes: data.marketRecipes || gameDataJSON.marketRecipes || [],
+                    introPages: data.introPages || gameDataJSON.introPages || [],
+                    soundtracks: data.soundtracks || gameDataJSON.soundtracks || [],
+                    news: data.news || gameDataJSON.news || []
+                } as any;
                 setGameData(mergedData);
                 
                 // Kayıt yoksa storyProgress'i veritabanına göre başlat
@@ -112,8 +127,8 @@ export function useAlchemyGame() {
                 setIsLoading(false);
             })
             .catch(error => {
-                console.warn("Yerel assets/gameData.json okunamadı, varsayılan (INITIAL_DATA) yükleniyor.", error);
-                setGameData(INITIAL_DATA);
+                console.warn("Yerel assets/gameData.json okunamadı, varsayılan (gameDataJSON) yükleniyor.", error);
+                setGameData(gameDataJSON as any);
                 setIsLoading(false);
             });
     }, []);
@@ -332,51 +347,28 @@ export function useAlchemyGame() {
     };
 
     const handleNewGame = () => {
-        const init = gameData?.initialPlayerState || INITIAL_DATA.initialPlayerState;
-        const storylines = gameData?.storylines || INITIAL_DATA.storylines;
-        
-        // Dinamik storyProgress oluşturma
-        const initialProgress: Record<string, any> = {};
-        storylines.forEach(s => {
-            const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
-            initialProgress[s.id] = { 
-                currentNodeId: firstNodeId, 
-                availableDay: s.id === 'story_landlord' ? 7 : (s.nodes?.[0]?.day ?? 1) 
-            };
-        });
-
-        setPlayerState({
-            gold: init.gold,
-            rentDebt: 0,
-            inventory: { plants: { ...init.inventory.plants }, potions: { ...init.inventory.potions } },
-            knownPotions: [...init.knownPotions]
-        });
-
-        setGameState({
-            day: 1, currentCustomer: null, rentPaidThisWeek: false,
-            storyProgress: initialProgress,
-            logs: ['🧙‍♂️ Yeni bir miras başladı.'], waitingCustomers: [], queuedCustomers: []
-        });
-
-        localStorage.removeItem('buyu_mirasi_save');
-        setHasSave(false);
-        setSavedMeta(null);
-
         setIsLoading(true);
         fetch('assets/gameData.json')
             .then(res => res.json())
             .then(data => {
-                const mergedData = {
-                    ...INITIAL_DATA, ...data,
-                    introPages: data.introPages || INITIAL_DATA.introPages,
-                    soundtracks: data.soundtracks || INITIAL_DATA.soundtracks,
-                    news: data.news || INITIAL_DATA.news
-                };
+                const mergedData: GameData = {
+                    ...gameDataJSON, 
+                    ...data,
+                    plants: data.plants && data.plants.length > 0 ? data.plants : gameDataJSON.plants,
+                    potions: data.potions && data.potions.length > 0 ? data.potions : gameDataJSON.potions,
+                    marketPlants: data.marketPlants || gameDataJSON.marketPlants || [],
+                    marketRecipes: data.marketRecipes || gameDataJSON.marketRecipes || [],
+                    introPages: data.introPages || gameDataJSON.introPages,
+                    soundtracks: data.soundtracks || gameDataJSON.soundtracks,
+                    news: data.news || gameDataJSON.news
+                } as any;
                 setGameData(mergedData);
                 
-                // Veri yüklendikten sonra storyProgress'i tekrar doğrula (eğer JSON'da farklı karakterler varsa)
+                const initNew = mergedData.initialPlayerState || gameDataJSON.initialPlayerState;
+                const storylinesNew = mergedData.storylines || gameDataJSON.storylines;
+                
                 const updatedProgress: Record<string, any> = {};
-                mergedData.storylines.forEach((s: any) => {
+                storylinesNew.forEach((s: any) => {
                     const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
                     updatedProgress[s.id] = { 
                         currentNodeId: firstNodeId, 
@@ -384,14 +376,67 @@ export function useAlchemyGame() {
                     };
                 });
                 
-                setGameState(prev => ({ ...prev, storyProgress: updatedProgress }));
+                setPlayerState({
+                    gold: initNew.gold,
+                    rentDebt: 0,
+                    inventory: { plants: { ...initNew.inventory.plants }, potions: { ...initNew.inventory.potions } },
+                    knownPotions: [...initNew.knownPotions]
+                });
+
+                setGameState({
+                    day: 1, 
+                    currentCustomer: null, 
+                    rentPaidThisWeek: false,
+                    storyProgress: updatedProgress,
+                    logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
+                    waitingCustomers: [], 
+                    queuedCustomers: []
+                });
+
+                localStorage.removeItem('buyu_mirasi_save');
+                setHasSave(false);
+                setSavedMeta(null);
                 
                 setIsLoading(false);
                 setIntroPageIndex(0);
                 setAppMode('intro');
             })
             .catch(() => {
-                setGameData(INITIAL_DATA);
+                setGameData(gameDataJSON as any);
+                
+                const initNew = gameDataJSON.initialPlayerState;
+                const storylinesNew = gameDataJSON.storylines;
+                
+                const updatedProgress: Record<string, any> = {};
+                storylinesNew.forEach((s: any) => {
+                    const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
+                    updatedProgress[s.id] = { 
+                        currentNodeId: firstNodeId, 
+                        availableDay: s.id === 'story_landlord' ? 7 : (s.nodes?.[0]?.day ?? 1) 
+                    };
+                });
+                
+                setPlayerState({
+                    gold: initNew.gold,
+                    rentDebt: 0,
+                    inventory: { plants: { ...initNew.inventory.plants }, potions: { ...initNew.inventory.potions } },
+                    knownPotions: [...initNew.knownPotions]
+                });
+
+                setGameState({
+                    day: 1, 
+                    currentCustomer: null, 
+                    rentPaidThisWeek: false,
+                    storyProgress: updatedProgress,
+                    logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
+                    waitingCustomers: [], 
+                    queuedCustomers: []
+                });
+
+                localStorage.removeItem('buyu_mirasi_save');
+                setHasSave(false);
+                setSavedMeta(null);
+                
                 setIsLoading(false);
                 setIntroPageIndex(0);
                 setAppMode('intro');
