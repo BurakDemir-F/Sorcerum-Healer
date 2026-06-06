@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GameData, PlayerState, GameState, CauldronItem, BrewState, TreatmentBenchItem, TreatmentStatus, RentPopup, NewsItem, GameHandlers, Choice, StoryNode, Storyline } from '../types';
+import { GameData, PlayerState, GameState, CauldronItem, BrewState, TreatmentBenchItem, TreatmentStatus, RentPopup, NewsItem, GameHandlers, Choice, StoryNode, Storyline, StoryProgressItem } from '../types';
 import { INITIAL_DATA } from '../constants/initialData';
 
 export function useAlchemyGame() {
@@ -86,13 +86,29 @@ export function useAlchemyGame() {
                 return response.json();
             })
             .then(data => {
-                setGameData({
+                const mergedData: GameData = {
                     ...INITIAL_DATA,
                     ...data,
                     introPages: data.introPages || INITIAL_DATA.introPages || [],
                     soundtracks: data.soundtracks || INITIAL_DATA.soundtracks || [],
                     news: data.news || INITIAL_DATA.news || []
-                });
+                };
+                setGameData(mergedData);
+                
+                // Kayıt yoksa storyProgress'i veritabanına göre başlat
+                const rawSave = localStorage.getItem('buyu_mirasi_save');
+                if (!rawSave) {
+                    const initialProgress: Record<string, StoryProgressItem> = {};
+                    mergedData.storylines.forEach(s => {
+                        const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
+                        initialProgress[s.id] = { 
+                            currentNodeId: firstNodeId, 
+                            availableDay: s.id === 'story_landlord' ? 7 : (s.nodes?.[0]?.day ?? 1) 
+                        };
+                    });
+                    setGameState(prev => ({ ...prev, storyProgress: initialProgress }));
+                }
+
                 setIsLoading(false);
             })
             .catch(error => {
@@ -317,17 +333,31 @@ export function useAlchemyGame() {
 
     const handleNewGame = () => {
         const init = gameData?.initialPlayerState || INITIAL_DATA.initialPlayerState;
+        const storylines = gameData?.storylines || INITIAL_DATA.storylines;
+        
+        // Dinamik storyProgress oluşturma
+        const initialProgress: Record<string, any> = {};
+        storylines.forEach(s => {
+            const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
+            initialProgress[s.id] = { 
+                currentNodeId: firstNodeId, 
+                availableDay: s.id === 'story_landlord' ? 7 : (s.nodes?.[0]?.day ?? 1) 
+            };
+        });
+
         setPlayerState({
             gold: init.gold,
             rentDebt: 0,
             inventory: { plants: { ...init.inventory.plants }, potions: { ...init.inventory.potions } },
             knownPotions: [...init.knownPotions]
         });
+
         setGameState({
             day: 1, currentCustomer: null, rentPaidThisWeek: false,
-            storyProgress: { 'story_baran': { currentNodeId: 'node_baran_1', availableDay: 1 }, 'story_landlord': { currentNodeId: 'node_landlord_demand', availableDay: 7 } },
+            storyProgress: initialProgress,
             logs: ['🧙‍♂️ Yeni bir miras başladı.'], waitingCustomers: [], queuedCustomers: []
         });
+
         localStorage.removeItem('buyu_mirasi_save');
         setHasSave(false);
         setSavedMeta(null);
@@ -336,12 +366,26 @@ export function useAlchemyGame() {
         fetch('assets/gameData.json')
             .then(res => res.json())
             .then(data => {
-                setGameData({
+                const mergedData = {
                     ...INITIAL_DATA, ...data,
                     introPages: data.introPages || INITIAL_DATA.introPages,
                     soundtracks: data.soundtracks || INITIAL_DATA.soundtracks,
                     news: data.news || INITIAL_DATA.news
+                };
+                setGameData(mergedData);
+                
+                // Veri yüklendikten sonra storyProgress'i tekrar doğrula (eğer JSON'da farklı karakterler varsa)
+                const updatedProgress: Record<string, any> = {};
+                mergedData.storylines.forEach((s: any) => {
+                    const firstNodeId = s.nodes && s.nodes.length > 0 ? s.nodes[0].id : `node_${s.id.replace('story_', '')}_1`;
+                    updatedProgress[s.id] = { 
+                        currentNodeId: firstNodeId, 
+                        availableDay: s.id === 'story_landlord' ? 7 : (s.nodes?.[0]?.day ?? 1) 
+                    };
                 });
+                
+                setGameState(prev => ({ ...prev, storyProgress: updatedProgress }));
+                
                 setIsLoading(false);
                 setIntroPageIndex(0);
                 setAppMode('intro');

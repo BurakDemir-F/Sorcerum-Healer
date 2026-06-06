@@ -317,12 +317,45 @@ export function AdminPanel({
     const handleAddStoryline = (): void => {
         if(!newStoryline.id || !newStoryline.characterName) return;
         const safeStoryId = newStoryline.id.startsWith('story_') ? newStoryline.id : `story_${newStoryline.id}`;
-        handleTranslateChange('tr', `char.${safeStoryId}`, newStoryline.characterName); if (newStoryline.description) handleTranslateChange('tr', `char.${safeStoryId}.desc`, newStoryline.description);
-        setGameData(prev => prev ? (prev.storylines.some(s => s.id === safeStoryId) ? prev : { ...prev, storylines: [...prev.storylines, { id: safeStoryId, characterName: newStoryline.characterName, description: newStoryline.description, avatarUrl: newStoryline.avatarUrl || '👤', nodes: [] }] }) : prev);
         const autoFirstNodeId = `node_${safeStoryId.replace('story_', '')}_1`;
-        setGameState(prev => ({ ...prev, storyProgress: { ...prev.storyProgress, [safeStoryId]: { currentNodeId: autoFirstNodeId, availableDay: 1 } }, logs: [`🧙‍♂️ Karakter: ${newStoryline.characterName}`, ...prev.logs].slice(0, 5) }));
-        setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => { if (s.id === safeStoryId && s.nodes.length === 0) { const initNode: StoryNode = { id: autoFirstNodeId, npcText: `Merhaba, ben ${newStoryline.characterName}.`, day: 1, choices: [] }; handleTranslateChange('tr', `node.${autoFirstNodeId}.npcText`, initNode.npcText); return { ...s, nodes: [initNode] }; } return s; }) } : prev);
-        setActiveEditorStoryId(safeStoryId); setNewStoryline({ id: '', characterName: '', description: '', avatarUrl: '' });
+        
+        handleTranslateChange('tr', `char.${safeStoryId}`, newStoryline.characterName); 
+        if (newStoryline.description) handleTranslateChange('tr', `char.${safeStoryId}.desc`, newStoryline.description);
+        
+        const initNode: StoryNode = { 
+            id: autoFirstNodeId, 
+            npcText: `Merhaba, ben ${newStoryline.characterName}.`, 
+            day: 1, 
+            choices: [] 
+        };
+        handleTranslateChange('tr', `node.${autoFirstNodeId}.npcText`, initNode.npcText);
+
+        setGameData(prev => {
+            if (!prev) return prev;
+            if (prev.storylines.some(s => s.id === safeStoryId)) return prev;
+            
+            const newStory: Storyline = { 
+                id: safeStoryId, 
+                characterName: newStoryline.characterName, 
+                description: newStoryline.description, 
+                avatarUrl: newStoryline.avatarUrl || '👤', 
+                nodes: [initNode] 
+            };
+            
+            return { ...prev, storylines: [...prev.storylines, newStory] };
+        });
+
+        setGameState(prev => ({ 
+            ...prev, 
+            storyProgress: { 
+                ...prev.storyProgress, 
+                [safeStoryId]: { currentNodeId: autoFirstNodeId, availableDay: 1 } 
+            }, 
+            logs: [`🧙‍♂️ Karakter: ${newStoryline.characterName}`, ...prev.logs].slice(0, 5) 
+        }));
+
+        setActiveEditorStoryId(safeStoryId); 
+        setNewStoryline({ id: '', characterName: '', description: '', avatarUrl: '' });
     };
 
     const handleUpdateStoryline = (): void => {

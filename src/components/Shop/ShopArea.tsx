@@ -138,7 +138,7 @@ export function ShopArea({ gameState, playerState, gameData, language, t, handle
                             )}
 
                             <div className="space-y-4">
-                                {activeNode.choices.map((choice, idx) => {
+                                {(activeNode.choices || []).map((choice, idx) => {
                                     const reqGoldCount = choice.reqGold || 0;
                                     const hasGold = playerState.gold >= reqGoldCount;
 
