@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     GameData, GameState, Plant, Disease, Potion, Ingredient, 
     Storyline, StoryNode, Choice, IntroPage, Soundtrack, 
@@ -32,7 +32,19 @@ export function AdminPanel({
 
     const [activeEditorStoryId, setActiveEditorStoryId] = useState<string>('story_baran');
     const [newStoryline, setNewStoryline] = useState<{ id: string; characterName: string; description: string; avatarUrl: string }>({ id: '', characterName: '', description: '', avatarUrl: '' });
+    const [editStoryData, setEditStoryData] = useState<{ characterName: string; description: string; avatarUrl: string }>({ characterName: '', description: '', avatarUrl: '' });
     const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
+
+    useEffect(() => {
+        const story = gameData.storylines.find(s => s.id === activeEditorStoryId);
+        if (story) {
+            setEditStoryData({
+                characterName: story.characterName,
+                description: story.description || '',
+                avatarUrl: story.avatarUrl || '👤'
+            });
+        }
+    }, [activeEditorStoryId, gameData.storylines]);
 
     const [newChoice, setNewChoice] = useState<{
         text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number;
@@ -41,6 +53,8 @@ export function AdminPanel({
     });
 
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+    const [linkChoiceInfo, setLinkChoiceInfo] = useState<{ nodeId: string, choiceIdx: number } | null>(null);
+    const [editingChoiceInfo, setEditingChoiceInfo] = useState<{ nodeId: string, choiceIdx: number } | null>(null);
     const [importText, setImportText] = useState<string>('');
     const [importStatus, setImportStatus] = useState<string>('');
 
@@ -152,7 +166,7 @@ export function AdminPanel({
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(gameData, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "buyu_mirasi_data.json");
+        downloadAnchor.setAttribute("download", "gameData.json");
         document.body.appendChild(downloadAnchor); downloadAnchor.click(); downloadAnchor.remove();
     };
 
@@ -226,6 +240,43 @@ export function AdminPanel({
         setEditingNodeId(null);
     };
 
+    const handleSaveChoiceEdits = (): void => {
+        if (!activeEditorStoryId || !editingChoiceInfo) return;
+        const { nodeId, choiceIdx } = editingChoiceInfo;
+        
+        const choiceObj: Choice = { 
+            text: newChoice.text, 
+            nextNodeId: newChoice.nextNodeId || null, 
+            delayDays: newChoice.delayDays || undefined, 
+            reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, 
+            reqPlant: newChoice.reqPlant || undefined, 
+            reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, 
+            reqPotion: newChoice.reqPotion || undefined, 
+            reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, 
+            rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, 
+            rewardPlantId: newChoice.rewardPlantId || undefined, 
+            rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, 
+            rewardPotionId: newChoice.rewardPotionId || undefined, 
+            rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined 
+        };
+
+        handleTranslateChange('tr', `choice.${nodeId}.${choiceIdx}`, newChoice.text);
+        
+        setGameData(prev => prev ? {
+            ...prev,
+            storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? {
+                ...s,
+                nodes: s.nodes.map(n => n.id === nodeId ? {
+                    ...n,
+                    choices: n.choices.map((c, idx) => idx === choiceIdx ? choiceObj : c)
+                } : n)
+            } : s)
+        } : prev);
+
+        setEditingChoiceInfo(null);
+        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
+    };
+
     const handleAddDisease = (): void => {
         if (!newDisease.id || !newDisease.name) return;
         handleTranslateChange('tr', `disease.${newDisease.id}.name`, newDisease.name);
@@ -274,6 +325,67 @@ export function AdminPanel({
         setActiveEditorStoryId(safeStoryId); setNewStoryline({ id: '', characterName: '', description: '', avatarUrl: '' });
     };
 
+    const handleUpdateStoryline = (): void => {
+        if (!activeEditorStoryId) return;
+        const name = editStoryData.characterName.trim();
+        const description = editStoryData.description.trim();
+        if (!name) return;
+
+        handleTranslateChange('tr', `char.${activeEditorStoryId}`, name);
+        handleTranslateChange('tr', `char.${activeEditorStoryId}.desc`, description);
+
+        setGameData(prev => prev ? {
+            ...prev,
+            storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { 
+                ...s, 
+                characterName: name, 
+                description: description,
+                avatarUrl: editStoryData.avatarUrl 
+            } : s)
+        } : prev);
+        alert("Karakter bilgileri güncellendi!");
+    };
+
+    const handleRemoveStoryline = (id: string): void => {
+        if (!window.confirm("Bu karakteri ve tüm diyaloglarını silmek istediğinize emin misiniz?")) return;
+
+        setGameData(prev => {
+            if (!prev) return prev;
+            const storyline = prev.storylines.find(s => s.id === id);
+            const nodeIds = storyline?.nodes.map(n => n.id) || [];
+            const updatedTranslations = { ...prev.translations };
+            
+            Object.keys(updatedTranslations).forEach(lang => {
+                const langData = { ...updatedTranslations[lang] };
+                delete langData[`char.${id}`];
+                delete langData[`char.${id}.desc`];
+                nodeIds.forEach(nodeId => {
+                    delete langData[`node.${nodeId}.npcText`];
+                    Object.keys(langData).forEach(key => {
+                        if (key.startsWith(`choice.${nodeId}.`)) delete langData[key];
+                    });
+                });
+                updatedTranslations[lang] = langData;
+            });
+
+            return { ...prev, storylines: prev.storylines.filter(s => s.id !== id), translations: updatedTranslations };
+        });
+
+        if (activeEditorStoryId === id) setActiveEditorStoryId('');
+
+        setGameState(prev => {
+            const updatedProgress = { ...prev.storyProgress };
+            delete updatedProgress[id];
+            return {
+                ...prev,
+                storyProgress: updatedProgress,
+                waitingCustomers: prev.waitingCustomers.filter(cid => cid !== id),
+                queuedCustomers: prev.queuedCustomers.filter(cid => cid !== id),
+                currentCustomer: prev.currentCustomer?.storyId === id ? null : prev.currentCustomer
+            };
+        });
+    };
+
     const handleAddNodeToStory = (): void => {
         if(!activeEditorStoryId || !newNode.id) return;
         handleTranslateChange('tr', `node.${newNode.id}.npcText`, newNode.npcText);
@@ -288,6 +400,26 @@ export function AdminPanel({
         if (gameData) { const story = gameData.storylines.find(s => s.id === activeEditorStoryId); const node = story?.nodes.find(n => n.id === nodeId); handleTranslateChange('tr', `choice.${nodeId}.${node?.choices.length || 0}`, newChoice.text); }
         setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => { if (s.id === activeEditorStoryId) { let updatedNodes = s.nodes.map(n => n.id === nodeId ? { ...n, choices: [...(n.choices || []), choiceObj] } : n); if (extraNodes.length > 0) updatedNodes = [...updatedNodes, ...extraNodes]; return { ...s, nodes: updatedNodes }; } return s; }) } : prev);
         setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
+    };
+
+    const handleAddNodeToChoice = (): void => {
+        if (!activeEditorStoryId || !linkChoiceInfo || !newNode.id) return;
+        const generatedNodeId = newNode.id;
+        handleTranslateChange('tr', `node.${generatedNodeId}.npcText`, newNode.npcText);
+        
+        setGameData(prev => prev ? {
+            ...prev,
+            storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? {
+                ...s,
+                nodes: [...s.nodes.map(n => n.id === linkChoiceInfo.nodeId ? {
+                    ...n,
+                    choices: n.choices.map((c, idx) => idx === linkChoiceInfo.choiceIdx ? { ...c, nextNodeId: generatedNodeId } : c)
+                } : n), { ...newNode, day: Number(newNode.day) || undefined, choices: [] }]
+            } : s)
+        } : prev);
+
+        setLinkChoiceInfo(null);
+        setNewNode({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
     };
 
     const handleAddIntroPage = (): void => {
@@ -328,8 +460,8 @@ export function AdminPanel({
                     </div>
                     <p className="text-sm font-bold">"{node.npcText}"</p>
                     <div className="absolute -right-3 -top-3 flex gap-1">
-                        <button onClick={() => { setEditingNodeId(node.id); setEditNodeData({ npcText: node.npcText, diseaseId: node.diseaseId || '', dynamicSuccessNodeId: node.dynamicSuccessNodeId || '', dynamicFailNodeId: node.dynamicFailNodeId || '', day: node.day ?? 1 }); }} className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow">✏️</button>
-                        <button onClick={() => setSelectedNodeId(node.id)} className="bg-emerald-500 hover:bg-emerald-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow">➕</button>
+                        <button onClick={() => { setEditingNodeId(node.id); setEditNodeData({ npcText: node.npcText, diseaseId: node.diseaseId || '', dynamicSuccessNodeId: node.dynamicSuccessNodeId || '', dynamicFailNodeId: node.dynamicFailNodeId || '', day: node.day ?? 1 }); }} className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow" title="Düğümü Düzenle">✏️</button>
+                        <button onClick={() => setSelectedNodeId(node.id)} className="bg-emerald-500 hover:bg-emerald-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow" title="Seçenek Ekle">➕</button>
                     </div>
                 </div>
                 {node.choices && node.choices.length > 0 && (
@@ -338,8 +470,43 @@ export function AdminPanel({
                         {node.choices.map((choice, idx) => (
                             <div key={idx} className="flex flex-col items-center relative pt-4 min-w-[200px]">
                                 <div className="absolute top-0 left-1/2 w-1 h-4 bg-slate-900 -translate-x-1/2"></div>
-                                <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3">
+                                <div className="bg-[#e9dbbe] border-2 border-slate-955 rounded-xl p-2.5 text-xs w-48 shadow-sm text-center mb-3 relative group">
                                     <p className="font-bold font-parchment text-sm">{t(`choice.${node.id}.${idx}`, choice.text)}</p>
+                                    <div className="absolute -right-2 -top-2 flex gap-1 z-20">
+                                        <button 
+                                            onClick={() => {
+                                                setEditingChoiceInfo({ nodeId: node.id, choiceIdx: idx });
+                                                setNewChoice({
+                                                    text: choice.text,
+                                                    nextNodeId: choice.nextNodeId || '',
+                                                    delayDays: choice.delayDays || 0,
+                                                    autoCreateNode: false,
+                                                    reqGold: choice.reqGold || 0,
+                                                    reqPlant: choice.reqPlant || '',
+                                                    reqPlantCount: choice.reqPlantCount || 1,
+                                                    reqPotion: choice.reqPotion || '',
+                                                    reqPotionCount: choice.reqPotionCount || 1,
+                                                    rewardGold: choice.rewardGold || 0,
+                                                    rewardPlantId: choice.rewardPlantId || '',
+                                                    rewardPlantCount: choice.rewardPlantCount || 1,
+                                                    rewardPotionId: choice.rewardPotionId || '',
+                                                    rewardPotionCount: choice.rewardPotionCount || 1
+                                                });
+                                            }}
+                                            className="bg-yellow-500 border-2 border-black rounded-full w-6 h-6 flex items-center justify-center shadow hover:bg-yellow-400 transition-all"
+                                            title="Seçeneği Düzenle"
+                                        >✏️</button>
+                                        {!choice.nextNodeId && (
+                                            <button 
+                                                onClick={() => {
+                                                    setLinkChoiceInfo({ nodeId: node.id, choiceIdx: idx });
+                                                    setNewNode(prev => ({ ...prev, id: `node_${activeEditorStoryId.replace('story_', '')}_${Date.now().toString().slice(-4)}` }));
+                                                }}
+                                                className="bg-emerald-500 border-2 border-black rounded-full w-6 h-6 flex items-center justify-center shadow hover:bg-emerald-400 transition-all"
+                                                title="Düğüm Ekle"
+                                            >➕</button>
+                                        )}
+                                    </div>
                                 </div>
                                 {renderVisualNode(story, choice.nextNodeId || '', nextVisited)}
                             </div>
@@ -546,55 +713,195 @@ export function AdminPanel({
                         </div>
                         <div className="flex-1 overflow-y-auto pr-1">
                             {gameData.storylines.map(story => (
-                                <button key={story.id} onClick={() => setActiveEditorStoryId(story.id)} className={`w-full text-left p-3 rounded-xl border-2 mb-2 transition-all ${activeEditorStoryId === story.id ? 'bg-[#dfd1b3] border-slate-900 shadow-inner' : 'bg-amber-50/50 border-transparent hover:border-amber-300'}`}>
-                                    <span className="font-bold text-sm block font-magic">{story.characterName}</span>
-                                    <span className="text-[10px] text-slate-500 font-mono">ID: {story.id}</span>
-                                </button>
+                                <div key={story.id} className="relative group">
+                                    <button onClick={() => setActiveEditorStoryId(story.id)} className={`w-full text-left p-3 rounded-xl border-2 mb-2 transition-all ${activeEditorStoryId === story.id ? 'bg-[#dfd1b3] border-slate-900 shadow-inner' : 'bg-amber-50/50 border-transparent hover:border-amber-300'}`}>
+                                        <span className="font-bold text-sm block font-magic">{story.characterName}</span>
+                                        <span className="text-[10px] text-slate-500 font-mono">ID: {story.id}</span>
+                                    </button>
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); handleRemoveStoryline(story.id); }}
+                                        className="absolute top-2 right-2 bg-red-100 text-red-600 w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 border border-red-200 z-10"
+                                        title="Karakteri Sil"
+                                    >✕</button>
+                                </div>
                             ))}
                         </div>
                     </div>
                     <div className="xl:col-span-3 bg-[#e9dbbe] border-4 border-slate-900 rounded-2xl flex flex-col relative overflow-hidden">
-                        <div className="absolute top-4 right-4 z-20 flex gap-2">
-                             <div className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl border-4 border-slate-900 shadow-2xl w-80 space-y-3 font-parchment">
-                                <h3 className="text-lg font-bold font-magic border-b-2 border-slate-200 pb-1">⚡ Hızlı İşlemler</h3>
-                                {selectedNodeId ? (
-                                    <div className="space-y-2">
-                                        <p className="text-[10px] font-bold text-indigo-700 bg-indigo-50 p-1 rounded">Düğüm Seçildi: #{selectedNodeId}</p>
-                                        <input className="w-full text-xs p-2 border-2 border-slate-300 rounded-lg" placeholder="Seçenek Metni" value={newChoice.text} onChange={e => setNewChoice({...newChoice, text: e.target.value})}/>
-                                        <input className="w-full text-xs p-2 border-2 border-slate-300 rounded-lg" placeholder="Hedef Düğüm ID" value={newChoice.nextNodeId} onChange={e => setNewChoice({...newChoice, nextNodeId: e.target.value})}/>
-                                        <div className="flex items-center gap-2">
-                                            <input type="checkbox" id="autoNode" checked={newChoice.autoCreateNode} onChange={e => setNewChoice({...newChoice, autoCreateNode: e.target.checked})}/>
-                                            <label htmlFor="autoNode" className="text-[10px] font-bold">Otomatik Düğüm Oluştur</label>
+                        {currentStory && (
+                            <div className="bg-slate-800 text-white p-4 border-b-4 border-slate-900 flex flex-col md:flex-row gap-4 items-end z-10">
+                                <div className="flex-1 w-full space-y-2">
+                                    <div className="flex gap-4">
+                                        <div className="flex-1">
+                                            <label className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Karakter İsmi</label>
+                                            <input className="w-full bg-slate-700 border border-slate-600 rounded p-1.5 text-sm font-magic" value={editStoryData.characterName} onChange={e => setEditStoryData({...editStoryData, characterName: e.target.value})}/>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-1">
-                                            <button onClick={() => handleAddChoiceToNodeAdv(selectedNodeId)} className="bg-emerald-600 text-white py-2 rounded-lg text-xs font-bold font-magic border-2 border-black">Ekle</button>
-                                            <button onClick={() => setSelectedNodeId(null)} className="bg-slate-400 text-white py-2 rounded-lg text-xs font-bold font-magic border-2 border-black">İptal</button>
+                                        <div className="w-24">
+                                            <label className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Avatar</label>
+                                            <input className="w-full bg-slate-700 border border-slate-600 rounded p-1.5 text-sm text-center" value={editStoryData.avatarUrl} onChange={e => setEditStoryData({...editStoryData, avatarUrl: e.target.value})}/>
                                         </div>
                                     </div>
-                                ) : editingNodeId ? (
-                                    <div className="space-y-2">
-                                        <p className="text-[10px] font-bold text-amber-700 bg-amber-50 p-1 rounded">Düzenle: #{editingNodeId}</p>
-                                        <textarea className="w-full text-xs p-2 border-2 border-slate-300 rounded-lg h-24" value={editNodeData.npcText} onChange={e => setEditNodeData({...editNodeData, npcText: e.target.value})}/>
-                                        <select className="w-full text-xs p-1 border-2 border-slate-300 rounded-lg" value={editNodeData.diseaseId} onChange={e => setEditNodeData({...editNodeData, diseaseId: e.target.value})}>
-                                            <option value="">Hastalık Atama (Yok)</option>
-                                            {gameData.diseases.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                                        </select>
-                                        <div className="grid grid-cols-2 gap-1">
-                                            <button onClick={handleSaveNodeEdits} className="bg-amber-600 text-white py-2 rounded-lg text-xs font-bold font-magic border-2 border-black">Kaydet</button>
-                                            <button onClick={() => setEditingNodeId(null)} className="bg-slate-400 text-white py-2 rounded-lg text-xs font-bold font-magic border-2 border-black">Kapat</button>
-                                        </div>
+                                    <div>
+                                        <label className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Karakter Açıklaması</label>
+                                        <textarea className="w-full bg-slate-700 border border-slate-600 rounded p-1.5 text-xs h-10 resize-none" value={editStoryData.description} onChange={e => setEditStoryData({...editStoryData, description: e.target.value})}/>
                                     </div>
-                                ) : (
-                                    <div className="space-y-2">
-                                        <input className="w-full text-xs p-2 border-2 border-slate-300 rounded-lg" placeholder="Yeni Düğüm ID" value={newNode.id} onChange={e => setNewNode({...newNode, id: e.target.value})}/>
-                                        <textarea className="w-full text-xs p-2 border-2 border-slate-300 rounded-lg h-20" placeholder="NPC Konuşması..." value={newNode.npcText} onChange={e => setNewNode({...newNode, npcText: e.target.value})}/>
-                                        <button onClick={handleAddNodeToStory} className="w-full bg-slate-800 text-white py-2 rounded-lg text-xs font-bold font-magic border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Düğüm Ekle</button>
+                                </div>
+                                <button onClick={handleUpdateStoryline} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl font-bold font-magic border-2 border-white/20 shadow-lg transition-colors whitespace-nowrap">Bilgileri Güncelle</button>
+                            </div>
+                        )}
+                        {(selectedNodeId || editingNodeId || linkChoiceInfo || editingChoiceInfo) && (
+                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
+                                <div className="bg-white/95 backdrop-blur-sm p-6 rounded-3xl border-4 border-slate-900 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto space-y-4 font-parchment">
+                                    <div className="flex justify-between items-center border-b-4 border-slate-100 pb-2">
+                                        <h3 className="text-2xl font-bold font-magic text-slate-800">
+                                            {selectedNodeId ? '✨ Yeni Seçenek Ekle' : editingNodeId ? '✏️ Düğümü Düzenle' : linkChoiceInfo ? '🎭 Yeni Düğüm Ekle' : '✏️ Seçeneği Düzenle'}
+                                        </h3>
+                                        <button 
+                                            onClick={() => { setSelectedNodeId(null); setEditingNodeId(null); setLinkChoiceInfo(null); setEditingChoiceInfo(null); }}
+                                            className="bg-red-100 text-red-600 w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-red-200 hover:bg-red-200"
+                                        >✕</button>
                                     </div>
-                                )}
-                             </div>
-                        </div>
 
-                        <div className="flex-1 overflow-auto p-8 pt-20">
+                                    {(selectedNodeId || editingChoiceInfo) && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-3">
+                                                <p className="text-xs font-bold text-indigo-700 bg-indigo-50 p-2 rounded-lg border border-indigo-100">
+                                                    {selectedNodeId ? `Düğüm: #${selectedNodeId}` : `Düzenlenen Seçenek: #${editingChoiceInfo?.nodeId} (Idx: ${editingChoiceInfo?.choiceIdx})`}
+                                                </p>
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">Seçenek Metni</label>
+                                                    <input className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl focus:border-indigo-500 outline-none" placeholder="Örn: 'Tabii, yardım edebilirim.'" value={newChoice.text} onChange={e => setNewChoice({...newChoice, text: e.target.value})}/>
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">Hedef Düğüm ID (Opsiyonel)</label>
+                                                    <input className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" placeholder="node_..." value={newChoice.nextNodeId} onChange={e => setNewChoice({...newChoice, nextNodeId: e.target.value})}/>
+                                                </div>
+                                                {selectedNodeId && (
+                                                    <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                                        <input type="checkbox" id="autoNode" className="w-4 h-4" checked={newChoice.autoCreateNode} onChange={e => setNewChoice({...newChoice, autoCreateNode: e.target.checked})}/>
+                                                        <label htmlFor="autoNode" className="text-xs font-bold cursor-pointer">Otomatik Düğüm Oluştur</label>
+                                                    </div>
+                                                )}
+                                                <button 
+                                                    onClick={editingChoiceInfo ? handleSaveChoiceEdits : () => handleAddChoiceToNodeAdv(selectedNodeId!)} 
+                                                    className="w-full bg-emerald-600 text-white py-3 rounded-2xl font-bold font-magic border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 active:translate-y-1 transition-all"
+                                                >
+                                                    {editingChoiceInfo ? 'Değişiklikleri Kaydet' : 'Sisteme Kaydet'}
+                                                </button>
+                                            </div>
+
+                                            <div className="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 space-y-4">
+                                                <h4 className="text-sm font-bold border-b border-slate-200 pb-1">💎 Alışveriş & Takas</h4>
+                                                
+                                                <div className="space-y-3">
+                                                    <div className="p-2 bg-red-50 rounded-xl border border-red-100">
+                                                        <p className="text-[10px] font-bold text-red-800 mb-1">Oyuncudan Alınacaklar:</p>
+                                                        <div className="grid grid-cols-2 gap-2">
+                                                            <div className="flex flex-col gap-1">
+                                                                <input type="number" placeholder="Altın" className="text-xs p-1.5 border rounded" value={newChoice.reqGold || ''} onChange={e => setNewChoice({...newChoice, reqGold: Number(e.target.value)})}/>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1">
+                                                                <select className="text-[10px] p-1.5 border rounded" value={newChoice.reqPlant} onChange={e => setNewChoice({...newChoice, reqPlant: e.target.value})}>
+                                                                    <option value="">Bitki Seç</option>
+                                                                    {gameData.plants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                                                </select>
+                                                                <input type="number" placeholder="Miktar" className="text-[10px] p-1 border rounded" value={newChoice.reqPlantCount || ''} onChange={e => setNewChoice({...newChoice, reqPlantCount: Number(e.target.value)})}/>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 col-span-2 mt-1 pt-1 border-t border-red-200">
+                                                                <select className="text-[10px] p-1.5 border rounded" value={newChoice.reqPotion} onChange={e => setNewChoice({...newChoice, reqPotion: e.target.value})}>
+                                                                    <option value="">İksir Seç</option>
+                                                                    {gameData.potions.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                                                </select>
+                                                                <input type="number" placeholder="İksir Miktarı" className="text-[10px] p-1 border rounded" value={newChoice.reqPotionCount || ''} onChange={e => setNewChoice({...newChoice, reqPotionCount: Number(e.target.value)})}/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="p-2 bg-emerald-50 rounded-xl border border-emerald-100">
+                                                        <p className="text-[10px] font-bold text-emerald-800 mb-1">Oyuncuya Verilecekler:</p>
+                                                        <div className="grid grid-cols-2 gap-2">
+                                                            <div className="flex flex-col gap-1">
+                                                                <input type="number" placeholder="Altın" className="text-xs p-1.5 border rounded" value={newChoice.rewardGold || ''} onChange={e => setNewChoice({...newChoice, rewardGold: Number(e.target.value)})}/>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1">
+                                                                <select className="text-[10px] p-1.5 border rounded" value={newChoice.rewardPlantId} onChange={e => setNewChoice({...newChoice, rewardPlantId: e.target.value})}>
+                                                                    <option value="">Bitki Seç</option>
+                                                                    {gameData.plants.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                                                </select>
+                                                                <input type="number" placeholder="Miktar" className="text-[10px] p-1 border rounded" value={newChoice.rewardPlantCount || ''} onChange={e => setNewChoice({...newChoice, rewardPlantCount: Number(e.target.value)})}/>
+                                                            </div>
+                                                            <div className="flex flex-col gap-1 col-span-2 mt-1 pt-1 border-t border-emerald-200">
+                                                                <select className="text-[10px] p-1.5 border rounded" value={newChoice.rewardPotionId} onChange={e => setNewChoice({...newChoice, rewardPotionId: e.target.value})}>
+                                                                    <option value="">İksir Seç</option>
+                                                                    {gameData.potions.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                                                </select>
+                                                                <input type="number" placeholder="İksir Miktarı" className="text-[10px] p-1 border rounded" value={newChoice.rewardPotionCount || ''} onChange={e => setNewChoice({...newChoice, rewardPotionCount: Number(e.target.value)})}/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {editingNodeId && (
+                                        <div className="space-y-4">
+                                            <p className="text-xs font-bold text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-100">Düzenlenen: #{editingNodeId}</p>
+                                            <div>
+                                                <label className="text-xs font-bold block mb-1">NPC Konuşması</label>
+                                                <textarea className="w-full text-sm p-3 border-2 border-slate-300 rounded-xl h-32 focus:border-amber-500 outline-none" value={editNodeData.npcText} onChange={e => setEditNodeData({...editNodeData, npcText: e.target.value})}/>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">İlişkili Hastalık</label>
+                                                    <select className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={editNodeData.diseaseId} onChange={e => setEditNodeData({...editNodeData, diseaseId: e.target.value})}>
+                                                        <option value="">Hastalık Yok</option>
+                                                        {gameData.diseases.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">Görünme Günü</label>
+                                                    <input type="number" className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={editNodeData.day} onChange={e => setEditNodeData({...editNodeData, day: Number(e.target.value)})}/>
+                                                </div>
+                                            </div>
+                                            <button onClick={handleSaveNodeEdits} className="w-full bg-amber-600 text-white py-3 rounded-2xl font-bold font-magic border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 active:translate-y-1 transition-all">Değişiklikleri Kaydet</button>
+                                        </div>
+                                    )}
+
+                                    {linkChoiceInfo && (
+                                        <div className="space-y-4">
+                                            <div className="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                                                <p className="text-xs font-bold text-indigo-800">Seçeneğe Bağlanıyor: #{linkChoiceInfo.nodeId} {'->'} Seçenek #{linkChoiceInfo.choiceIdx}</p>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">Yeni Düğüm ID</label>
+                                                    <input className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" placeholder="node_..." value={newNode.id} onChange={e => setNewNode({...newNode, id: e.target.value})}/>
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">İlişkili Hastalık</label>
+                                                    <select className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={newNode.diseaseId} onChange={e => setNewNode({...newNode, diseaseId: e.target.value})}>
+                                                        <option value="">Hastalık Yok</option>
+                                                        {gameData.diseases.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">Görünme Günü</label>
+                                                    <input type="number" className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={newNode.day} onChange={e => setNewNode({...newNode, day: Number(e.target.value)})}/>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="text-xs font-bold block mb-1">NPC Konuşması</label>
+                                                <textarea className="w-full text-sm p-3 border-2 border-slate-300 rounded-xl h-32 focus:border-indigo-500 outline-none" placeholder="Karakter ne söyleyecek?..." value={newNode.npcText} onChange={e => setNewNode({...newNode, npcText: e.target.value})}/>
+                                            </div>
+                                            <button onClick={handleAddNodeToChoice} className="w-full bg-indigo-600 text-white py-3 rounded-2xl font-bold font-magic border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 active:translate-y-1 transition-all">Düğümü Oluştur ve Bağla</button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex-1 overflow-auto p-8 pt-10">
                             {currentStory && currentStory.nodes.length > 0 ? renderVisualNode(currentStory, currentStory.nodes[0].id) : (
                                 <div className="h-full flex flex-col items-center justify-center text-slate-500 italic font-parchment">
                                     <span className="text-5xl mb-4 animate-bounce">🎭</span>
