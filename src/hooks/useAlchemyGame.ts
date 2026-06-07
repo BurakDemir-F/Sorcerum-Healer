@@ -391,7 +391,8 @@ export function useAlchemyGame() {
                     storyProgress: updatedProgress,
                     logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
                     waitingCustomers: [], 
-                    queuedCustomers: []
+                    queuedCustomers: [],
+                    triggeredConditionalNews: []
                 });
 
                 localStorage.removeItem('buyu_mirasi_save');
@@ -431,7 +432,8 @@ export function useAlchemyGame() {
                     storyProgress: updatedProgress,
                     logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
                     waitingCustomers: [], 
-                    queuedCustomers: []
+                    queuedCustomers: [],
+                    triggeredConditionalNews: []
                 });
 
                 localStorage.removeItem('buyu_mirasi_save');
@@ -452,7 +454,9 @@ export function useAlchemyGame() {
 
         const nextDay = gameState.day + 1;
         const dailyNews = (gameData?.news || []).filter(n => n.day === nextDay);
-        if (dailyNews.length > 0) setNewsPopup({ show: true, items: dailyNews });
+        const triggeredConditional = (gameData?.conditionalNews || []).filter(n => n.day === nextDay && gameState.triggeredConditionalNews.includes(n.id));
+        const allNewsToShow = [...dailyNews, ...triggeredConditional];
+        if (allNewsToShow.length > 0) setNewsPopup({ show: true, items: allNewsToShow });
 
         setGameData(prev => {
             if (!prev) return prev;
@@ -510,11 +514,27 @@ export function useAlchemyGame() {
             updProgress[storyId] = { currentNodeId: choice.nextNodeId, availableDay: calculatedAvailableDay };
 
             const shouldDismissCustomer = (choice.delayDays || 0) > 0 || nextNodeDay > gameState.day;
-            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: shouldDismissCustomer ? null : { storyId, nodeId: choice.nextNodeId as string }, isTreatmentChoiceSelected: choice.isTreatmentChoice || false }));
+            setGameState(prev => ({ 
+                ...prev, 
+                storyProgress: updProgress, 
+                currentCustomer: shouldDismissCustomer ? null : { storyId, nodeId: choice.nextNodeId as string }, 
+                isTreatmentChoiceSelected: choice.isTreatmentChoice || false,
+                triggeredConditionalNews: choice.triggeredNewsId && !prev.triggeredConditionalNews.includes(choice.triggeredNewsId)
+                    ? [...prev.triggeredConditionalNews, choice.triggeredNewsId]
+                    : prev.triggeredConditionalNews
+            }));
             if (shouldDismissCustomer) addLog(language === 'en' ? `👥 Customer will return on Day ${calculatedAvailableDay}.` : `👥 Karakter ${calculatedAvailableDay}. gün tekrar gelecek.`);
         } else {
             updProgress[storyId] = { currentNodeId: 'END', availableDay: 999 };
-            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: null, isTreatmentChoiceSelected: false }));
+            setGameState(prev => ({ 
+                ...prev, 
+                storyProgress: updProgress, 
+                currentCustomer: null, 
+                isTreatmentChoiceSelected: false,
+                triggeredConditionalNews: choice.triggeredNewsId && !prev.triggeredConditionalNews.includes(choice.triggeredNewsId)
+                    ? [...prev.triggeredConditionalNews, choice.triggeredNewsId]
+                    : prev.triggeredConditionalNews
+            }));
         }
     };
 

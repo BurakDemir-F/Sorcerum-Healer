@@ -54,6 +54,7 @@ export interface Choice {
 
     autoCreateNode?: boolean;
     isTreatmentChoice?: boolean;
+    triggeredNewsId?: string;
 }
 
 export interface StoryNode {
@@ -133,6 +134,7 @@ export interface GameData {
     introPages: IntroPage[]; // JSON içinde hikaye giriş sayfaları verisi
     soundtracks: Soundtrack[]; // Dinamik müzik/soundtrack listesi
     news: NewsItem[]; // Günlük haberler
+    conditionalNews: NewsItem[]; // Şarta bağlı haberler
     initialPlayerState: InitialPlayerState;
 }
 
@@ -181,6 +183,7 @@ export interface GameState {
     waitingCustomers: string[]; // Kapıda bekleyen müşteri storyId listesi
     queuedCustomers: string[];  // Gün içinde gelecek (zamanlanmış) müşteri storyId listesi
     isTreatmentChoiceSelected?: boolean; // Tedavi choice'u seçildi mi?
+    triggeredConditionalNews: string[]; // Tetiklenmiş şarta bağlı haber ID'leri
 }
 
 export interface RentPopup {

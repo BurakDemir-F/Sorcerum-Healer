@@ -47,9 +47,9 @@ export function AdminPanel({
     }, [activeEditorStoryId, gameData.storylines]);
 
     const [newChoice, setNewChoice] = useState<{
-        text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number; isTreatmentChoice: boolean;
+        text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number; isTreatmentChoice: boolean; triggeredNewsId?: string;
     }>({
-        text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, isTreatmentChoice: false
+        text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, isTreatmentChoice: false, triggeredNewsId: undefined
     });
 
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -82,6 +82,8 @@ export function AdminPanel({
     const [newTrack, setNewTrack] = useState<Soundtrack>({ id: '', title: '', path: '' });
     const [editingPropertyName, setEditingPropertyName] = useState<string | null>(null);
     const [newNews, setNewNews] = useState<NewsItem>({ id: '', day: 1, text: '' });
+    const [newConditionalNews, setNewConditionalNews] = useState<NewsItem>({ id: '', day: 1, text: '' });
+    const [editingConditionalNewsId, setEditingConditionalNewsId] = useState<string | null>(null);
 
     const [initPlantId, setInitPlantId] = useState<string>('');
     const [initPlantCount, setInitPlantCount] = useState<number>(1);
@@ -152,6 +154,39 @@ export function AdminPanel({
 
     const handleRemoveNews = (id: string): void => {
         setGameData(prev => prev ? { ...prev, news: (prev.news || []).filter(n => n.id !== id) } : prev);
+    };
+
+    const handleAddConditionalNews = (): void => {
+        if (!newConditionalNews.id || !newConditionalNews.text) return;
+        setGameData(prev => {
+            if (!prev || (prev.conditionalNews || []).some(n => n.id === newConditionalNews.id)) return prev;
+            return { ...prev, conditionalNews: [...(prev.conditionalNews || []), { ...newConditionalNews, day: Number(newConditionalNews.day) }] };
+        });
+        setNewConditionalNews({ id: '', day: 1, text: '' });
+    };
+
+    const handleUpdateConditionalNews = (): void => {
+        if (!newConditionalNews.id || !newConditionalNews.text) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                conditionalNews: (prev.conditionalNews || []).map(n =>
+                    n.id === editingConditionalNewsId ? { ...newConditionalNews, day: Number(newConditionalNews.day) } : n
+                )
+            };
+        });
+        setNewConditionalNews({ id: '', day: 1, text: '' });
+        setEditingConditionalNewsId(null);
+    };
+
+    const startEditingConditionalNews = (news: NewsItem): void => {
+        setNewConditionalNews(news);
+        setEditingConditionalNewsId(news.id);
+    };
+
+    const handleRemoveConditionalNews = (id: string): void => {
+        setGameData(prev => prev ? { ...prev, conditionalNews: (prev.conditionalNews || []).filter(n => n.id !== id) } : prev);
     };
 
     const handleRemovePlant = (id: string): void => {
@@ -267,7 +302,8 @@ export function AdminPanel({
             rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, 
             rewardPotionId: newChoice.rewardPotionId || undefined, 
             rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined,
-            isTreatmentChoice: newChoice.isTreatmentChoice
+            isTreatmentChoice: newChoice.isTreatmentChoice,
+            triggeredNewsId: newChoice.triggeredNewsId || undefined
         };
 
         handleTranslateChange('tr', `choice.${nodeId}.${choiceIdx}`, newChoice.text);
@@ -284,7 +320,7 @@ export function AdminPanel({
         } : prev);
 
         setEditingChoiceInfo(null);
-        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
+        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, triggeredNewsId: undefined });
     };
 
     const handleAddDisease = (): void => {
@@ -439,10 +475,10 @@ export function AdminPanel({
     const handleAddChoiceToNodeAdv = (nodeId: string): void => {
         let targetNextNodeId: string | null = newChoice.nextNodeId || null; const extraNodes: StoryNode[] = [];
         if (newChoice.autoCreateNode) { const generatedNodeId = `node_${activeEditorStoryId.replace('story_', '')}_gen_${Date.now().toString().slice(-4)}`; targetNextNodeId = generatedNodeId; extraNodes.push({ id: generatedNodeId, npcText: '...', day: 1, choices: [] }); }
-        const choiceObj: Choice = { text: newChoice.text, nextNodeId: targetNextNodeId, delayDays: newChoice.delayDays || undefined, reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, reqPlant: newChoice.reqPlant || undefined, reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, reqPotion: newChoice.reqPotion || undefined, reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, rewardPlantId: newChoice.rewardPlantId || undefined, rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, rewardPotionId: newChoice.rewardPotionId || undefined, rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined, isTreatmentChoice: newChoice.isTreatmentChoice };
+        const choiceObj: Choice = { text: newChoice.text, nextNodeId: targetNextNodeId, delayDays: newChoice.delayDays || undefined, reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, reqPlant: newChoice.reqPlant || undefined, reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, reqPotion: newChoice.reqPotion || undefined, reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, rewardPlantId: newChoice.rewardPlantId || undefined, rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, rewardPotionId: newChoice.rewardPotionId || undefined, rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined, isTreatmentChoice: newChoice.isTreatmentChoice, triggeredNewsId: newChoice.triggeredNewsId || undefined };
         if (gameData) { const story = gameData.storylines.find(s => s.id === activeEditorStoryId); const node = story?.nodes.find(n => n.id === nodeId); handleTranslateChange('tr', `choice.${nodeId}.${node?.choices.length || 0}`, newChoice.text); }
         setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => { if (s.id === activeEditorStoryId) { let updatedNodes = s.nodes.map(n => n.id === nodeId ? { ...n, choices: [...(n.choices || []), choiceObj] } : n); if (extraNodes.length > 0) updatedNodes = [...updatedNodes, ...extraNodes]; return { ...s, nodes: updatedNodes }; } return s; }) } : prev);
-        setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
+        setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, triggeredNewsId: undefined });
     };
 
     const handleAddNodeToChoice = (): void => {
@@ -533,7 +569,8 @@ export function AdminPanel({
                                                     rewardPlantId: choice.rewardPlantId || '',
                                                     rewardPlantCount: choice.rewardPlantCount || 1,
                                                     rewardPotionId: choice.rewardPotionId || '',
-                                                    rewardPotionCount: choice.rewardPotionCount || 1
+                                                    rewardPotionCount: choice.rewardPotionCount || 1,
+                                                    triggeredNewsId: choice.triggeredNewsId || undefined
                                                 });
                                             }}
                                             className="bg-yellow-500 border-2 border-black rounded-full w-6 h-6 flex items-center justify-center shadow hover:bg-yellow-400 transition-all"
@@ -882,6 +919,13 @@ export function AdminPanel({
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="p-2 bg-indigo-50 rounded-xl border border-indigo-100 mt-2">
+                                                        <p className="text-[10px] font-bold text-indigo-800 mb-1">Haber Tetikle (Opsiyonel):</p>
+                                                        <select className="text-[10px] p-1.5 border rounded w-full" value={newChoice.triggeredNewsId || ''} onChange={e => setNewChoice({...newChoice, triggeredNewsId: e.target.value || undefined})}>
+                                                            <option value="">Haber Tetikleme</option>
+                                                            {(gameData.conditionalNews || []).map(n => <option key={n.id} value={n.id}>{n.id} (Gün: {n.day})</option>)}
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1113,28 +1157,67 @@ export function AdminPanel({
                 <div className="bg-[#f3e8d2] p-8 rounded-2xl border-4 border-slate-900 space-y-8 font-parchment">
                     <h2 className="text-3xl font-magic font-bold text-indigo-900 border-b-4 border-indigo-100 pb-2">📰 Köy Bülteni Düzenleyici</h2>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                        <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
-                            <h3 className="text-xl font-bold font-magic">Yeni Haber Yaz</h3>
-                            <div className="grid grid-cols-3 gap-2">
-                                <input className="col-span-2 p-3 border-2 border-slate-900 rounded-xl font-bold" placeholder="ID" value={newNews.id} onChange={e => setNewNews({...newNews, id: e.target.value})}/>
-                                <input type="number" className="p-3 border-2 border-slate-900 rounded-xl font-bold text-center" placeholder="GÜN" value={newNews.day} onChange={e => setNewNews({...newNews, day: Number(e.target.value)})}/>
-                            </div>
-                            <textarea className="w-full p-4 border-2 border-slate-900 rounded-xl h-44 font-bold italic bg-amber-50" placeholder="Köyün duvarına asılacak haber..." value={newNews.text} onChange={e => setNewNews({...newNews, text: e.target.value})}/>
-                            <button onClick={handleAddNews} className="w-full bg-indigo-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-700">Haberi Yayına Ver</button>
-                        </div>
                         <div className="space-y-4">
-                            <h3 className="text-xl font-bold font-magic text-slate-800">Geçmiş & Gelecek Havadisler</h3>
-                            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-3">
-                                {(gameData.news || []).sort((a,b) => a.day - b.day).map(news => (
-                                    <div key={news.id} className="bg-white border-4 border-slate-900 p-5 rounded-2xl relative shadow-md overflow-hidden">
-                                        <div className="absolute top-0 right-0 bg-indigo-900 text-white px-4 py-1 rounded-bl-xl font-bold text-sm">GÜN {news.day}</div>
-                                        <p className="text-lg font-bold italic mb-4 mt-2">"{news.text}"</p>
-                                        <div className="flex justify-between items-center border-t-2 border-slate-100 pt-3">
-                                            <span className="text-xs font-mono text-slate-500 font-bold uppercase">{news.id}</span>
-                                            <button onClick={() => handleRemoveNews(news.id)} className="text-red-700 font-bold flex items-center gap-1 hover:underline">🗑️ Kaldır</button>
-                                        </div>
+                            <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
+                                <h3 className="text-xl font-bold font-magic">Yeni Haber Yaz</h3>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <input className="col-span-2 p-3 border-2 border-slate-900 rounded-xl font-bold" placeholder="ID" value={newNews.id} onChange={e => setNewNews({...newNews, id: e.target.value})}/>
+                                    <input type="number" className="p-3 border-2 border-slate-900 rounded-xl font-bold text-center" placeholder="GÜN" value={newNews.day} onChange={e => setNewNews({...newNews, day: Number(e.target.value)})}/>
+                                </div>
+                                <textarea className="w-full p-4 border-2 border-slate-900 rounded-xl h-44 font-bold italic bg-amber-50" placeholder="Köyün duvarına asılacak haber..." value={newNews.text} onChange={e => setNewNews({...newNews, text: e.target.value})}/>
+                                <button onClick={handleAddNews} className="w-full bg-indigo-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-700">Haberi Yayına Ver</button>
+                            </div>
+                            <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
+                                <h3 className="text-xl font-bold font-magic">{editingConditionalNewsId ? 'Şarta Bağlı Haber Güncelle' : 'Şarta Bağlı Haber Ekle'}</h3>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <input disabled={!!editingConditionalNewsId} className="col-span-2 p-3 border-2 border-slate-900 rounded-xl font-bold" placeholder="ID" value={newConditionalNews.id} onChange={e => setNewConditionalNews({...newConditionalNews, id: e.target.value})}/>
+                                    <input type="number" className="p-3 border-2 border-slate-900 rounded-xl font-bold text-center" placeholder="GÜN" value={newConditionalNews.day} onChange={e => setNewConditionalNews({...newConditionalNews, day: Number(e.target.value)})}/>
+                                </div>
+                                <textarea className="w-full p-4 border-2 border-slate-900 rounded-xl h-44 font-bold italic bg-amber-50" placeholder="Şarta bağlı haber..." value={newConditionalNews.text} onChange={e => setNewConditionalNews({...newConditionalNews, text: e.target.value})}/>
+                                {editingConditionalNewsId ? (
+                                    <div className="flex gap-2">
+                                        <button onClick={handleUpdateConditionalNews} className="flex-1 bg-emerald-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-emerald-700">Güncelle</button>
+                                        <button onClick={() => { setEditingConditionalNewsId(null); setNewConditionalNews({ id: '', day: 1, text: '' }); }} className="flex-1 bg-slate-500 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-600">İptal</button>
                                     </div>
-                                ))}
+                                ) : (
+                                    <button onClick={handleAddConditionalNews} className="w-full bg-emerald-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-emerald-700">Şarta Bağlı Haber Ekle</button>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-bold font-magic text-slate-800">Geçmiş & Gelecek Havadisler</h3>
+                                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-3">
+                                    {(gameData.news || []).sort((a,b) => a.day - b.day).map(news => (
+                                        <div key={news.id} className="bg-white border-4 border-slate-900 p-5 rounded-2xl relative shadow-md overflow-hidden">
+                                            <div className="absolute top-0 right-0 bg-indigo-900 text-white px-4 py-1 rounded-bl-xl font-bold text-sm">GÜN {news.day}</div>
+                                            <p className="text-lg font-bold italic mb-4 mt-2">"{news.text}"</p>
+                                            <div className="flex justify-between items-center border-t-2 border-slate-100 pt-3">
+                                                <span className="text-xs font-mono text-slate-500 font-bold uppercase">{news.id}</span>
+                                                <button onClick={() => handleRemoveNews(news.id)} className="text-red-700 font-bold flex items-center gap-1 hover:underline">🗑️ Kaldır</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h3 className="text-xl font-bold font-magic text-slate-800">Şarta Bağlı Haberler</h3>
+                                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-3">
+                                    {(gameData.conditionalNews || []).sort((a,b) => a.day - b.day).map(news => (
+                                        <div key={news.id} className="bg-white border-4 border-emerald-900 p-5 rounded-2xl relative shadow-md overflow-hidden">
+                                            <div className="absolute top-0 right-0 bg-emerald-900 text-white px-4 py-1 rounded-bl-xl font-bold text-sm">GÜN {news.day}</div>
+                                            <p className="text-lg font-bold italic mb-4 mt-2">"{news.text}"</p>
+                                            <div className="flex justify-between items-center border-t-2 border-slate-100 pt-3">
+                                                <span className="text-xs font-mono text-slate-500 font-bold uppercase">{news.id}</span>
+                                                <div className="flex gap-2">
+                                                    <button onClick={() => startEditingConditionalNews(news)} className="text-indigo-700 font-bold flex items-center gap-1 hover:underline">✏️ Düzenle</button>
+                                                    <button onClick={() => handleRemoveConditionalNews(news.id)} className="text-red-700 font-bold flex items-center gap-1 hover:underline">🗑️ Kaldır</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -710,7 +710,8 @@
             {
               "text": "Tabii, sana güzel bir kış çayı demleyeyim, fiyatı 18 altın.",
               "nextNodeId": null,
-              "rewardGold": 18
+              "rewardGold": 18,
+              "triggeredNewsId": "test"
             },
             {
               "text": "Madem bugün bir kuzu doğdu ve sen onu sırtında taşıdın o zaman bir kış çayını hakettin. Zaten ilk müşterim de sensin.",
@@ -775,6 +776,11 @@
               "reqPotion": "d_woundSerum",
               "reqPotionCount": 1,
               "rewardGold": 19
+            },
+            {
+              "text": "Maalesef elimde kesik kremi yok usta.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
             }
           ]
         },
@@ -792,6 +798,11 @@
               "reqPotion": "d_woundSerum",
               "reqPotionCount": 1,
               "rewardGold": 19
+            },
+            {
+              "text": "Maalesef elimde kesik kremi yok usta.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
             }
           ]
         }
@@ -897,6 +908,13 @@
       "id": "news_2",
       "day": 2,
       "text": "Orman sınırında garip sesler duyulduğu söyleniyor. Druidlerin endişeli bakışları sıklaştı."
+    }
+  ],
+  "conditionalNews": [
+    {
+      "id": "test",
+      "day": 2,
+      "text": "test"
     }
   ],
   "translations": {
@@ -1057,7 +1075,10 @@
       "node.node_d_carpenterDursun_1056.npcText": "Palankayı tamir ederken elimi kestim, elinde biraz kesik merhemi ya da kanı durduracak bir şeyler var mı?",
       "choice.node_d_carpenterDursun_1056.0": "Kesik merhemim var usta, 19 altındır.",
       "node.node_d_carpenterDursun_5531.npcText": "Palanka köyün etrafını saran ahşap tahkimattır. Yani bir nevi köy suru. Demir ardıç dediğimiz büyülü ağaçtan yapılmıştır. Ama çok eski, babamın babası zamanında yapılmış, o yüzden şimdi dökülüyor. Ben de onu tamir ederken elimi kestim. Kesik merhemin var mı?",
-      "choice.node_d_carpenterDursun_5531.0": "Kesik merhemim var usta, fiyatı 19 altın."
+      "choice.node_d_carpenterDursun_5531.0": "Kesik merhemim var usta, fiyatı 19 altın.",
+      "char.story_d_shepherdNarin.desc": "",
+      "choice.node_d_carpenterDursun_5531.1": "Maalesef elimde kesik kremi yok usta.",
+      "choice.node_d_carpenterDursun_1056.1": "Maalesef elimde kesik kremi yok usta."
     },
     "en": {
       "ui.gold": "Gold",
