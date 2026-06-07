@@ -206,6 +206,40 @@ export function useAlchemyGame() {
         return () => clearTimeout(timer);
     }, [gameState.queuedCustomers]);
 
+    // 5. AŞAMA: OYUN BİTTİ KONTROLÜ
+    useEffect(() => {
+        if (!gameData || isLoading || appMode === 'portal' || appMode === 'intro' || gameState.isGameOver) return;
+
+        // Gelecekte veya bugün gelebilecek herhangi bir müşteri kaldı mı?
+        const hasPotentialCustomers = Object.entries(gameState.storyProgress).some(([sId, prog]) => {
+            // story_landlord hariç tutulabilir mi? Kullanıcı "gelecek hiçbir müşteri" dedi. 
+            // Landlord her 7 günde bir geliyor. Ama landlord sonsuz mu?
+            // gameData incelediğimizde story_landlord 7. gün geliyor. 
+            // Eğer diğer tüm story'ler END ise ve gün 7'yi geçtiyse oyun bitmiş olabilir.
+            
+            if (prog.currentNodeId === 'END') return false;
+            
+            // Eğer landlord ise ve kira borcu bitmeyecekse (oyun sonsuz döngüye girer)
+            // Ama kullanıcı "gelecek hiçbir müşteri kalmadığında" diyor.
+            // Landlord'un nodes dizisine bakalım.
+            const storyDef = gameData.storylines.find(s => s.id === sId);
+            if (!storyDef) return false;
+
+            // Eğer story_landlord ise, onun nodes'ları belirli bir günde (7) bitiyor mu?
+            // gameData'da node_landlord_angry ve node_landlord_thanks nextNodeId null. Yani bitiyor.
+            
+            return true;
+        });
+
+        if (!hasPotentialCustomers && 
+            gameState.waitingCustomers.length === 0 && 
+            gameState.queuedCustomers.length === 0 && 
+            !gameState.currentCustomer) {
+            
+            setGameState(prev => ({ ...prev, isGameOver: true }));
+        }
+    }, [gameState.storyProgress, gameState.waitingCustomers, gameState.queuedCustomers, gameState.currentCustomer, gameData, isLoading, appMode]);
+
     // Soundtrack Çalma Ve Yavaşça Geçiş Yapma (Fade In / Fade Out) Mekanizması
     const changeTrack = (targetIndex: number) => {
         const audio = audioRef.current;
@@ -340,7 +374,8 @@ export function useAlchemyGame() {
                     ...parsed.gameState,
                     waitingCustomers: parsed.gameState.waitingCustomers || [],
                     queuedCustomers: parsed.gameState.queuedCustomers || [],
-                    triggeredEvents: parsed.gameState.triggeredEvents || []
+                    triggeredEvents: parsed.gameState.triggeredEvents || [],
+                    isGameOver: parsed.gameState.isGameOver || false
                 };
                 setGameState(loadedGameState);
                 if (parsed.gameData) setGameData(parsed.gameData);
@@ -402,7 +437,8 @@ export function useAlchemyGame() {
                     waitingCustomers: [], 
                     queuedCustomers: [],
                     triggeredConditionalNews: [],
-                    triggeredEvents: []
+                    triggeredEvents: [],
+                    isGameOver: false
                 });
 
                 localStorage.removeItem('buyu_mirasi_save');
@@ -444,7 +480,8 @@ export function useAlchemyGame() {
                     waitingCustomers: [], 
                     queuedCustomers: [],
                     triggeredConditionalNews: [],
-                    triggeredEvents: []
+                    triggeredEvents: [],
+                    isGameOver: false
                 });
 
                 localStorage.removeItem('buyu_mirasi_save');

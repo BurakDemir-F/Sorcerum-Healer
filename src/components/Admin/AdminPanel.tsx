@@ -46,6 +46,12 @@ export function AdminPanel({
         }
     }, [activeEditorStoryId, gameData.storylines]);
 
+    useEffect(() => {
+        if (gameData.gameEndSettings) {
+            setLocalGameEndSettings(gameData.gameEndSettings);
+        }
+    }, [gameData.gameEndSettings]);
+
     const [newChoice, setNewChoice] = useState<{
         text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number; isTreatmentChoice: boolean; triggeredNewsId?: string; triggeredEventId?: string;
     }>({
@@ -91,6 +97,7 @@ export function AdminPanel({
     const [initPotionCount, setInitPotionCount] = useState<number>(1);
 
     const [newEvent, setNewEvent] = useState<GameEvent>({ id: '', text: '' });
+    const [gameEndSettings, setLocalGameEndSettings] = useState<GameEndSettings>(gameData.gameEndSettings || { endText: '', adLink: '', adImagePath: '' });
 
     // Handlers (Original logic restored)
     const handleUpdateInitialGold = (gold: number) => {
@@ -526,6 +533,11 @@ export function AdminPanel({
         setGameData(prev => prev ? { ...prev, events: (prev.events || []).filter(e => e.id !== id) } : prev);
     };
 
+    const handleUpdateGameEndSettings = () => {
+        setGameData(prev => prev ? { ...prev, gameEndSettings: gameEndSettings } : prev);
+        alert('Oyun bitti ayarları güncellendi!');
+    };
+
     const handleRemoveIntroPage = (id: string): void => { setGameData(prev => prev ? { ...prev, introPages: (prev.introPages || []).filter(page => page.id !== id) } : prev); };
 
     const moveIntroPage = (index: number, direction: 'up' | 'down'): void => {
@@ -640,6 +652,7 @@ export function AdminPanel({
                     { id: 'musicEditor', label: '🎵 Müzik' },
                     { id: 'newsEditor', label: t('ui.news_tab') },
                     { id: 'eventEditor', label: '📅 Oyun İçi Olaylar' },
+                    { id: 'gameEndEditor', label: '🏁 Oyun Bitti' },
                     { id: 'marketEditor', label: '🛒 Market' },
                     { id: 'translationEditor', label: '🌍 Dil' },
                     { id: 'jsonHub', label: '📂 JSON' }
@@ -1293,6 +1306,66 @@ export function AdminPanel({
                                     </div>
                                 ))}
                                 {(gameData.events || []).length === 0 && <p className="italic text-slate-500">Henüz tanımlı olay yok.</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'gameEndEditor' && (
+                <div className="bg-[#f3e8d2] p-8 rounded-2xl border-4 border-slate-900 space-y-8 font-parchment">
+                    <h2 className="text-3xl font-magic font-bold text-indigo-900 border-b-4 border-indigo-100 pb-2">🏁 Oyun Bitti Ekranı Ayarları</h2>
+                    <div className="max-w-2xl mx-auto space-y-6">
+                        <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
+                            <div className="space-y-2">
+                                <label className="block font-bold text-lg font-magic">Bitiş Metni</label>
+                                <textarea 
+                                    className="w-full p-4 border-2 border-slate-900 rounded-xl h-32 font-bold italic bg-amber-50" 
+                                    placeholder="Oyun bittiğinde gösterilecek açıklama..." 
+                                    value={gameEndSettings.endText} 
+                                    onChange={e => setLocalGameEndSettings({...gameEndSettings, endText: e.target.value})}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block font-bold text-lg font-magic">Reklam Linki (Yeni Sekmede Açılır)</label>
+                                <input 
+                                    className="w-full p-3 border-2 border-slate-900 rounded-xl font-bold" 
+                                    placeholder="https://..." 
+                                    value={gameEndSettings.adLink} 
+                                    onChange={e => setLocalGameEndSettings({...gameEndSettings, adLink: e.target.value})}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block font-bold text-lg font-magic">Reklam Görsel Yolu</label>
+                                <input 
+                                    className="w-full p-3 border-2 border-slate-900 rounded-xl font-bold" 
+                                    placeholder="assets/GameEndAd.png" 
+                                    value={gameEndSettings.adImagePath} 
+                                    onChange={e => setLocalGameEndSettings({...gameEndSettings, adImagePath: e.target.value})}
+                                />
+                                <p className="text-xs text-slate-500 font-sans italic">* Görselin public/assets klasörü altında olması gerekir.</p>
+                            </div>
+                            <button 
+                                onClick={handleUpdateGameEndSettings} 
+                                className="w-full bg-indigo-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-700 mt-4"
+                            >
+                                Ayarları Güncelle
+                            </button>
+                        </div>
+
+                        <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
+                            <h3 className="text-xl font-bold font-magic">Önizleme (Kabataslak)</h3>
+                            <div className="border-4 border-dashed border-slate-400 p-6 rounded-xl flex flex-col items-center text-center space-y-4">
+                                <p className="text-xl font-bold italic">"{gameEndSettings.endText || '...'}"</p>
+                                {gameEndSettings.adImagePath && (
+                                    <div className="w-48 h-32 bg-slate-200 border-2 border-slate-900 rounded flex items-center justify-center relative overflow-hidden">
+                                        <img src={gameEndSettings.adImagePath} alt="Ad Preview" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                        <span className="text-[10px] text-slate-500 font-bold">Görsel: {gameEndSettings.adImagePath}</span>
+                                    </div>
+                                )}
+                                {gameEndSettings.adLink && (
+                                    <span className="text-blue-600 underline font-bold">{gameEndSettings.adLink}</span>
+                                )}
                             </div>
                         </div>
                     </div>

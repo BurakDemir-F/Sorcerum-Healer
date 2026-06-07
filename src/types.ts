@@ -117,6 +117,12 @@ export interface NewsItem {
     text: string;
 }
 
+export interface GameEndSettings {
+    endText: string;
+    adLink: string;
+    adImagePath: string;
+}
+
 export interface InitialPlayerState {
     gold: number;
     inventory: {
@@ -143,6 +149,7 @@ export interface GameData {
     news: NewsItem[]; // Günlük haberler
     conditionalNews: NewsItem[]; // Şarta bağlı haberler
     events: GameEvent[]; // Oyun içi olaylar
+    gameEndSettings: GameEndSettings;
     initialPlayerState: InitialPlayerState;
 }
 
@@ -193,6 +200,7 @@ export interface GameState {
     isTreatmentChoiceSelected?: boolean; // Tedavi choice'u seçildi mi?
     triggeredConditionalNews: string[]; // Tetiklenmiş şarta bağlı haber ID'leri
     triggeredEvents: string[]; // Tetiklenmiş olay ID'leri
+    isGameOver?: boolean;
 }
 
 export interface RentPopup {

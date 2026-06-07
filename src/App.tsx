@@ -134,6 +134,56 @@ export default function App(): React.JSX.Element {
                     </div>
                 </div>
             )}
+
+            {gameState.isGameOver && (
+                <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-[60] flex items-center justify-center font-parchment text-[#f3e8d2] p-4">
+                    <div className="bg-[#1c0f13] border-8 border-amber-900 rounded-[3rem] p-10 max-w-2xl w-full shadow-[0_0_50px_rgba(120,50,20,0.5)] text-center space-y-8 animate-idle-float border-double">
+                        <div className="space-y-2">
+                            <h2 className="text-5xl font-magic text-amber-500 tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">OYUN BİTTİ</h2>
+                            <div className="h-1 w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
+                        </div>
+                        
+                        <p className="text-2xl italic leading-relaxed text-amber-100/90">
+                            "{gameData.gameEndSettings?.endText || 'Tebrikler, hikayen tamamlandı!'}"
+                        </p>
+
+                        {gameData.gameEndSettings?.adImagePath && (
+                            <div className="relative group mx-auto max-w-xs">
+                                <div className="absolute -inset-2 bg-gradient-to-r from-amber-900 to-yellow-900 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                                <img 
+                                    src={gameData.gameEndSettings.adImagePath} 
+                                    alt="Recommended Game" 
+                                    className="relative rounded-xl border-4 border-amber-900 shadow-2xl w-full h-auto object-cover"
+                                    onError={(e) => { (e.target as any).style.display = 'none' }}
+                                />
+                            </div>
+                        )}
+
+                        <div className="pt-4 flex flex-col gap-4 items-center">
+                            {gameData.gameEndSettings?.adLink && (
+                                <a 
+                                    href={gameData.gameEndSettings.adLink} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="inline-block bg-amber-900 hover:bg-amber-800 text-amber-100 font-magic font-bold text-xl px-8 py-4 rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"
+                                >
+                                    Diğer Oyunlarımıza Göz At ➔
+                                </a>
+                            )}
+                            
+                            <button 
+                                onClick={() => {
+                                    setGameState(prev => ({ ...prev, isGameOver: false }));
+                                    setAppMode('portal');
+                                }}
+                                className="text-amber-500/60 hover:text-amber-500 font-magic transition-colors underline underline-offset-8"
+                            >
+                                Ana Menüye Dön
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

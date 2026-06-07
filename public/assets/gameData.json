@@ -951,6 +951,11 @@
       "text": "Çok garip bir olay oldu."
     }
   ],
+  "gameEndSettings": {
+    "endText": "Tebrikler, tüm hastaları iyileştirdin ve hikayeni tamamladın! Köyün en saygın şifacısı oldun.",
+    "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
+    "adImagePath": "assets/GameEndAd.png"
+  },
   "translations": {
     "tr": {
       "ui.gold": "Altın",

@@ -901,6 +901,11 @@
   ],
   "conditionalNews": [],
   "events": [],
+  "gameEndSettings": {
+    "endText": "Tebrikler, tüm hastaları iyileştirdin ve hikayeni tamamladın! Köyün en saygın şifacısı oldun.",
+    "adLink": "https://example.com/my-other-game",
+    "adImagePath": "assets/GameEndAd.png"
+  },
   "translations": {
     "tr": {
       "ui.gold": "Altın",
