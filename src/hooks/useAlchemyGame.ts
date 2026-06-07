@@ -44,7 +44,9 @@ export function useAlchemyGame() {
             logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'],
             waitingCustomers: [],
             queuedCustomers: [],
-            isTreatmentChoiceSelected: false
+            isTreatmentChoiceSelected: false,
+            triggeredConditionalNews: [],
+            triggeredEvents: []
         };
     });
     const [rentPopup, setRentPopup] = useState<RentPopup>({ show: false, message: '' });
@@ -167,6 +169,12 @@ export function useAlchemyGame() {
 
                     const storyDef = gameData.storylines.find(s => s.id === sId);
                     const nodeDef = storyDef?.nodes.find(n => n.id === prog.currentNodeId);
+
+                    // Olay Gereksinimi Kontrolü
+                    if (nodeDef?.requiredEventId && !(gameState.triggeredEvents || []).includes(nodeDef.requiredEventId)) {
+                        return false;
+                    }
+
                     const nodeDayReq = nodeDef?.day ?? 1;
 
                     return gameState.day >= nodeDayReq;
@@ -331,7 +339,8 @@ export function useAlchemyGame() {
                 const loadedGameState = {
                     ...parsed.gameState,
                     waitingCustomers: parsed.gameState.waitingCustomers || [],
-                    queuedCustomers: parsed.gameState.queuedCustomers || []
+                    queuedCustomers: parsed.gameState.queuedCustomers || [],
+                    triggeredEvents: parsed.gameState.triggeredEvents || []
                 };
                 setGameState(loadedGameState);
                 if (parsed.gameData) setGameData(parsed.gameData);
@@ -392,7 +401,8 @@ export function useAlchemyGame() {
                     logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
                     waitingCustomers: [], 
                     queuedCustomers: [],
-                    triggeredConditionalNews: []
+                    triggeredConditionalNews: [],
+                    triggeredEvents: []
                 });
 
                 localStorage.removeItem('buyu_mirasi_save');
@@ -433,7 +443,8 @@ export function useAlchemyGame() {
                     logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
                     waitingCustomers: [], 
                     queuedCustomers: [],
-                    triggeredConditionalNews: []
+                    triggeredConditionalNews: [],
+                    triggeredEvents: []
                 });
 
                 localStorage.removeItem('buyu_mirasi_save');
@@ -521,7 +532,10 @@ export function useAlchemyGame() {
                 isTreatmentChoiceSelected: choice.isTreatmentChoice || false,
                 triggeredConditionalNews: choice.triggeredNewsId && !prev.triggeredConditionalNews.includes(choice.triggeredNewsId)
                     ? [...prev.triggeredConditionalNews, choice.triggeredNewsId]
-                    : prev.triggeredConditionalNews
+                    : prev.triggeredConditionalNews,
+                triggeredEvents: choice.triggeredEventId && !(prev.triggeredEvents || []).includes(choice.triggeredEventId)
+                    ? [...(prev.triggeredEvents || []), choice.triggeredEventId]
+                    : (prev.triggeredEvents || [])
             }));
             if (shouldDismissCustomer) addLog(language === 'en' ? `👥 Customer will return on Day ${calculatedAvailableDay}.` : `👥 Karakter ${calculatedAvailableDay}. gün tekrar gelecek.`);
         } else {
@@ -533,7 +547,10 @@ export function useAlchemyGame() {
                 isTreatmentChoiceSelected: false,
                 triggeredConditionalNews: choice.triggeredNewsId && !prev.triggeredConditionalNews.includes(choice.triggeredNewsId)
                     ? [...prev.triggeredConditionalNews, choice.triggeredNewsId]
-                    : prev.triggeredConditionalNews
+                    : prev.triggeredConditionalNews,
+                triggeredEvents: choice.triggeredEventId && !(prev.triggeredEvents || []).includes(choice.triggeredEventId)
+                    ? [...(prev.triggeredEvents || []), choice.triggeredEventId]
+                    : (prev.triggeredEvents || [])
             }));
         }
     };

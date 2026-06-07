@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
     GameData, GameState, Plant, Disease, Potion, Ingredient, 
     Storyline, StoryNode, Choice, IntroPage, Soundtrack, 
-    NewsItem, PlantProperty, StoryProgressItem 
+    NewsItem, PlantProperty, StoryProgressItem, GameEvent 
 } from '../../types';
 import { getHerbCuredSymptoms } from '../../utils/helpers';
 import gameDataJSON from '../../assets/gameData.json';
@@ -33,7 +33,7 @@ export function AdminPanel({
     const [activeEditorStoryId, setActiveEditorStoryId] = useState<string>('story_baran');
     const [newStoryline, setNewStoryline] = useState<{ id: string; characterName: string; description: string; avatarUrl: string }>({ id: '', characterName: '', description: '', avatarUrl: '' });
     const [editStoryData, setEditStoryData] = useState<{ characterName: string; description: string; avatarUrl: string }>({ characterName: '', description: '', avatarUrl: '' });
-    const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
+    const [newNode, setNewNode] = useState<{ id: string; npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number; requiredEventId?: string }>({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1, requiredEventId: '' });
 
     useEffect(() => {
         const story = gameData.storylines.find(s => s.id === activeEditorStoryId);
@@ -47,9 +47,9 @@ export function AdminPanel({
     }, [activeEditorStoryId, gameData.storylines]);
 
     const [newChoice, setNewChoice] = useState<{
-        text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number; isTreatmentChoice: boolean; triggeredNewsId?: string;
+        text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number; isTreatmentChoice: boolean; triggeredNewsId?: string; triggeredEventId?: string;
     }>({
-        text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, isTreatmentChoice: false, triggeredNewsId: undefined
+        text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, isTreatmentChoice: false, triggeredNewsId: undefined, triggeredEventId: ''
     });
 
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -77,7 +77,7 @@ export function AdminPanel({
     const [editingPlantId, setEditingPlantId] = useState<string | null>(null);
     const [editingPotionId, setEditingPotionId] = useState<string | null>(null);
     const [editingNodeId, setEditingNodeId] = useState<string | null>(null);
-    const [editNodeData, setEditNodeData] = useState<{ npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number }>({ npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
+    const [editNodeData, setEditNodeData] = useState<{ npcText: string; diseaseId: string; dynamicSuccessNodeId: string; dynamicFailNodeId: string; day: number; requiredEventId?: string }>({ npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1, requiredEventId: '' });
 
     const [newTrack, setNewTrack] = useState<Soundtrack>({ id: '', title: '', path: '' });
     const [editingPropertyName, setEditingPropertyName] = useState<string | null>(null);
@@ -89,6 +89,8 @@ export function AdminPanel({
     const [initPlantCount, setInitPlantCount] = useState<number>(1);
     const [initPotionId, setInitPotionId] = useState<string>('');
     const [initPotionCount, setInitPotionCount] = useState<number>(1);
+
+    const [newEvent, setNewEvent] = useState<GameEvent>({ id: '', text: '' });
 
     // Handlers (Original logic restored)
     const handleUpdateInitialGold = (gold: number) => {
@@ -280,7 +282,7 @@ export function AdminPanel({
     const handleSaveNodeEdits = (): void => {
         if (!activeEditorStoryId || !editingNodeId) return;
         handleTranslateChange('tr', `node.${editingNodeId}.npcText`, editNodeData.npcText);
-        setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { ...s, nodes: s.nodes.map(n => n.id === editingNodeId ? { ...n, npcText: editNodeData.npcText, diseaseId: editNodeData.diseaseId || undefined, dynamicSuccessNodeId: editNodeData.dynamicSuccessNodeId || undefined, dynamicFailNodeId: editNodeData.dynamicFailNodeId || undefined, day: Number(editNodeData.day) || undefined } : n) } : s) } : prev);
+        setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { ...s, nodes: s.nodes.map(n => n.id === editingNodeId ? { ...n, npcText: editNodeData.npcText, diseaseId: editNodeData.diseaseId || undefined, dynamicSuccessNodeId: editNodeData.dynamicSuccessNodeId || undefined, dynamicFailNodeId: editNodeData.dynamicFailNodeId || undefined, day: Number(editNodeData.day) || undefined, requiredEventId: editNodeData.requiredEventId || undefined } : n) } : s) } : prev);
         setEditingNodeId(null);
     };
 
@@ -303,7 +305,8 @@ export function AdminPanel({
             rewardPotionId: newChoice.rewardPotionId || undefined, 
             rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined,
             isTreatmentChoice: newChoice.isTreatmentChoice,
-            triggeredNewsId: newChoice.triggeredNewsId || undefined
+            triggeredNewsId: newChoice.triggeredNewsId || undefined,
+            triggeredEventId: newChoice.triggeredEventId || undefined
         };
 
         handleTranslateChange('tr', `choice.${nodeId}.${choiceIdx}`, newChoice.text);
@@ -320,7 +323,7 @@ export function AdminPanel({
         } : prev);
 
         setEditingChoiceInfo(null);
-        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, triggeredNewsId: undefined });
+        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, triggeredNewsId: undefined, triggeredEventId: '' });
     };
 
     const handleAddDisease = (): void => {
@@ -468,17 +471,17 @@ export function AdminPanel({
     const handleAddNodeToStory = (): void => {
         if(!activeEditorStoryId || !newNode.id) return;
         handleTranslateChange('tr', `node.${newNode.id}.npcText`, newNode.npcText);
-        setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { ...s, nodes: [...s.nodes, { ...newNode, day: Number(newNode.day) || undefined, choices: [] }] } : s) } : prev);
-        setNewNode({id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1});
+        setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => s.id === activeEditorStoryId ? { ...s, nodes: [...s.nodes, { ...newNode, day: Number(newNode.day) || undefined, requiredEventId: newNode.requiredEventId || undefined, choices: [] }] } : s) } : prev);
+        setNewNode({id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1, requiredEventId: ''});
     };
 
     const handleAddChoiceToNodeAdv = (nodeId: string): void => {
         let targetNextNodeId: string | null = newChoice.nextNodeId || null; const extraNodes: StoryNode[] = [];
         if (newChoice.autoCreateNode) { const generatedNodeId = `node_${activeEditorStoryId.replace('story_', '')}_gen_${Date.now().toString().slice(-4)}`; targetNextNodeId = generatedNodeId; extraNodes.push({ id: generatedNodeId, npcText: '...', day: 1, choices: [] }); }
-        const choiceObj: Choice = { text: newChoice.text, nextNodeId: targetNextNodeId, delayDays: newChoice.delayDays || undefined, reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, reqPlant: newChoice.reqPlant || undefined, reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, reqPotion: newChoice.reqPotion || undefined, reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, rewardPlantId: newChoice.rewardPlantId || undefined, rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, rewardPotionId: newChoice.rewardPotionId || undefined, rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined, isTreatmentChoice: newChoice.isTreatmentChoice, triggeredNewsId: newChoice.triggeredNewsId || undefined };
+        const choiceObj: Choice = { text: newChoice.text, nextNodeId: targetNextNodeId, delayDays: newChoice.delayDays || undefined, reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, reqPlant: newChoice.reqPlant || undefined, reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, reqPotion: newChoice.reqPotion || undefined, reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, rewardPlantId: newChoice.rewardPlantId || undefined, rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, rewardPotionId: newChoice.rewardPotionId || undefined, rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined, isTreatmentChoice: newChoice.isTreatmentChoice, triggeredNewsId: newChoice.triggeredNewsId || undefined, triggeredEventId: newChoice.triggeredEventId || undefined };
         if (gameData) { const story = gameData.storylines.find(s => s.id === activeEditorStoryId); const node = story?.nodes.find(n => n.id === nodeId); handleTranslateChange('tr', `choice.${nodeId}.${node?.choices.length || 0}`, newChoice.text); }
         setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => { if (s.id === activeEditorStoryId) { let updatedNodes = s.nodes.map(n => n.id === nodeId ? { ...n, choices: [...(n.choices || []), choiceObj] } : n); if (extraNodes.length > 0) updatedNodes = [...updatedNodes, ...extraNodes]; return { ...s, nodes: updatedNodes }; } return s; }) } : prev);
-        setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, triggeredNewsId: undefined });
+        setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, triggeredNewsId: undefined, triggeredEventId: '' });
     };
 
     const handleAddNodeToChoice = (): void => {
@@ -493,12 +496,12 @@ export function AdminPanel({
                 nodes: [...s.nodes.map(n => n.id === linkChoiceInfo.nodeId ? {
                     ...n,
                     choices: n.choices.map((c, idx) => idx === linkChoiceInfo.choiceIdx ? { ...c, nextNodeId: generatedNodeId } : c)
-                } : n), { ...newNode, day: Number(newNode.day) || undefined, choices: [] }]
+                } : n), { ...newNode, day: Number(newNode.day) || undefined, requiredEventId: newNode.requiredEventId || undefined, choices: [] }]
             } : s)
         } : prev);
 
         setLinkChoiceInfo(null);
-        setNewNode({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1 });
+        setNewNode({ id: '', npcText: '', diseaseId: '', dynamicSuccessNodeId: '', dynamicFailNodeId: '', day: 1, requiredEventId: '' });
     };
 
     const handleAddIntroPage = (): void => {
@@ -506,6 +509,21 @@ export function AdminPanel({
         handleTranslateChange('tr', `intro.title.${newIntroPage.id}`, newIntroPage.title); handleTranslateChange('tr', `intro.text.${newIntroPage.id}`, newIntroPage.text);
         setGameData(prev => { if (!prev) return prev; const currentPages = prev.introPages || []; if (editingIntroPageId) return { ...prev, introPages: currentPages.map(page => page.id === editingIntroPageId ? newIntroPage : page) }; else return currentPages.some(page => page.id === newIntroPage.id) ? prev : { ...prev, introPages: [...currentPages, newIntroPage] }; });
         setNewIntroPage({ id: '', title: '', text: '', imageUrl: '' }); setEditingIntroPageId(null);
+    };
+
+    const handleAddEvent = (): void => {
+        if (!newEvent.id || !newEvent.text) return;
+        setGameData(prev => {
+            if (!prev) return prev;
+            const events = prev.events || [];
+            if (events.some(e => e.id === newEvent.id)) return prev;
+            return { ...prev, events: [...events, newEvent] };
+        });
+        setNewEvent({ id: '', text: '' });
+    };
+
+    const handleRemoveEvent = (id: string): void => {
+        setGameData(prev => prev ? { ...prev, events: (prev.events || []).filter(e => e.id !== id) } : prev);
     };
 
     const handleRemoveIntroPage = (id: string): void => { setGameData(prev => prev ? { ...prev, introPages: (prev.introPages || []).filter(page => page.id !== id) } : prev); };
@@ -539,7 +557,7 @@ export function AdminPanel({
                     </div>
                     <p className="text-sm font-bold">"{node.npcText}"</p>
                     <div className="absolute -right-3 -top-3 flex gap-1">
-                        <button onClick={() => { setEditingNodeId(node.id); setEditNodeData({ npcText: node.npcText, diseaseId: node.diseaseId || '', dynamicSuccessNodeId: node.dynamicSuccessNodeId || '', dynamicFailNodeId: node.dynamicFailNodeId || '', day: node.day ?? 1 }); }} className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow" title="Düğümü Düzenle">✏️</button>
+                        <button onClick={() => { setEditingNodeId(node.id); setEditNodeData({ npcText: node.npcText, diseaseId: node.diseaseId || '', dynamicSuccessNodeId: node.dynamicSuccessNodeId || '', dynamicFailNodeId: node.dynamicFailNodeId || '', day: node.day ?? 1, requiredEventId: node.requiredEventId || '' }); }} className="bg-yellow-500 hover:bg-yellow-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow" title="Düğümü Düzenle">✏️</button>
                         <button onClick={() => setSelectedNodeId(node.id)} className="bg-emerald-500 hover:bg-emerald-400 border-2 border-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow" title="Seçenek Ekle">➕</button>
                     </div>
                 </div>
@@ -570,7 +588,8 @@ export function AdminPanel({
                                                     rewardPlantCount: choice.rewardPlantCount || 1,
                                                     rewardPotionId: choice.rewardPotionId || '',
                                                     rewardPotionCount: choice.rewardPotionCount || 1,
-                                                    triggeredNewsId: choice.triggeredNewsId || undefined
+                                                    triggeredNewsId: choice.triggeredNewsId || undefined,
+                                                    triggeredEventId: choice.triggeredEventId || ''
                                                 });
                                             }}
                                             className="bg-yellow-500 border-2 border-black rounded-full w-6 h-6 flex items-center justify-center shadow hover:bg-yellow-400 transition-all"
@@ -620,6 +639,7 @@ export function AdminPanel({
                     { id: 'initialStateEditor', label: t('ui.initial_state_tab') },
                     { id: 'musicEditor', label: '🎵 Müzik' },
                     { id: 'newsEditor', label: t('ui.news_tab') },
+                    { id: 'eventEditor', label: '📅 Oyun İçi Olaylar' },
                     { id: 'marketEditor', label: '🛒 Market' },
                     { id: 'translationEditor', label: '🌍 Dil' },
                     { id: 'jsonHub', label: '📂 JSON' }
@@ -926,6 +946,13 @@ export function AdminPanel({
                                                             {(gameData.conditionalNews || []).map(n => <option key={n.id} value={n.id}>{n.id} (Gün: {n.day})</option>)}
                                                         </select>
                                                     </div>
+                                                    <div className="p-2 bg-purple-50 rounded-xl border border-purple-100 mt-2">
+                                                        <p className="text-[10px] font-bold text-purple-800 mb-1">Olay Tetikle (Opsiyonel):</p>
+                                                        <select className="text-[10px] p-1.5 border rounded w-full" value={newChoice.triggeredEventId || ''} onChange={e => setNewChoice({...newChoice, triggeredEventId: e.target.value})}>
+                                                            <option value="">Olay Tetikleme</option>
+                                                            {(gameData.events || []).map(ev => <option key={ev.id} value={ev.id}>{ev.id}</option>)}
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -950,6 +977,13 @@ export function AdminPanel({
                                                     <label className="text-xs font-bold block mb-1">Görünme Günü</label>
                                                     <input type="number" className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={editNodeData.day} onChange={e => setEditNodeData({...editNodeData, day: Number(e.target.value)})}/>
                                                 </div>
+                                                <div className="col-span-2">
+                                                    <label className="text-xs font-bold block mb-1">Gerekli Olay (Opsiyonel)</label>
+                                                    <select className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={editNodeData.requiredEventId} onChange={e => setEditNodeData({...editNodeData, requiredEventId: e.target.value})}>
+                                                        <option value="">Olay Gereksinimi Yok</option>
+                                                        {(gameData.events || []).map(ev => <option key={ev.id} value={ev.id}>{ev.id}</option>)}
+                                                    </select>
+                                                </div>
                                             </div>
                                             <button onClick={handleSaveNodeEdits} className="w-full bg-amber-600 text-white py-3 rounded-2xl font-bold font-magic border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 active:translate-y-1 transition-all">Değişiklikleri Kaydet</button>
                                         </div>
@@ -960,7 +994,7 @@ export function AdminPanel({
                                             <div className="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
                                                 <p className="text-xs font-bold text-indigo-800">Seçeneğe Bağlanıyor: #{linkChoiceInfo.nodeId} {'->'} Seçenek #{linkChoiceInfo.choiceIdx}</p>
                                             </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
                                                     <label className="text-xs font-bold block mb-1">Yeni Düğüm ID</label>
                                                     <input className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" placeholder="node_..." value={newNode.id} onChange={e => setNewNode({...newNode, id: e.target.value})}/>
@@ -975,6 +1009,13 @@ export function AdminPanel({
                                                 <div>
                                                     <label className="text-xs font-bold block mb-1">Görünme Günü</label>
                                                     <input type="number" className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={newNode.day} onChange={e => setNewNode({...newNode, day: Number(e.target.value)})}/>
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs font-bold block mb-1">Gerekli Olay (Opsiyonel)</label>
+                                                    <select className="w-full text-sm p-2.5 border-2 border-slate-300 rounded-xl" value={newNode.requiredEventId} onChange={e => setNewNode({...newNode, requiredEventId: e.target.value})}>
+                                                        <option value="">Olay Gereksinimi Yok</option>
+                                                        {(gameData.events || []).map(ev => <option key={ev.id} value={ev.id}>{ev.id}</option>)}
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div>
@@ -1218,6 +1259,40 @@ export function AdminPanel({
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'eventEditor' && (
+                <div className="bg-[#f3e8d2] p-8 rounded-2xl border-4 border-slate-900 space-y-8 font-parchment">
+                    <h2 className="text-3xl font-magic font-bold text-indigo-900 border-b-4 border-indigo-100 pb-2">📅 Oyun İçi Olay Editörü</h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        <div className="space-y-4">
+                            <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
+                                <h3 className="text-xl font-bold font-magic">Yeni Olay Tanımla</h3>
+                                <div className="space-y-2">
+                                    <input className="w-full p-3 border-2 border-slate-900 rounded-xl font-bold" placeholder="Olay ID (örn: event_baris_saglandi)" value={newEvent.id} onChange={e => setNewEvent({...newEvent, id: e.target.value})}/>
+                                    <textarea className="w-full p-4 border-2 border-slate-900 rounded-xl h-32 font-bold italic bg-amber-50" placeholder="Olay gerçekleştiğinde ne oldu? (Kısa not)" value={newEvent.text} onChange={e => setNewEvent({...newEvent, text: e.target.value})}/>
+                                    <button onClick={handleAddEvent} className="w-full bg-indigo-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-700">Olayı Kaydet</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-xl font-bold font-magic text-slate-800">Tanımlı Olaylar Listesi</h3>
+                            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-3">
+                                {(gameData.events || []).map(ev => (
+                                    <div key={ev.id} className="bg-white border-4 border-slate-900 p-5 rounded-2xl relative shadow-md overflow-hidden">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <span className="text-xs font-mono bg-slate-900 text-white px-2 py-0.5 rounded font-bold uppercase">{ev.id}</span>
+                                            <button onClick={() => handleRemoveEvent(ev.id)} className="text-red-700 font-bold flex items-center gap-1 hover:underline text-sm">🗑️ Sil</button>
+                                        </div>
+                                        <p className="text-lg font-bold italic">"{ev.text}"</p>
+                                    </div>
+                                ))}
+                                {(gameData.events || []).length === 0 && <p className="italic text-slate-500">Henüz tanımlı olay yok.</p>}
                             </div>
                         </div>
                     </div>

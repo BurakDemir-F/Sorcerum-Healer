@@ -33,6 +33,11 @@ export interface Potion {
     imageUrl?: string;
 }
 
+export interface GameEvent {
+    id: string;
+    text: string;
+}
+
 export interface Choice {
     text: string;
     nextNodeId: string | null;
@@ -55,6 +60,7 @@ export interface Choice {
     autoCreateNode?: boolean;
     isTreatmentChoice?: boolean;
     triggeredNewsId?: string;
+    triggeredEventId?: string;
 }
 
 export interface StoryNode {
@@ -65,6 +71,7 @@ export interface StoryNode {
     dynamicFailNodeId?: string;
     choices: Choice[];
     day?: number; // Düğüm seviyesinde tetiklenme gün gereksinimi
+    requiredEventId?: string;
 }
 
 export interface Storyline {
@@ -135,6 +142,7 @@ export interface GameData {
     soundtracks: Soundtrack[]; // Dinamik müzik/soundtrack listesi
     news: NewsItem[]; // Günlük haberler
     conditionalNews: NewsItem[]; // Şarta bağlı haberler
+    events: GameEvent[]; // Oyun içi olaylar
     initialPlayerState: InitialPlayerState;
 }
 
@@ -184,6 +192,7 @@ export interface GameState {
     queuedCustomers: string[];  // Gün içinde gelecek (zamanlanmış) müşteri storyId listesi
     isTreatmentChoiceSelected?: boolean; // Tedavi choice'u seçildi mi?
     triggeredConditionalNews: string[]; // Tetiklenmiş şarta bağlı haber ID'leri
+    triggeredEvents: string[]; // Tetiklenmiş olay ID'leri
 }
 
 export interface RentPopup {

@@ -695,7 +695,8 @@
             },
             {
               "text": "Merhaba, seninle tanıştığıma memnun oldum Narin. Nasılsın?",
-              "nextNodeId": "node_d_shepherdNarin_2300"
+              "nextNodeId": "node_d_shepherdNarin_2300",
+              "triggeredEventId": "d_testEVent"
             }
           ]
         },
@@ -807,6 +808,33 @@
           ]
         }
       ]
+    },
+    {
+      "id": "story_d_test",
+      "characterName": "TestCustomer",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_d_test_1",
+          "npcText": "Merhaba, ben TestCustomer.",
+          "day": 2,
+          "choices": [
+            {
+              "text": "oldu",
+              "nextNodeId": null,
+              "rewardGold": 18,
+              "triggeredNewsId": "test"
+            },
+            {
+              "text": "olmadı.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ],
+          "requiredEventId": "d_testEVent"
+        }
+      ]
     }
   ],
   "marketPlants": [
@@ -915,6 +943,12 @@
       "id": "test",
       "day": 2,
       "text": "test"
+    }
+  ],
+  "events": [
+    {
+      "id": "d_testEVent",
+      "text": "Çok garip bir olay oldu."
     }
   ],
   "translations": {
@@ -1078,7 +1112,11 @@
       "choice.node_d_carpenterDursun_5531.0": "Kesik merhemim var usta, fiyatı 19 altın.",
       "char.story_d_shepherdNarin.desc": "",
       "choice.node_d_carpenterDursun_5531.1": "Maalesef elimde kesik kremi yok usta.",
-      "choice.node_d_carpenterDursun_1056.1": "Maalesef elimde kesik kremi yok usta."
+      "choice.node_d_carpenterDursun_1056.1": "Maalesef elimde kesik kremi yok usta.",
+      "char.story_d_test": "TestCustomer",
+      "node.node_d_test_1.npcText": "Merhaba, ben TestCustomer.",
+      "choice.node_d_test_1.0": "oldu",
+      "choice.node_d_test_1.1": "olmadı."
     },
     "en": {
       "ui.gold": "Gold",
