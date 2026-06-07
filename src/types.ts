@@ -53,6 +53,7 @@ export interface Choice {
     rewardPotionCount?: number;
 
     autoCreateNode?: boolean;
+    isTreatmentChoice?: boolean;
 }
 
 export interface StoryNode {
@@ -179,6 +180,7 @@ export interface GameState {
     logs: string[];
     waitingCustomers: string[]; // Kapıda bekleyen müşteri storyId listesi
     queuedCustomers: string[];  // Gün içinde gelecek (zamanlanmış) müşteri storyId listesi
+    isTreatmentChoiceSelected?: boolean; // Tedavi choice'u seçildi mi?
 }
 
 export interface RentPopup {

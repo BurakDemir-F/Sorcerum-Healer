@@ -95,45 +95,49 @@ export function ShopArea({ gameState, playerState, gameData, language, t, handle
                                     <div className="flex flex-wrap gap-2">
                                         {customerDisease.symptoms.map(s => <span key={s} className="bg-red-200 border-2 border-red-900 text-red-900 text-sm px-3 py-1 rounded-md font-bold">⚠️ {t(`symptom.${s}`, s)}</span>)}
                                     </div>
-                                    <div className="bg-[#dfd1b3] p-4 rounded-xl border-2 border-slate-900 min-h-[65px] flex flex-wrap gap-2 items-center">
-                                        {treatmentBench.length === 0 && <span className="text-sm text-slate-600 italic">{t('ui.empty_bench')}</span>}
-                                        {treatmentBench.map((item, index) => (
-                                            <button key={index} onClick={() => handlers.handleRemoveFromTreatmentBench(index)} className="bg-[#f3e8d2] border-2 border-slate-900 text-slate-955 hover:bg-red-800 hover:text-white px-3 py-1 rounded-lg font-bold">
-                                                {item.type === 'plant' ? '🌿' : '🧪'} {item.type === 'plant' ? t(`plant.${item.id}.name`, item.name) : t(`potion.${item.id}.name`, item.name)} ✕
-                                            </button>
-                                        ))}
-                                    </div>
-                                    {treatmentStatus.message && <div className="p-3 rounded-lg text-sm text-center font-bold border-2 bg-red-100 border-red-900 text-red-900">{treatmentStatus.message}</div>}
-                                    <button onClick={() => handlers.handleApplyTreatment(activeNode!, activeStory!)} disabled={treatmentBench.length === 0} className="w-full py-3 rounded-xl font-magic font-bold text-lg border-4 border-black bg-emerald-500 hover:bg-emerald-400 text-slate-955 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">{t('ui.apply_treatment')}</button>
-                                    <div className="pt-4 border-t-2 border-slate-900/10">
-                                        <span className="text-sm font-bold font-magic text-slate-700 block mb-2">{t('ui.fill_bench')}</span>
-                                        <div className="flex flex-wrap gap-2">
-                                            {Object.entries(playerState.inventory.plants).map(([id, count]) => {
-                                                const plantDef = gameData.plants.find(p => p.id === id);
-                                                if (!plantDef || count <= 0) return null;
-                                                return (
-                                                    <div key={id} className="relative group">
-                                                        <button onClick={() => handlers.handleAddToTreatmentBench('plant', id, plantDef.name)} className="bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 text-sm px-3 py-1.5 rounded-lg text-slate-800 font-semibold flex items-center gap-1.5">
-                                                            {plantDef.imageUrl ? <img src={plantDef.imageUrl} alt={plantDef.name} className="w-5 h-5 object-contain" /> : '🌿'} {t(`plant.${id}.name`, plantDef.name)} ({count})
-                                                        </button>
-                                                        <TooltipPlant plantId={id} gameData={gameData} t={t} />
-                                                    </div>
-                                                );
-                                            })}
-                                            {Object.entries(playerState.inventory.potions).map(([id, count]) => {
-                                                const potionDef = gameData.potions.find(p => p.id === id);
-                                                if (!potionDef || count <= 0) return null;
-                                                return (
-                                                    <div key={id} className="relative group">
-                                                        <button onClick={() => handlers.handleAddToTreatmentBench('potion', id, potionDef.name)} className="bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 text-sm px-3 py-1.5 rounded-lg text-slate-800 font-semibold flex items-center gap-1.5">
-                                                            {potionDef.imageUrl ? <img src={potionDef.imageUrl} alt={potionDef.name} className="w-5 h-5 object-contain" /> : '🧪'} {t(`potion.${id}.name`, potionDef.name)} ({count})
-                                                        </button>
-                                                        <TooltipPotion potionId={id} gameData={gameData} t={t} />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
+                                    {gameState.isTreatmentChoiceSelected && (
+                                        <>
+                                            <div className="bg-[#dfd1b3] p-4 rounded-xl border-2 border-slate-900 min-h-[65px] flex flex-wrap gap-2 items-center">
+                                                {treatmentBench.length === 0 && <span className="text-sm text-slate-600 italic">{t('ui.empty_bench')}</span>}
+                                                {treatmentBench.map((item, index) => (
+                                                    <button key={index} onClick={() => handlers.handleRemoveFromTreatmentBench(index)} className="bg-[#f3e8d2] border-2 border-slate-900 text-slate-955 hover:bg-red-800 hover:text-white px-3 py-1 rounded-lg font-bold">
+                                                        {item.type === 'plant' ? '🌿' : '🧪'} {item.type === 'plant' ? t(`plant.${item.id}.name`, item.name) : t(`potion.${item.id}.name`, item.name)} ✕
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            {treatmentStatus.message && <div className="p-3 rounded-lg text-sm text-center font-bold border-2 bg-red-100 border-red-900 text-red-900">{treatmentStatus.message}</div>}
+                                            <button onClick={() => handlers.handleApplyTreatment(activeNode!, activeStory!)} disabled={treatmentBench.length === 0} className="w-full py-3 rounded-xl font-magic font-bold text-lg border-4 border-black bg-emerald-500 hover:bg-emerald-400 text-slate-955 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">{t('ui.apply_treatment')}</button>
+                                            <div className="pt-4 border-t-2 border-slate-900/10">
+                                                <span className="text-sm font-bold font-magic text-slate-700 block mb-2">{t('ui.fill_bench')}</span>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {Object.entries(playerState.inventory.plants).map(([id, count]) => {
+                                                        const plantDef = gameData.plants.find(p => p.id === id);
+                                                        if (!plantDef || count <= 0) return null;
+                                                        return (
+                                                            <div key={id} className="relative group">
+                                                                <button onClick={() => handlers.handleAddToTreatmentBench('plant', id, plantDef.name)} className="bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 text-sm px-3 py-1.5 rounded-lg text-slate-800 font-semibold flex items-center gap-1.5">
+                                                                    {plantDef.imageUrl ? <img src={plantDef.imageUrl} alt={plantDef.name} className="w-5 h-5 object-contain" /> : '🌿'} {t(`plant.${id}.name`, plantDef.name)} ({count})
+                                                                </button>
+                                                                <TooltipPlant plantId={id} gameData={gameData} t={t} />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                    {Object.entries(playerState.inventory.potions).map(([id, count]) => {
+                                                        const potionDef = gameData.potions.find(p => p.id === id);
+                                                        if (!potionDef || count <= 0) return null;
+                                                        return (
+                                                            <div key={id} className="relative group">
+                                                                <button onClick={() => handlers.handleAddToTreatmentBench('potion', id, potionDef.name)} className="bg-amber-100 hover:bg-amber-200 border-2 border-slate-900 text-sm px-3 py-1.5 rounded-lg text-slate-800 font-semibold flex items-center gap-1.5">
+                                                                    {potionDef.imageUrl ? <img src={potionDef.imageUrl} alt={potionDef.name} className="w-5 h-5 object-contain" /> : '🧪'} {t(`potion.${id}.name`, potionDef.name)} ({count})
+                                                                </button>
+                                                                <TooltipPotion potionId={id} gameData={gameData} t={t} />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             )}
 

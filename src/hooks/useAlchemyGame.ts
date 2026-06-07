@@ -43,7 +43,8 @@ export function useAlchemyGame() {
             storyProgress: initialProgress,
             logs: ['🧙‍♂️ Kulübeye hoş geldin şifacı!'],
             waitingCustomers: [],
-            queuedCustomers: []
+            queuedCustomers: [],
+            isTreatmentChoiceSelected: false
         };
     });
     const [rentPopup, setRentPopup] = useState<RentPopup>({ show: false, message: '' });
@@ -476,7 +477,7 @@ export function useAlchemyGame() {
         const prog = gameState.storyProgress[nextStoryId];
         if (!prog) return;
 
-        setGameState(prev => ({ ...prev, waitingCustomers: remainingWaiting, currentCustomer: { storyId: nextStoryId, nodeId: prog.currentNodeId } }));
+        setGameState(prev => ({ ...prev, waitingCustomers: remainingWaiting, currentCustomer: { storyId: nextStoryId, nodeId: prog.currentNodeId }, isTreatmentChoiceSelected: false }));
         setTreatmentBench([]); setTreatmentStatus({ type: '', message: '' });
     };
 
@@ -509,11 +510,11 @@ export function useAlchemyGame() {
             updProgress[storyId] = { currentNodeId: choice.nextNodeId, availableDay: calculatedAvailableDay };
 
             const shouldDismissCustomer = (choice.delayDays || 0) > 0 || nextNodeDay > gameState.day;
-            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: shouldDismissCustomer ? null : { storyId, nodeId: choice.nextNodeId as string } }));
+            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: shouldDismissCustomer ? null : { storyId, nodeId: choice.nextNodeId as string }, isTreatmentChoiceSelected: choice.isTreatmentChoice || false }));
             if (shouldDismissCustomer) addLog(language === 'en' ? `👥 Customer will return on Day ${calculatedAvailableDay}.` : `👥 Karakter ${calculatedAvailableDay}. gün tekrar gelecek.`);
         } else {
             updProgress[storyId] = { currentNodeId: 'END', availableDay: 999 };
-            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: null }));
+            setGameState(prev => ({ ...prev, storyProgress: updProgress, currentCustomer: null, isTreatmentChoiceSelected: false }));
         }
     };
 

@@ -47,9 +47,9 @@ export function AdminPanel({
     }, [activeEditorStoryId, gameData.storylines]);
 
     const [newChoice, setNewChoice] = useState<{
-        text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number;
+        text: string; nextNodeId: string; delayDays: number; autoCreateNode: boolean; reqGold: number; reqPlant: string; reqPlantCount: number; reqPotion: string; reqPotionCount: number; rewardGold: number; rewardPlantId: string; rewardPlantCount: number; rewardPotionId: string; rewardPotionCount: number; isTreatmentChoice: boolean;
     }>({
-        text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1
+        text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1, isTreatmentChoice: false
     });
 
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -266,7 +266,8 @@ export function AdminPanel({
             rewardPlantId: newChoice.rewardPlantId || undefined, 
             rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, 
             rewardPotionId: newChoice.rewardPotionId || undefined, 
-            rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined 
+            rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined,
+            isTreatmentChoice: newChoice.isTreatmentChoice
         };
 
         handleTranslateChange('tr', `choice.${nodeId}.${choiceIdx}`, newChoice.text);
@@ -283,7 +284,7 @@ export function AdminPanel({
         } : prev);
 
         setEditingChoiceInfo(null);
-        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
+        setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
     };
 
     const handleAddDisease = (): void => {
@@ -438,10 +439,10 @@ export function AdminPanel({
     const handleAddChoiceToNodeAdv = (nodeId: string): void => {
         let targetNextNodeId: string | null = newChoice.nextNodeId || null; const extraNodes: StoryNode[] = [];
         if (newChoice.autoCreateNode) { const generatedNodeId = `node_${activeEditorStoryId.replace('story_', '')}_gen_${Date.now().toString().slice(-4)}`; targetNextNodeId = generatedNodeId; extraNodes.push({ id: generatedNodeId, npcText: '...', day: 1, choices: [] }); }
-        const choiceObj: Choice = { text: newChoice.text, nextNodeId: targetNextNodeId, delayDays: newChoice.delayDays || undefined, reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, reqPlant: newChoice.reqPlant || undefined, reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, reqPotion: newChoice.reqPotion || undefined, reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, rewardPlantId: newChoice.rewardPlantId || undefined, rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, rewardPotionId: newChoice.rewardPotionId || undefined, rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined };
+        const choiceObj: Choice = { text: newChoice.text, nextNodeId: targetNextNodeId, delayDays: newChoice.delayDays || undefined, reqGold: newChoice.reqGold ? Number(newChoice.reqGold) : undefined, reqPlant: newChoice.reqPlant || undefined, reqPlantCount: newChoice.reqPlant ? Number(newChoice.reqPlantCount) : undefined, reqPotion: newChoice.reqPotion || undefined, reqPotionCount: newChoice.reqPotion ? Number(newChoice.reqPotionCount) : undefined, rewardGold: newChoice.rewardGold ? Number(newChoice.rewardGold) : undefined, rewardPlantId: newChoice.rewardPlantId || undefined, rewardPlantCount: newChoice.rewardPlantId ? Number(newChoice.rewardPlantCount) : undefined, rewardPotionId: newChoice.rewardPotionId || undefined, rewardPotionCount: newChoice.rewardPotionId ? Number(newChoice.rewardPotionCount) : undefined, isTreatmentChoice: newChoice.isTreatmentChoice };
         if (gameData) { const story = gameData.storylines.find(s => s.id === activeEditorStoryId); const node = story?.nodes.find(n => n.id === nodeId); handleTranslateChange('tr', `choice.${nodeId}.${node?.choices.length || 0}`, newChoice.text); }
         setGameData(prev => prev ? { ...prev, storylines: prev.storylines.map(s => { if (s.id === activeEditorStoryId) { let updatedNodes = s.nodes.map(n => n.id === nodeId ? { ...n, choices: [...(n.choices || []), choiceObj] } : n); if (extraNodes.length > 0) updatedNodes = [...updatedNodes, ...extraNodes]; return { ...s, nodes: updatedNodes }; } return s; }) } : prev);
-        setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
+        setSelectedNodeId(null); setNewChoice({ text: '', nextNodeId: '', delayDays: 0, autoCreateNode: false, isTreatmentChoice: false, reqGold: 0, reqPlant: '', reqPlantCount: 1, reqPotion: '', reqPotionCount: 1, rewardGold: 0, rewardPlantId: '', rewardPlantCount: 1, rewardPotionId: '', rewardPotionCount: 1 });
     };
 
     const handleAddNodeToChoice = (): void => {
