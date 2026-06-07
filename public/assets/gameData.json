@@ -691,7 +691,7 @@
           "choices": [
             {
               "text": "Peki. İsimleri pek hatırlamam.",
-              "nextNodeId": null
+              "nextNodeId": "node_d_shepherdNarin_9582"
             },
             {
               "text": "Merhaba, seninle tanıştığıma memnun oldum Narin. Nasılsın?",
@@ -711,6 +711,8 @@
             {
               "text": "Tabii, sana güzel bir kış çayı demleyeyim, fiyatı 18 altın.",
               "nextNodeId": null,
+              "reqPotion": "d_freezingElixir",
+              "reqPotionCount": 1,
               "rewardGold": 18,
               "triggeredNewsId": "test"
             },
@@ -741,6 +743,16 @@
               "rewardPlantCount": 2
             }
           ]
+        },
+        {
+          "id": "node_d_shepherdNarin_9582",
+          "npcText": "Senin yüzünden köyün palankaları çöktü. Aç gözlüsün, seni canavar kapsın.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 4,
+          "requiredEventId": "event_notBorrowIronLeafBlock",
+          "choices": []
         }
       ]
     },
@@ -810,29 +822,120 @@
       ]
     },
     {
-      "id": "story_d_test",
-      "characterName": "TestCustomer",
+      "id": "story_fehim",
+      "characterName": "Marangoz Çırağı Fehim",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
-          "id": "node_d_test_1",
-          "npcText": "Merhaba, ben TestCustomer.",
+          "id": "node_fehim_1",
+          "npcText": "Selam Şifacı. Ben marangoz Dursun'un çırağı Fehim. Beni ustam gönderdi. Malzeme yetersizliğinden palankayı onaramıyoruz. Demir Ardıç bloklarına ihtiyacımız var. Elinde bulunursa bize biraz ödünç vermen mümkün mü? Şimdi paramız yok ama palanka köy için çok önemli. Ustam köylülerden para toplayıp paranı sonra ödeyecek.",
           "day": 2,
           "choices": [
             {
-              "text": "oldu",
-              "nextNodeId": null,
-              "rewardGold": 18,
-              "triggeredNewsId": "test"
+              "text": "Olur. Madem köy için çok önemli size biraz demir ardıç bloğu ödünç vereceğim, umarım ustan sözünde durur.",
+              "nextNodeId": "node_fehim_6756",
+              "reqPotion": "d_monsterTrapElixir",
+              "reqPotionCount": 3,
+              "isTreatmentChoice": false
             },
             {
-              "text": "olmadı.",
-              "nextNodeId": null,
+              "text": "Olmaz, herkese ödünç verirsem dükkan batar.",
+              "nextNodeId": "node_fehim_4917",
+              "triggeredNewsId": "news_palankaBroken",
+              "triggeredEventId": "event_notBorrowIronLeafBlock"
+            }
+          ]
+        },
+        {
+          "id": "node_fehim_6756",
+          "npcText": "Umay Ana seni korusun şifacı.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 2,
+          "choices": [
+            {
+              "text": "Umay Ana kimdir?",
+              "nextNodeId": "node_fehim_8942",
+              "triggeredNewsId": "news_palankaBroken",
+              "triggeredEventId": "event_notBorrowIronLeafBlock"
+            }
+          ]
+        },
+        {
+          "id": "node_fehim_8942",
+          "npcText": "Topraklara bereket getiren yüce ana.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 2,
+          "choices": []
+        },
+        {
+          "id": "node_fehim_4917",
+          "npcText": "Palanka olmadan sen de güvende olmayacaksın. Seni canavar kapsın.",
+          "day": 2,
+          "choices": []
+        }
+      ]
+    },
+    {
+      "id": "story_monsterSlayerCevat",
+      "characterName": "Canavar Avcısı Rize'li Cevat",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_monsterSlayerCevat_1",
+          "npcText": "Merhaba.",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Merhaba.",
+              "nextNodeId": "node_monsterSlayerCevat_6699",
+              "reqPotion": "d_freezingElixir",
+              "reqPotionCount": 1
+            }
+          ]
+        },
+        {
+          "id": "node_monsterSlayerCevat_6699",
+          "npcText": "Ben bir canavar avcısıyım, Rize'li Cevat.",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Peki",
+              "nextNodeId": "node_monsterSlayerCevat_1995",
               "isTreatmentChoice": false
             }
-          ],
-          "requiredEventId": "d_testEVent"
+          ]
+        },
+        {
+          "id": "node_monsterSlayerCevat_1995",
+          "npcText": "Dükkanında benim türümü istemeyebilirsin.",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Saçmalıyorsun. Canavar avcıları saygındır. İnsanları canavarlardan koruyorsunuz.",
+              "nextNodeId": "node_monsterSlayerCevat_2193",
+              "isTreatmentChoice": false
+            },
+            {
+              "text": "Saygın olmayan kişileri dükkanımda istemiyorum.",
+              "nextNodeId": null,
+              "triggeredEventId": "event_cevatFired"
+            }
+          ]
+        },
+        {
+          "id": "node_monsterSlayerCevat_2193",
+          "npcText": "Hımm.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 3,
+          "choices": []
         }
       ]
     }
@@ -928,27 +1031,31 @@
   ],
   "news": [
     {
-      "id": "news_1",
-      "day": 1,
-      "text": "Vadide yeni bir şifacı kulübesi açıldı! Köylüler umutla dedenden kalan bu mirasın canlanmasını bekliyor."
+      "id": "news_lightling_invasion",
+      "day": 4,
+      "text": "Palanka onarılamadığı için köyü ışıldaklar bastı. Tavuklarımız ve ufak kuzularımız ölüyor. "
     },
     {
-      "id": "news_2",
-      "day": 2,
-      "text": "Orman sınırında garip sesler duyulduğu söyleniyor. Druidlerin endişeli bakışları sıklaştı."
+      "id": "news_druidSeen.",
+      "day": 5,
+      "text": "Yıllardır köyde görülmeyen druid kulubesinden çıktı ve köy meydanında görüldü. "
     }
   ],
   "conditionalNews": [
     {
-      "id": "test",
-      "day": 2,
-      "text": "test"
+      "id": "news_palankaBroken",
+      "day": 3,
+      "text": "Malzeme yetersizliğinden ötürü Marangoz Dursun ve Çırağı Fehim palankayı tamir edemedi. Palanka bir çok yerden çöktü. Köy canavarlara karşı korunmasız kaldı."
     }
   ],
   "events": [
     {
-      "id": "d_testEVent",
-      "text": "Çok garip bir olay oldu."
+      "id": "event_notBorrowIronLeafBlock",
+      "text": "Marangoz'un çırağına ödünç demir ardıç blok verilmedi."
+    },
+    {
+      "id": "event_cevatFired",
+      "text": "Cevat şifacı dükkanından kovuldu."
     }
   ],
   "gameEndSettings": {
@@ -1118,10 +1225,24 @@
       "char.story_d_shepherdNarin.desc": "",
       "choice.node_d_carpenterDursun_5531.1": "Maalesef elimde kesik kremi yok usta.",
       "choice.node_d_carpenterDursun_1056.1": "Maalesef elimde kesik kremi yok usta.",
-      "char.story_d_test": "TestCustomer",
-      "node.node_d_test_1.npcText": "Merhaba, ben TestCustomer.",
-      "choice.node_d_test_1.0": "oldu",
-      "choice.node_d_test_1.1": "olmadı."
+      "char.story_fehim": "Marangoz Çırağı Fehim",
+      "node.node_fehim_1.npcText": "Selam Şifacı. Ben marangoz Dursun'un çırağı Fehim. Beni ustam gönderdi. Malzeme yetersizliğinden palankayı onaramıyoruz. Demir Ardıç bloklarına ihtiyacımız var. Elinde bulunursa bize biraz ödünç vermen mümkün mü? Şimdi paramız yok ama palanka köy için çok önemli. Ustam köylülerden para toplayıp paranı sonra ödeyecek.",
+      "choice.node_fehim_1.0": "Olur. Madem köy için çok önemli size biraz demir ardıç bloğu ödünç vereceğim, umarım ustan sözünde durur.",
+      "choice.node_fehim_1.1": "Olmaz, herkese ödünç verirsem dükkan batar.",
+      "node.node_fehim_6756.npcText": "Umay Ana seni korusun şifacı.",
+      "choice.node_fehim_6756.0": "Umay Ana kimdir?",
+      "node.node_fehim_8942.npcText": "Topraklara bereket getiren yüce ana.",
+      "node.node_fehim_4917.npcText": "Palanka olmadan sen de güvende olmayacaksın. Seni canavar kapsın.",
+      "node.node_d_shepherdNarin_9582.npcText": "Senin yüzünden köyün palankaları çöktü. Aç gözlüsün, seni canavar kapsın.",
+      "char.story_monsterSlayerCevat": "Canavar Avcısı Rize'li Cevat",
+      "node.node_monsterSlayerCevat_1.npcText": "Merhaba.",
+      "choice.node_monsterSlayerCevat_1.0": "Merhaba.",
+      "node.node_monsterSlayerCevat_6699.npcText": "Ben bir canavar avcısıyım, Rize'li Cevat.",
+      "choice.node_monsterSlayerCevat_6699.0": "Peki",
+      "node.node_monsterSlayerCevat_1995.npcText": "Dükkanında benim türümü istemeyebilirsin.",
+      "choice.node_monsterSlayerCevat_1995.0": "Saçmalıyorsun. Canavar avcıları saygındır. İnsanları canavarlardan koruyorsunuz.",
+      "choice.node_monsterSlayerCevat_1995.1": "Saygın olmayan kişileri dükkanımda istemiyorum.",
+      "node.node_monsterSlayerCevat_2193.npcText": "Hımm."
     },
     "en": {
       "ui.gold": "Gold",
