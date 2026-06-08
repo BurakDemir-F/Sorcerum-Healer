@@ -33,3 +33,11 @@ export const isImageUrl = (url: string): boolean => {
         normalized.startsWith('./assets') ||
         /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(normalized);
 };
+
+export const getValidImageUrl = (url: string): string => {
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('/')) return url;
+    if (url.startsWith('assets/')) return '/' + url;
+    if (url.startsWith('./assets/')) return url.substring(1); // . kısmını at
+    return url;
+};

@@ -4,7 +4,7 @@ import {
     Storyline, StoryNode, Choice, IntroPage, Soundtrack, 
     NewsItem, PlantProperty, StoryProgressItem, GameEvent 
 } from '../../types';
-import { getHerbCuredSymptoms } from '../../utils/helpers';
+import { getHerbCuredSymptoms, getValidImageUrl } from '../../utils/helpers';
 import gameDataJSON from '../../assets/gameData.json';
 
 interface AdminPanelProps {
@@ -822,6 +822,7 @@ export function AdminPanel({
                         <div className="space-y-2 mb-4 p-2 bg-white/30 rounded-xl border border-slate-300">
                             <input className="w-full text-[10px] p-1 border rounded" placeholder="ID (story_...)" value={newStoryline.id} onChange={e => setNewStoryline({...newStoryline, id: e.target.value})}/>
                             <input className="w-full text-[10px] p-1 border rounded" placeholder="İsim" value={newStoryline.characterName} onChange={e => setNewStoryline({...newStoryline, characterName: e.target.value})}/>
+                            <input className="w-full text-[10px] p-1 border rounded" placeholder="Görsel Yolu / Emoji" value={newStoryline.avatarUrl} onChange={e => setNewStoryline({...newStoryline, avatarUrl: e.target.value})}/>
                             <button onClick={handleAddStoryline} className="w-full bg-emerald-600 text-white text-[10px] py-1 rounded font-magic">Yeni Karakter Ekle</button>
                         </div>
                         <div className="flex-1 overflow-y-auto pr-1">
@@ -844,14 +845,14 @@ export function AdminPanel({
                         {currentStory && (
                             <div className="bg-slate-800 text-white p-4 border-b-4 border-slate-900 flex flex-col md:flex-row gap-4 items-end z-10">
                                 <div className="flex-1 w-full space-y-2">
-                                    <div className="flex gap-4">
+                                    <div className="flex flex-col md:flex-row gap-4">
                                         <div className="flex-1">
                                             <label className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Karakter İsmi</label>
                                             <input className="w-full bg-slate-700 border border-slate-600 rounded p-1.5 text-sm font-magic" value={editStoryData.characterName} onChange={e => setEditStoryData({...editStoryData, characterName: e.target.value})}/>
                                         </div>
-                                        <div className="w-24">
-                                            <label className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Avatar</label>
-                                            <input className="w-full bg-slate-700 border border-slate-600 rounded p-1.5 text-sm text-center" value={editStoryData.avatarUrl} onChange={e => setEditStoryData({...editStoryData, avatarUrl: e.target.value})}/>
+                                        <div className="flex-1">
+                                            <label className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Görsel Yolu / Emoji (assets/...)</label>
+                                            <input className="w-full bg-slate-700 border border-slate-600 rounded p-1.5 text-sm" value={editStoryData.avatarUrl} onChange={e => setEditStoryData({...editStoryData, avatarUrl: e.target.value})}/>
                                         </div>
                                     </div>
                                     <div>
@@ -1359,7 +1360,7 @@ export function AdminPanel({
                                 <p className="text-xl font-bold italic">"{gameEndSettings.endText || '...'}"</p>
                                 {gameEndSettings.adImagePath && (
                                     <div className="w-48 h-32 bg-slate-200 border-2 border-slate-900 rounded flex items-center justify-center relative overflow-hidden">
-                                        <img src={gameEndSettings.adImagePath} alt="Ad Preview" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                        <img src={getValidImageUrl(gameEndSettings.adImagePath)} alt="Ad Preview" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                                         <span className="text-[10px] text-slate-500 font-bold">Görsel: {gameEndSettings.adImagePath}</span>
                                     </div>
                                 )}

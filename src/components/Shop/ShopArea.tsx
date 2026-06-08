@@ -2,7 +2,7 @@ import React from 'react';
 import { GameState, PlayerState, GameData, GameHandlers, TreatmentBenchItem, TreatmentStatus, StoryNode, Storyline } from '../../types';
 import { SidePanel } from '../Layout/SidePanel';
 import { TooltipPlant, TooltipPotion } from '../Shared/Tooltips';
-import { isImageUrl } from '../../utils/helpers';
+import { isImageUrl, getValidImageUrl } from '../../utils/helpers';
 
 interface ShopAreaProps {
     gameState: GameState;
@@ -72,7 +72,7 @@ export function ShopArea({ gameState, playerState, gameData, language, t, handle
                             <div className="flex justify-center mb-6">
                                 {activeStory?.avatarUrl && isImageUrl(activeStory.avatarUrl) ? (
                                     <div className="w-40 h-40 bg-amber-50 rounded-2xl border-4 border-slate-900 overflow-hidden flex items-center justify-center p-2 shadow-lg animate-idle-float">
-                                        <img src={activeStory.avatarUrl} alt={charNameTranslated} className="max-w-full max-h-full object-contain" />
+                                        <img src={getValidImageUrl(activeStory.avatarUrl)} alt={charNameTranslated} className="max-w-full max-h-full object-contain" />
                                     </div>
                                 ) : (
                                     <div className="w-40 h-40 bg-[#dfd1b3] border-4 border-slate-900 rounded-2xl flex flex-col justify-center items-center text-slate-800 animate-idle-float shadow-md">

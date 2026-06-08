@@ -4,6 +4,7 @@ import { PortalScreen } from './components/Portal/PortalScreen';
 import { IntroScreen } from './components/Intro/IntroScreen';
 import { GameClient } from './components/GameClient';
 import { AdminPanel } from './components/Admin/AdminPanel';
+import { getValidImageUrl } from './utils/helpers';
 
 // Global Stiller
 const styleTag = document.createElement('style') as HTMLStyleElement;
@@ -151,7 +152,7 @@ export default function App(): React.JSX.Element {
                             <div className="relative group mx-auto max-w-xs">
                                 <div className="absolute -inset-2 bg-gradient-to-r from-amber-900 to-yellow-900 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
                                 <img 
-                                    src={gameData.gameEndSettings.adImagePath} 
+                                    src={getValidImageUrl(gameData.gameEndSettings.adImagePath)} 
                                     alt="Recommended Game" 
                                     className="relative rounded-xl border-4 border-amber-900 shadow-2xl w-full h-auto object-cover"
                                     onError={(e) => { (e.target as any).style.display = 'none' }}

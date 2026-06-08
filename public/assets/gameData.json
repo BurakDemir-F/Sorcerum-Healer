@@ -376,17 +376,7 @@
         {
           "type": "plant",
           "id": "d_ironJuniperShell",
-          "count": 1
-        },
-        {
-          "type": "plant",
-          "id": "d_ironJuniperShell",
-          "count": 1
-        },
-        {
-          "type": "plant",
-          "id": "d_ironJuniperShell",
-          "count": 1
+          "count": 3
         }
       ]
     },
@@ -752,7 +742,18 @@
           "dynamicFailNodeId": "",
           "day": 4,
           "requiredEventId": "event_notBorrowIronLeafBlock",
-          "choices": []
+          "choices": [
+            {
+              "text": "Sen git koyunlarını otlat.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            },
+            {
+              "text": "Ben bir şey yapmadım.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
         }
       ]
     },
@@ -870,13 +871,26 @@
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 2,
-          "choices": []
+          "choices": [
+            {
+              "text": "Anladım.",
+              "nextNodeId": "node_fehim_8942",
+              "triggeredNewsId": "news_palankaBroken",
+              "triggeredEventId": "event_notBorrowIronLeafBlock"
+            }
+          ]
         },
         {
           "id": "node_fehim_4917",
           "npcText": "Palanka olmadan sen de güvende olmayacaksın. Seni canavar kapsın.",
           "day": 2,
-          "choices": []
+          "choices": [
+            {
+              "text": "Sana da iyi günler!",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
         }
       ]
     },
@@ -884,7 +898,7 @@
       "id": "story_monsterSlayerCevat",
       "characterName": "Canavar Avcısı Rize'li Cevat",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/cevat.png",
       "nodes": [
         {
           "id": "node_monsterSlayerCevat_1",
@@ -893,9 +907,7 @@
           "choices": [
             {
               "text": "Merhaba.",
-              "nextNodeId": "node_monsterSlayerCevat_6699",
-              "reqPotion": "d_freezingElixir",
-              "reqPotionCount": 1
+              "nextNodeId": "node_monsterSlayerCevat_6699"
             }
           ]
         },
@@ -924,6 +936,7 @@
             {
               "text": "Saygın olmayan kişileri dükkanımda istemiyorum.",
               "nextNodeId": null,
+              "triggeredNewsId": "news_cevatDead",
               "triggeredEventId": "event_cevatFired"
             }
           ]
@@ -935,19 +948,121 @@
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 3,
-          "choices": []
+          "choices": [
+            {
+              "text": "Sana nasıl yardımcı olabilirim Cevat?",
+              "nextNodeId": "node_monsterSlayerCevat_6518",
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_monsterSlayerCevat_6518",
+          "npcText": "Tahsildar Kazım'dan bir kontrat aldım. Işıldaklar için canavar ağına ihtiyacım var, elinde var mı ya da bir tane hazırlayabilir misin? Demir ardıçtan yapılması gerekiyor. Karşılığını tamı tamına öderim.",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Maalesef.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            },
+            {
+              "text": "Tabii, demir ardıç canavar ağı hazır, 90 altına senin olabilir. Işıldak nedir?",
+              "nextNodeId": "node_monsterSlayerCevat_6561",
+              "reqPotion": "d_monsterTrapElixir",
+              "reqPotionCount": 1,
+              "rewardGold": 90,
+              "triggeredNewsId": "news_cevatContractSucceded"
+            }
+          ],
+          "diseaseId": "d_monsterTrap"
+        },
+        {
+          "id": "node_monsterSlayerCevat_6561",
+          "npcText": "Işıldaklar ışınlanabilen orman kedileridir. Bir köyde ortaya çıktıklarında köyün kümes hayvanlarını ve ufak kuzuları yerler. Yolun açık olsun şifacı.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Senin de Cevat, hoşçakal.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "story_farmerKalender",
+      "characterName": "Çiftçi Kalender",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_farmerKalender_1",
+          "npcText": "Işıldaklar kolumu çizdi şifacı. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. Ne olur bir iksir kaynat.",
+          "day": 4,
+          "choices": [
+            {
+              "text": "Maalesef.",
+              "nextNodeId": null,
+              "triggeredEventId": "event_cevatFired"
+            },
+            {
+              "text": "Tabii, azıcık daha sık dişini, hemen bir büyülü kesikler için krem hazırlıyorum.",
+              "nextNodeId": null,
+              "reqPotion": "d_magicalWoundSerum",
+              "reqPotionCount": 1,
+              "rewardGold": 52,
+              "isTreatmentChoice": false
+            }
+          ],
+          "diseaseId": "d_magicalWound"
+        }
+      ]
+    },
+    {
+      "id": "story_blacksmithRüstem",
+      "characterName": "Demirci Rüstem",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_blacksmithRüstem_1",
+          "npcText": "Şifacı ayağım fena yandı, bana bir şifa hazırla.",
+          "day": 4,
+          "choices": [
+            {
+              "text": "Ayağın nasıl yandı?",
+              "nextNodeId": "node_blacksmithRüstem_3676",
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_blacksmithRüstem_3676",
+          "npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum.",
+          "diseaseId": "d_burn",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 4,
+          "choices": [
+            {
+              "text": "Yanık kremin hazır, 25 altın ver yeter. Bir daha nereye bastığına dikkat et.",
+              "nextNodeId": null,
+              "reqPotion": "d_burnElixir",
+              "reqPotionCount": 1,
+              "rewardGold": 25,
+              "isTreatmentChoice": false
+            }
+          ]
         }
       ]
     }
   ],
   "marketPlants": [
-    {
-      "plantId": "d_ironJuniperLeaf",
-      "cost": 10,
-      "stock": 5,
-      "maxStock": 5,
-      "availableDay": 1
-    },
     {
       "plantId": "d_nettle",
       "cost": 10,
@@ -961,6 +1076,20 @@
       "stock": 5,
       "maxStock": 5,
       "availableDay": 1
+    },
+    {
+      "plantId": "d_ironJuniperShell",
+      "cost": 18,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 3
+    },
+    {
+      "plantId": "d_ironJuniperLeaf",
+      "cost": 16,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 3
     }
   ],
   "marketRecipes": [
@@ -984,6 +1113,13 @@
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
+    },
+    {
+      "potionId": "d_monsterTrapElixir",
+      "cost": 22,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 3
     }
   ],
   "introPages": [
@@ -1046,6 +1182,16 @@
       "id": "news_palankaBroken",
       "day": 3,
       "text": "Malzeme yetersizliğinden ötürü Marangoz Dursun ve Çırağı Fehim palankayı tamir edemedi. Palanka bir çok yerden çöktü. Köy canavarlara karşı korunmasız kaldı."
+    },
+    {
+      "id": "news_cevatDead",
+      "day": 4,
+      "text": "Ak saçlı canavar avcısı ölü bulundu."
+    },
+    {
+      "id": "news_cevatContractSucceded",
+      "day": 5,
+      "text": "Cevat köyün ışıldak problemini çözdü."
     }
   ],
   "events": [
@@ -1242,7 +1388,27 @@
       "node.node_monsterSlayerCevat_1995.npcText": "Dükkanında benim türümü istemeyebilirsin.",
       "choice.node_monsterSlayerCevat_1995.0": "Saçmalıyorsun. Canavar avcıları saygındır. İnsanları canavarlardan koruyorsunuz.",
       "choice.node_monsterSlayerCevat_1995.1": "Saygın olmayan kişileri dükkanımda istemiyorum.",
-      "node.node_monsterSlayerCevat_2193.npcText": "Hımm."
+      "node.node_monsterSlayerCevat_2193.npcText": "Hımm.",
+      "char.story_monsterSlayerCevat.desc": "",
+      "choice.node_monsterSlayerCevat_2193.0": "Sana nasıl yardımcı olabilirim Cevat?",
+      "node.node_monsterSlayerCevat_6518.npcText": "Tahsildar Kazım'dan bir kontrat aldım. Işıldaklar için canavar ağına ihtiyacım var, elinde var mı ya da bir tane hazırlayabilir misin? Demir ardıçtan yapılması gerekiyor. Karşılığını tamı tamına öderim.",
+      "choice.node_monsterSlayerCevat_6518.0": "Maalesef.",
+      "choice.node_monsterSlayerCevat_6518.1": "Tabii, demir ardıç canavar ağı hazır, 90 altına senin olabilir. Işıldak nedir?",
+      "node.node_monsterSlayerCevat_6561.npcText": "Işıldaklar ışınlanabilen orman kedileridir. Bir köyde ortaya çıktıklarında köyün kümes hayvanlarını ve ufak kuzuları yerler. Yolun açık olsun şifacı.",
+      "choice.node_monsterSlayerCevat_6561.0": "Senin de Cevat, hoşçakal.",
+      "choice.node_fehim_4917.0": "Sana da iyi günler!",
+      "choice.node_d_shepherdNarin_9582.0": "Sen git koyunlarını otlat.",
+      "choice.node_d_shepherdNarin_9582.1": "Ben bir şey yapmadım.",
+      "choice.node_fehim_8942.0": "Anladım.",
+      "char.story_farmerKalender": "Çiftçi Kalender",
+      "node.node_farmerKalender_1.npcText": "Işıldaklar kolumu çizdi şifacı. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. Ne olur bir iksir kaynat.",
+      "choice.node_farmerKalender_1.0": "Maalesef.",
+      "choice.node_farmerKalender_1.1": "Tabii, azıcık daha sık dişini, hemen bir büyülü kesikler için krem hazırlıyorum.",
+      "char.story_blacksmithRüstem": "Demirci Rüstem",
+      "node.node_blacksmithRüstem_1.npcText": "Şifacı ayağım fena yandı, bana bir şifa hazırla.",
+      "choice.node_blacksmithRüstem_1.0": "Ayağın nasıl yandı?",
+      "node.node_blacksmithRüstem_3676.npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum.",
+      "choice.node_blacksmithRüstem_3676.0": "Yanık kremin hazır, 25 altın ver yeter. Bir daha nereye bastığına dikkat et."
     },
     "en": {
       "ui.gold": "Gold",

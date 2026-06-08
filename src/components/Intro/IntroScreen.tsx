@@ -1,6 +1,6 @@
 import React from 'react';
 import { GameData, IntroPage } from '../../types';
-import { isImageUrl } from '../../utils/helpers';
+import { isImageUrl, getValidImageUrl } from '../../utils/helpers';
 
 interface IntroScreenProps {
     gameData: GameData;
@@ -55,7 +55,7 @@ export function IntroScreen({ gameData, pageIndex, setPageIndex, setAppMode, lan
 
                     {currentPage.imageUrl && isImageUrl(currentPage.imageUrl) ? (
                         <div className="w-64 h-48 bg-amber-55 rounded-2xl border-4 border-slate-900 overflow-hidden flex items-center justify-center p-2 shadow-lg animate-idle-float">
-                            <img src={currentPage.imageUrl} alt="Hikaye Görseli" className="max-w-full max-h-full object-contain" />
+                            <img src={getValidImageUrl(currentPage.imageUrl)} alt="Hikaye Görseli" className="max-w-full max-h-full object-contain" />
                         </div>
                     ) : (
                         <div className="w-24 h-24 bg-[#dfd1b3] border-4 border-slate-900 rounded-full flex items-center justify-center text-5xl shadow-md animate-idle-float">
