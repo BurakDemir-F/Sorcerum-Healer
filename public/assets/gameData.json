@@ -1060,6 +1060,147 @@
           ]
         }
       ]
+    },
+    {
+      "id": "story_zenal",
+      "characterName": "Köylü Zenal",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_zenal_1",
+          "npcText": "Kolay gelsin şifacı. Yemek yapacağım, baharat olarak kullanabileceğim bir şeylerin var mı?",
+          "day": 2,
+          "choices": [
+            {
+              "text": "Kekiğim var, yemeğine tat katar. 13 altına senindir.",
+              "nextNodeId": null,
+              "reqPlant": "d_thyme",
+              "reqPlantCount": 1,
+              "rewardGold": 13,
+              "isTreatmentChoice": false
+            },
+            {
+              "text": "Burası bir han değil. Ben de bir aşçı değilim.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "story_crazyMan",
+      "characterName": "Köyün Delisi",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_crazyMan_1",
+          "npcText": "Şifacı karnım çok aç. Karnımı doyurabilecek bir şeyin var mı?",
+          "day": 4,
+          "choices": [
+            {
+              "text": "Biraz bal verebilirim.",
+              "nextNodeId": "node_crazyMan_4806",
+              "reqPlant": "d_honey",
+              "reqPlantCount": 1,
+              "isTreatmentChoice": false
+            },
+            {
+              "text": "Burası bir han değil, bedava aş da vermiyorum.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_crazyMan_4806",
+          "npcText": "Umay Ana seni korusun. ",
+          "day": 4,
+          "choices": [
+            {
+              "text": "Seni de.",
+              "nextNodeId": "node_crazyMan_4204",
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_crazyMan_4204",
+          "npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 33'ün katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 6,
+          "choices": [
+            {
+              "text": "33 Altın.",
+              "nextNodeId": "node_crazyMan_6226",
+              "reqPlant": "d_honey",
+              "reqPlantCount": 1,
+              "rewardGold": 66
+            },
+            {
+              "text": "66 Altın.",
+              "nextNodeId": "node_crazyMan_9938",
+              "rewardGold": 99,
+              "isTreatmentChoice": false
+            },
+            {
+              "text": "99 Altın.",
+              "nextNodeId": "node_crazyMan_0841",
+              "rewardGold": 33,
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_crazyMan_6226",
+          "npcText": "Sana 66 Altın verdim.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 6,
+          "choices": [
+            {
+              "text": "Teşekkürler.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_crazyMan_9938",
+          "npcText": "Sana 99 altın verdim.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 6,
+          "choices": [
+            {
+              "text": "Teşekkürler.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_crazyMan_0841",
+          "npcText": "Aç gözlülük etme, sana 33 altın verdim.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 6,
+          "choices": [
+            {
+              "text": "Peki.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "marketPlants": [
@@ -1408,7 +1549,27 @@
       "node.node_blacksmithRüstem_1.npcText": "Şifacı ayağım fena yandı, bana bir şifa hazırla.",
       "choice.node_blacksmithRüstem_1.0": "Ayağın nasıl yandı?",
       "node.node_blacksmithRüstem_3676.npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum.",
-      "choice.node_blacksmithRüstem_3676.0": "Yanık kremin hazır, 25 altın ver yeter. Bir daha nereye bastığına dikkat et."
+      "choice.node_blacksmithRüstem_3676.0": "Yanık kremin hazır, 25 altın ver yeter. Bir daha nereye bastığına dikkat et.",
+      "char.story_zenal": "Köylü Zenal",
+      "node.node_zenal_1.npcText": "Kolay gelsin şifacı. Yemek yapacağım, baharat olarak kullanabileceğim bir şeylerin var mı?",
+      "choice.node_zenal_1.0": "Kekiğim var, yemeğine tat katar. 13 altına senindir.",
+      "choice.node_zenal_1.1": "Burası bir han değil. Ben de bir aşçı değilim.",
+      "char.story_crazyMan": "Köyün Delisi",
+      "node.node_crazyMan_1.npcText": "Şifacı karnım çok aç. Karnımı doyurabilecek bir şeyin var mı?",
+      "choice.node_crazyMan_1.0": "Biraz bal verebilirim.",
+      "choice.node_crazyMan_1.1": "Burası bir han değil, bedava aş da vermiyorum.",
+      "node.node_crazyMan_4806.npcText": "Umay Ana seni korusun. ",
+      "choice.node_crazyMan_4806.0": "Seni de.",
+      "node.node_crazyMan_4204.npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 33'ün katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
+      "choice.node_crazyMan_4204.0": "33 Altın.",
+      "choice.node_crazyMan_4204.1": "66 Altın.",
+      "choice.node_crazyMan_4204.2": "99 Altın.",
+      "node.node_crazyMan_6226.npcText": "Sana 66 Altın verdim.",
+      "choice.node_crazyMan_6226.0": "Teşekkürler.",
+      "node.node_crazyMan_9938.npcText": "Sana 99 altın verdim.",
+      "choice.node_crazyMan_9938.0": "Teşekkürler.",
+      "node.node_crazyMan_0841.npcText": "Aç gözlülük etme, sana 33 altın verdim.",
+      "choice.node_crazyMan_0841.0": "Peki."
     },
     "en": {
       "ui.gold": "Gold",

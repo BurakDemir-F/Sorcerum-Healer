@@ -213,7 +213,7 @@ export function DialogueGraph({ gameData }: DialogueGraphProps): React.JSX.Eleme
     return (
         <div 
             ref={containerRef}
-            className={`${isFullscreen ? 'fixed inset-0 z-[9999] rounded-none' : 'w-full h-[700px] rounded-3xl'} bg-[#1a0f14] border-8 border-slate-900 overflow-hidden relative cursor-grab active:cursor-grabbing`}
+            className={`${isFullscreen ? 'fixed inset-0 z-[99999] w-screen h-screen rounded-none' : 'w-full h-[700px] rounded-3xl relative'} bg-[#1a0f14] border-8 border-slate-900 overflow-hidden cursor-grab active:cursor-grabbing`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
