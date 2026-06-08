@@ -19,6 +19,9 @@ styleTag.innerHTML = `
     50% { transform: translateY(-8px) rotate(1deg); }
   }
   .animate-idle-float { animation: idleFloat 3s ease-in-out infinite; }
+  
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 `;
 document.head.appendChild(styleTag);
 

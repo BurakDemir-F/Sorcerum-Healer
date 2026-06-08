@@ -6,6 +6,7 @@ import {
 } from '../../types';
 import { getHerbCuredSymptoms, getValidImageUrl } from '../../utils/helpers';
 import gameDataJSON from '../../assets/gameData.json';
+import { DialogueGraph } from './DialogueGraph';
 
 interface AdminPanelProps {
     gameData: GameData;
@@ -647,6 +648,7 @@ export function AdminPanel({
                 {[
                     { id: 'dataEditor', label: '🌿 Element & Reçete' },
                     { id: 'dialogueEditor', label: '💬 Diyalog & Karakter' },
+                    { id: 'dialogueGraph', label: '📊 Diyalog Akışı' },
                     { id: 'introEditor', label: '📖 Hikaye Girişi' },
                     { id: 'initialStateEditor', label: t('ui.initial_state_tab') },
                     { id: 'musicEditor', label: '🎵 Müzik' },
@@ -1054,6 +1056,10 @@ export function AdminPanel({
                         </div>
                     </div>
                 </div>
+            )}
+
+            {activeTab === 'dialogueGraph' && (
+                <DialogueGraph gameData={gameData} />
             )}
 
             {activeTab === 'introEditor' && (
