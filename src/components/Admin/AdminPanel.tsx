@@ -215,6 +215,30 @@ export function AdminPanel({
         document.body.appendChild(downloadAnchor); downloadAnchor.click(); downloadAnchor.remove();
     };
 
+    const saveJsonToProject = async (jsonData: GameData): Promise<void> => {
+        try{
+            const response = await fetch('api/save-game-data', {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonData),
+            });
+
+            const result: { success: boolean; message?: string; error?: string } = await response.json();
+
+            if (result.success) {
+                alert('gameData.json başarıyla güncellendi!');
+            } else {
+                alert('Hata oluştu: ' + result.error);
+            }
+        }
+        catch (exception : any){
+            console.error('İstek hatası:', exception);
+            alert('Sunucuya bağlanılamadı.');
+        }
+    }
+
     const handleImportJSON = (): void => {
         try {
             const parsed = JSON.parse(importText);
@@ -639,7 +663,8 @@ export function AdminPanel({
                     <p className="text-amber-100/60 text-sm font-sans">Senaryo ve Veritabanı Editörü</p>
                 </div>
                 <div className="flex gap-2">
-                    <button onClick={handleExportJSON} className="bg-emerald-600 hover:bg-emerald-500 text-white font-magic font-bold px-5 py-2.5 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">💾 Senaryoyu Kaydet</button>
+                    <button onClick={() => saveJsonToProject(gameData)} className="bg-emerald-600 hover:bg-emerald-500 text-white font-magic font-bold px-5 py-2.5 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">💾 Senaryoyu Projeye Kaydet</button>
+                    <button onClick={handleExportJSON} className="bg-emerald-600 hover:bg-emerald-500 text-white font-magic font-bold px-5 py-2.5 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">💾 Senaryoyu İndir</button>
                     <button onClick={() => setAppMode('portal')} className="bg-red-800 hover:bg-red-700 text-white font-magic font-bold px-5 py-2.5 rounded-xl border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">🚪 Çıkış</button>
                 </div>
             </div>

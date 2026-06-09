@@ -619,6 +619,19 @@
           "count": 1
         }
       ]
+    },
+    {
+      "id": "d_ironLeafBlock",
+      "name": "Demir Ardıç Blok",
+      "sellPrice": 74,
+      "curesDiseaseIds": [],
+      "ingredients": [
+        {
+          "type": "plant",
+          "id": "d_ironJuniperShell",
+          "count": 3
+        }
+      ]
     }
   ],
   "storylines": [
@@ -836,9 +849,8 @@
             {
               "text": "Olur. Madem köy için çok önemli size biraz demir ardıç bloğu ödünç vereceğim, umarım ustan sözünde durur.",
               "nextNodeId": "node_fehim_6756",
-              "reqPotion": "d_monsterTrapElixir",
-              "reqPotionCount": 3,
-              "isTreatmentChoice": false
+              "reqPotion": "d_ironLeafBlock",
+              "reqPotionCount": 1
             },
             {
               "text": "Olmaz, herkese ödünç verirsem dükkan batar.",
@@ -874,7 +886,7 @@
           "choices": [
             {
               "text": "Anladım.",
-              "nextNodeId": "node_fehim_8942",
+              "nextNodeId": "node_fehim_2180",
               "triggeredNewsId": "news_palankaBroken",
               "triggeredEventId": "event_notBorrowIronLeafBlock"
             }
@@ -888,6 +900,19 @@
             {
               "text": "Sana da iyi günler!",
               "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_fehim_2180",
+          "npcText": "Ustam köylülerden demir ardıç bloğunun parasını toplamayı başardı. Tamı tamına 74 altın.",
+          "day": 3,
+          "choices": [
+            {
+              "text": "Teşekkürler. Ustana selam söyle.",
+              "nextNodeId": null,
+              "rewardGold": 74,
               "isTreatmentChoice": false
             }
           ]
@@ -1205,20 +1230,6 @@
   ],
   "marketPlants": [
     {
-      "plantId": "d_nettle",
-      "cost": 10,
-      "stock": 5,
-      "maxStock": 5,
-      "availableDay": 1
-    },
-    {
-      "plantId": "d_yarrow",
-      "cost": 10,
-      "stock": 5,
-      "maxStock": 5,
-      "availableDay": 1
-    },
-    {
       "plantId": "d_ironJuniperShell",
       "cost": 18,
       "stock": 5,
@@ -1231,36 +1242,176 @@
       "stock": 5,
       "maxStock": 5,
       "availableDay": 3
-    }
-  ],
-  "marketRecipes": [
+    },
     {
-      "potionId": "d_seeingElixir",
-      "cost": 100,
+      "plantId": "d_willowShell",
+      "cost": 4,
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
     },
     {
-      "potionId": "d_burnElixir",
-      "cost": 100,
+      "plantId": "d_honey",
+      "cost": 7,
+      "stock": 3,
+      "maxStock": 3,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_rosehit",
+      "cost": 2,
+      "stock": 3,
+      "maxStock": 3,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_blackberry",
+      "cost": 3,
+      "stock": 2,
+      "maxStock": 2,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_riverAlgea",
+      "cost": 18,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_mint",
+      "cost": 4,
+      "stock": 4,
+      "maxStock": 4,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_yarrow",
+      "cost": 9,
+      "stock": 4,
+      "maxStock": 4,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_nettle",
+      "cost": 6,
+      "stock": 4,
+      "maxStock": 4,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_calendula",
+      "cost": 9,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_thyme",
+      "cost": 8,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_sage",
+      "cost": 9,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_hotWater",
+      "cost": 1,
+      "stock": 30,
+      "maxStock": 30,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_carlic",
+      "cost": 7,
+      "stock": 4,
+      "maxStock": 4,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_honeyWax",
+      "cost": 5,
+      "stock": 6,
+      "maxStock": 6,
+      "availableDay": 1
+    }
+  ],
+  "marketRecipes": [
+    {
+      "potionId": "d_monsterTrapElixir",
+      "cost": 90,
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
     },
     {
       "potionId": "d_freezingElixir",
-      "cost": 100,
+      "cost": 18,
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
     },
     {
-      "potionId": "d_monsterTrapElixir",
-      "cost": 22,
+      "potionId": "d_woundSerum",
+      "cost": 19,
       "stock": 1,
       "maxStock": 1,
-      "availableDay": 3
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_FluElixir",
+      "cost": 19,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_magicalWoundSerum",
+      "cost": 52,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_naiadBreath",
+      "cost": 62,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_possessElixir",
+      "cost": 64,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_seeingElixir",
+      "cost": 55,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_acneElixir",
+      "cost": 26,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
+    },
+    {
+      "potionId": "d_burnElixir",
+      "cost": 25,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
     }
   ],
   "introPages": [
@@ -1569,7 +1720,10 @@
       "node.node_crazyMan_9938.npcText": "Sana 99 altın verdim.",
       "choice.node_crazyMan_9938.0": "Teşekkürler.",
       "node.node_crazyMan_0841.npcText": "Aç gözlülük etme, sana 33 altın verdim.",
-      "choice.node_crazyMan_0841.0": "Peki."
+      "choice.node_crazyMan_0841.0": "Peki.",
+      "potion.d_ironLeafBlock.name": "Demir Ardıç Blok",
+      "node.node_fehim_2180.npcText": "Ustam köylülerden demir ardıç bloğunun parasını toplamayı başardı. Tamı tamına 74 altın.",
+      "choice.node_fehim_2180.0": "Teşekkürler. Ustana selam söyle."
     },
     "en": {
       "ui.gold": "Gold",
