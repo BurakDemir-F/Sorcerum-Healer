@@ -8,7 +8,7 @@ export function useAlchemyGame() {
     const [activeTab, setActiveTab] = useState<string>('shopArea');
     const [gameData, setGameData] = useState<GameData>(gameDataJSON as any);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [language, setLanguage] = useState<string>('tr');
+    const [language, setLanguage] = useState<string>('en');
 
     // Temel Oyun State'leri
     const [playerState, setPlayerState] = useState<PlayerState>(() => {
@@ -208,10 +208,10 @@ export function useAlchemyGame() {
 
     // 5. AŞAMA: OYUN BİTTİ KONTROLÜ
     useEffect(() => {
-        if (!gameData || isLoading || appMode === 'portal' || appMode === 'intro' || gameState.isGameOver) return;
+        if (!gameData || isLoading || appMode === 'portal' || appMode === 'studio' || appMode === 'intro' || gameState.isGameOver) return;
 
         // Gelecekte veya bugün gelebilecek herhangi bir müşteri kaldı mı?
-        const hasPotentialCustomers = Object.entries(gameState.storyProgress).some(([sId, prog]) => {
+        const hasPotentialCustomers = gameState.day <= 7 && Object.entries(gameState.storyProgress).some(([sId, prog]) => {
             // story_landlord hariç tutulabilir mi? Kullanıcı "gelecek hiçbir müşteri" dedi. 
             // Landlord her 7 günde bir geliyor. Ama landlord sonsuz mu?
             // gameData incelediğimizde story_landlord 7. gün geliyor. 

@@ -501,12 +501,7 @@
         {
           "type": "plant",
           "id": "d_mint",
-          "count": 1
-        },
-        {
-          "type": "plant",
-          "id": "d_mint",
-          "count": 1
+          "count": 2
         }
       ]
     },
@@ -638,22 +633,29 @@
     {
       "id": "story_landlord",
       "characterName": "Tahsildar Kazım",
-      "description": "Köyün beyine çalışan, palankadaki kiraları toplayan ve borç affetmeyen kurallara bağlı devlet görevlisi.",
-      "avatarUrl": "",
+      "description": "",
+      "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_landlord_demand",
-          "npcText": "Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını (100 Altın) tahsil etmeye geldim.",
+          "npcText": "Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını tahsil etmeye geldim.Gördüğüm kadarıyla iyi para kazanmışsın. 100 altına anlaşmıştık ama madem çok para kazandın senden 120 altın istiyorum.",
           "day": 7,
           "choices": [
             {
-              "text": "Kiramı Öde (100 Altın Öde)",
+              "text": "120 altın ödemeyi kabul et.",
               "nextNodeId": "node_landlord_thanks",
+              "reqGold": 120,
+              "triggeredEventId": "event_kazimVillain"
+            },
+            {
+              "text": "100 altına anlaştık, 100 altını al ve defol.",
+              "nextNodeId": "node_landlord_angry",
               "reqGold": 100
             },
             {
-              "text": "Şu an ödeyemiyorum, borç yaz beyimize.",
-              "nextNodeId": "node_landlord_angry"
+              "text": "Yeterli param yok.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
             }
           ]
         },
@@ -663,7 +665,7 @@
           "day": 7,
           "choices": [
             {
-              "text": "Teşekkürler, iyi günler Kazım Bey.",
+              "text": "...",
               "nextNodeId": null,
               "reqGold": 2
             }
@@ -671,14 +673,22 @@
         },
         {
           "id": "node_landlord_angry",
-          "npcText": "Yine mi borç?! Bak burası devlet kapısı. Kazandığın her altın doğrudan benim borç defterime kesilecek, palanka kanunudur bu!",
+          "npcText": "Buralarda benim gözlerime bakabilen tek kişi Borakran'dı. O da yeni öldü. Artık buralarda istediğimi yapabilirim. Şimdi bana istediğim fazladan 20 altını vereceksin.",
           "day": 7,
           "choices": [
             {
-              "text": "Anlıyorum, yapacak bir şey yok...",
-              "nextNodeId": null
+              "text": "...",
+              "nextNodeId": null,
+              "reqGold": 20,
+              "triggeredEventId": "event_kazimVillain"
+            },
+            {
+              "text": "Yeterli param yok.",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
             }
-          ]
+          ],
+          "requiredEventId": "event_BorakranFired"
         }
       ]
     },
@@ -851,7 +861,9 @@
               "text": "Olur. Madem köy için çok önemli size biraz demir ardıç bloğu ödünç vereceğim, umarım ustan sözünde durur.",
               "nextNodeId": "node_fehim_6756",
               "reqPotion": "d_ironLeafBlock",
-              "reqPotionCount": 1
+              "reqPotionCount": 1,
+              "triggeredNewsId": "news_ligtlingsAppeared",
+              "triggeredEventId": "event_gameChoice_fehimWelcomed"
             },
             {
               "text": "Olmaz, herkese ödünç verirsem dükkan batar.",
@@ -871,9 +883,7 @@
           "choices": [
             {
               "text": "Umay Ana kimdir?",
-              "nextNodeId": "node_fehim_8942",
-              "triggeredNewsId": "news_palankaBroken",
-              "triggeredEventId": "event_notBorrowIronLeafBlock"
+              "nextNodeId": "node_fehim_8942"
             }
           ]
         },
@@ -887,9 +897,7 @@
           "choices": [
             {
               "text": "Anladım.",
-              "nextNodeId": "node_fehim_2180",
-              "triggeredNewsId": "news_palankaBroken",
-              "triggeredEventId": "event_notBorrowIronLeafBlock"
+              "nextNodeId": "node_fehim_2180"
             }
           ]
         },
@@ -922,9 +930,9 @@
     },
     {
       "id": "story_monsterSlayerCevat",
-      "characterName": "Canavar Avcısı Rize'li Cevat",
+      "characterName": "Canavar Avcısı Rivze'li Cevat",
       "description": "",
-      "avatarUrl": "assets/cevat.png",
+      "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_monsterSlayerCevat_1",
@@ -939,7 +947,7 @@
         },
         {
           "id": "node_monsterSlayerCevat_6699",
-          "npcText": "Ben bir canavar avcısıyım, Rize'li Cevat.",
+          "npcText": "Ben bir canavar avcısıyım, Rivze'li Cevat.",
           "day": 3,
           "choices": [
             {
@@ -957,7 +965,7 @@
             {
               "text": "Saçmalıyorsun. Canavar avcıları saygındır. İnsanları canavarlardan koruyorsunuz.",
               "nextNodeId": "node_monsterSlayerCevat_2193",
-              "isTreatmentChoice": false
+              "triggeredEventId": "event_cevatWelcomed"
             },
             {
               "text": "Saygın olmayan kişileri dükkanımda istemiyorum.",
@@ -990,7 +998,8 @@
             {
               "text": "Maalesef.",
               "nextNodeId": null,
-              "isTreatmentChoice": false
+              "triggeredNewsId": "news_cevatDead",
+              "triggeredEventId": "event_cevatFired"
             },
             {
               "text": "Tabii, demir ardıç canavar ağı hazır, 90 altına senin olabilir. Işıldak nedir?",
@@ -1028,24 +1037,29 @@
       "nodes": [
         {
           "id": "node_farmerKalender_1",
-          "npcText": "Işıldaklar kolumu çizdi şifacı. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. Ne olur bir iksir kaynat.",
+          "npcText": "Burada canavar avcılarıyla ticaret yapılıyormuş. Sizin gibilerle işim olmaz ama ışıldaklar kolumu çizdi. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. ",
           "day": 4,
           "choices": [
             {
-              "text": "Maalesef.",
-              "nextNodeId": null,
-              "triggeredEventId": "event_cevatFired"
-            },
-            {
-              "text": "Tabii, azıcık daha sık dişini, hemen bir büyülü kesikler için krem hazırlıyorum.",
+              "text": "Tedavi et.",
               "nextNodeId": null,
               "reqPotion": "d_magicalWoundSerum",
               "reqPotionCount": 1,
-              "rewardGold": 52,
-              "isTreatmentChoice": false
+              "rewardGold": 52
+            },
+            {
+              "text": "Sana burada şifa yok, kesiği kendin tedavi et.",
+              "nextNodeId": null
+            },
+            {
+              "text": "Kiminle ticaret yapıyorsam yapıyorum sanane, ışıldaklar seni daha fazla tırmalamasın istiyorsan kes sesini. (Fazladan 20 altın talep ediyorsun)",
+              "nextNodeId": null,
+              "reqPotion": "d_magicalWoundSerum",
+              "reqPotionCount": 1,
+              "rewardGold": 72
             }
           ],
-          "diseaseId": "d_magicalWound"
+          "requiredEventId": "event_cevatWelcomed"
         }
       ]
     },
@@ -1069,18 +1083,21 @@
         },
         {
           "id": "node_blacksmithRüstem_3676",
-          "npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum.",
+          "npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum. Ama paramız palanka tamiratlarına gidiyor ve ışıldaklar da köylünün tavuklarına saldırdı. Yani anlayacağın param yok. Sana eşimin kendi yetiştirdiği sarımsaklardan versem kabul eder misin?",
           "diseaseId": "d_burn",
-          "dynamicSuccessNodeId": "",
-          "dynamicFailNodeId": "",
           "day": 4,
           "choices": [
             {
-              "text": "Yanık kremin hazır, 25 altın ver yeter. Bir daha nereye bastığına dikkat et.",
+              "text": "Yanık kremin hazır, peki sarımsakları kabul ediyorum.",
               "nextNodeId": null,
               "reqPotion": "d_burnElixir",
               "reqPotionCount": 1,
-              "rewardGold": 25,
+              "rewardPlantId": "d_carlic",
+              "rewardPlantCount": 2
+            },
+            {
+              "text": "Olmaz, ben de kira ödüyorum ve burası bir hayır kurumu değil.",
+              "nextNodeId": null,
               "isTreatmentChoice": false
             }
           ]
@@ -1154,39 +1171,31 @@
         },
         {
           "id": "node_crazyMan_4204",
-          "npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 33'ün katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
-          "diseaseId": "",
-          "dynamicSuccessNodeId": "",
-          "dynamicFailNodeId": "",
+          "npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 7'nin katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
           "day": 6,
           "choices": [
             {
-              "text": "33 Altın.",
+              "text": "7 Altın.",
               "nextNodeId": "node_crazyMan_6226",
               "reqPlant": "d_honey",
               "reqPlantCount": 1,
-              "rewardGold": 66
+              "rewardGold": 14
             },
             {
-              "text": "66 Altın.",
+              "text": "14 Altın.",
               "nextNodeId": "node_crazyMan_9938",
-              "rewardGold": 99,
-              "isTreatmentChoice": false
+              "rewardGold": 21
             },
             {
-              "text": "99 Altın.",
+              "text": "21 Altın.",
               "nextNodeId": "node_crazyMan_0841",
-              "rewardGold": 33,
-              "isTreatmentChoice": false
+              "rewardGold": 7
             }
           ]
         },
         {
           "id": "node_crazyMan_6226",
-          "npcText": "Sana 66 Altın verdim.",
-          "diseaseId": "",
-          "dynamicSuccessNodeId": "",
-          "dynamicFailNodeId": "",
+          "npcText": "Sana 14 Altın verdim.",
           "day": 6,
           "choices": [
             {
@@ -1198,10 +1207,7 @@
         },
         {
           "id": "node_crazyMan_9938",
-          "npcText": "Sana 99 altın verdim.",
-          "diseaseId": "",
-          "dynamicSuccessNodeId": "",
-          "dynamicFailNodeId": "",
+          "npcText": "Sana 21 altın verdim.",
           "day": 6,
           "choices": [
             {
@@ -1213,10 +1219,7 @@
         },
         {
           "id": "node_crazyMan_0841",
-          "npcText": "Aç gözlülük etme, sana 33 altın verdim.",
-          "diseaseId": "",
-          "dynamicSuccessNodeId": "",
-          "dynamicFailNodeId": "",
+          "npcText": "Aç gözlülük etme, sana 7 altın verdim.",
           "day": 6,
           "choices": [
             {
@@ -1225,6 +1228,96 @@
               "isTreatmentChoice": false
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "story_Borakran",
+      "characterName": "Eski Paralı Asker Borakran",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_Borakran_1",
+          "npcText": "(Dükkanın kapısı açıldı. Bir asker hemen dükkanın girişine yıkıldı. Sayıklıyor. Görünmez canavarlar görüyor. Nerede olduğunun bilincinde değil.)",
+          "day": 6,
+          "choices": [
+            {
+              "text": "Parayı sorun etmeden yardım et. ",
+              "nextNodeId": "node_Borakran_6494",
+              "reqPotion": "d_possessElixir",
+              "reqPotionCount": 1,
+              "triggeredEventId": "event_BorakranWelcomed"
+            },
+            {
+              "text": "Para isteyebilmek için tedavi etmeden önce kendine gelmesini bekle.",
+              "nextNodeId": "node_Borakran_1272",
+              "triggeredNewsId": "news_BorakranDead",
+              "triggeredEventId": "event_BorakranFired"
+            }
+          ],
+          "diseaseId": "d_magicalPossess"
+        },
+        {
+          "id": "node_Borakran_1272",
+          "npcText": "(Asker kendine geldi. Zorlanarak dışarı çıktı. Seninle konuşmadı.)",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 6,
+          "choices": [
+            {
+              "text": "\"Bekle yardım etseydim...\"",
+              "nextNodeId": null,
+              "isTreatmentChoice": false
+            }
+          ]
+        },
+        {
+          "id": "node_Borakran_6494",
+          "npcText": "Sağol şifacı. Ama sana verecek param yok. Olduğunda getireceğim, ben Borakran, sözüm sözdür.",
+          "diseaseId": "",
+          "dynamicSuccessNodeId": "",
+          "dynamicFailNodeId": "",
+          "day": 6,
+          "requiredEventId": "event_gameChoice_fehimWelcomed",
+          "choices": [
+            {
+              "text": "Peki öyle olsun.",
+              "nextNodeId": null,
+              "reqPotion": "d_possessElixir",
+              "reqPotionCount": 1,
+              "triggeredEventId": "event_bestGameEnd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "story_druidSeren",
+      "characterName": "Druid Seren",
+      "description": "",
+      "avatarUrl": "👤",
+      "nodes": [
+        {
+          "id": "node_druidSeren_1",
+          "npcText": "Ben Seren. Çok fazla konuşmam. Arkadaşım Cevat senin yüzünden öldü. Köylüler ışıldaklardan kurtulamadı. Bana bir naiad nefesi iksiri ver. Karşılığını ödemeyeceğim. ",
+          "day": 6,
+          "choices": [
+            {
+              "text": "Benim bir suçum yok, defol dükkanımdan.",
+              "nextNodeId": null,
+              "triggeredEventId": "event_SerenFired"
+            },
+            {
+              "text": "Üzgünüm.",
+              "nextNodeId": null,
+              "reqPotion": "d_naiadBreath",
+              "reqPotionCount": 1,
+              "isTreatmentChoice": false
+            }
+          ],
+          "requiredEventId": "event_cevatFired"
         }
       ]
     }
@@ -1413,6 +1506,13 @@
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
+    },
+    {
+      "potionId": "d_ironLeafBlock",
+      "cost": 28,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 1
     }
   ],
   "introPages": [
@@ -1460,11 +1560,6 @@
   ],
   "news": [
     {
-      "id": "news_lightling_invasion",
-      "day": 4,
-      "text": "Palanka onarılamadığı için köyü ışıldaklar bastı. Tavuklarımız ve ufak kuzularımız ölüyor. "
-    },
-    {
       "id": "news_druidSeen.",
       "day": 5,
       "text": "Yıllardır köyde görülmeyen druid kulubesinden çıktı ve köy meydanında görüldü. "
@@ -1477,6 +1572,11 @@
       "text": "Malzeme yetersizliğinden ötürü Marangoz Dursun ve Çırağı Fehim palankayı tamir edemedi. Palanka bir çok yerden çöktü. Köy canavarlara karşı korunmasız kaldı."
     },
     {
+      "id": "news_ligtlingsAppeared",
+      "day": 3,
+      "text": "Palanka Marangoz Dursun ve çırağı Fehim tarafından tamir edildi. Köyümüz büyük canavarlarndan korundu ama tamir sırasında ışıldaklar köye sızdı. Tavuklarımız ve ufak kuzularımıza saldırıyorlar."
+    },
+    {
       "id": "news_cevatDead",
       "day": 4,
       "text": "Ak saçlı canavar avcısı ölü bulundu."
@@ -1485,6 +1585,11 @@
       "id": "news_cevatContractSucceded",
       "day": 5,
       "text": "Cevat köyün ışıldak problemini çözdü."
+    },
+    {
+      "id": "news_BorakranDead",
+      "day": 7,
+      "text": "Köyümüzün eski gazisi Borakran öldü. Adına bir cenaze düzenlenecek."
     }
   ],
   "events": [
@@ -1495,16 +1600,60 @@
     {
       "id": "event_cevatFired",
       "text": "Cevat şifacı dükkanından kovuldu."
+    },
+    {
+      "id": "event_cevatWelcomed",
+      "text": "Cevat saygı gördü."
+    },
+    {
+      "id": "event_BorakranWelcomed",
+      "text": "Borakran'dan para istenmeden yardım edildi."
+    },
+    {
+      "id": "event_BorakranFired",
+      "text": "Borakran şifacı dükkanında tedavi edilmedi."
+    },
+    {
+      "id": "event_kazimVillain",
+      "text": "Borakran ölünce Kazım köyün yeni zorbası haline geldi. Artık kimse karşısında duramıyor."
+    },
+    {
+      "id": "event_gameChoice_fehimWelcomed",
+      "text": "Marangozlara yardım edildi."
+    },
+    {
+      "id": "event_bestGameEnd",
+      "text": "Borakran kurtarıldı ve palanka için para harcandı."
+    },
+    {
+      "id": "event_SerenFired",
+      "text": "Seren dükkandan kovuld."
     }
   ],
   "gameEndSettings": {
     "pages": [
       {
         "id": "default_end",
-        "endText": "Tebrikler, tüm hastaları iyileştirdin ve hikayeni tamamladın! Köyün en saygın şifacısı oldun.",
+        "endText": "Demo burada bitiyor. Farklı bir son için yeni baştan oynayabilir ya da Sorcerum dünyasında geçen daha fazla oyun istersen steam sayfamıza göz atabilirsin.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "assets/GameEndAd.png",
         "isDefault": true
+      },
+      {
+        "id": "end_BorakranDead",
+        "endText": "Borakran'ın ölümü köyde büyük bir üzüntüyle karşılandı. Senin ona yardım etmediğin köylü tarafından biliniyor ve sana kötü gözle bakıyorlar. Borakran'ın ölümü tahsildar Kazım'ı köyün zorbası haline getirdi.\n\nDemo burada bitti, istersen yeniden oynayabilir ve başka bir son elde etmeye çalışabilirsin. Sorcerum evreninde geçen diğer oyunlarımızı görmek için aşağıdaki butona tıklayabilirsin. ",
+        "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
+        "adImagePath": "",
+        "eventId": "event_BorakranFired",
+        "isDefault": false
+      },
+      {
+        "id": "end_death",
+        "endText": "Seren kendisine saygısızlık ettiğin ve Cevat ölümüne sebep olduğu için seni bir kaktüse çevirdi. Farklı bir son için yeni baştan oynamayı deneyeyebilirsin. Sorcerum evreninde geçen diğer oyunları görmek için steam sayfamızı ziyaret edebilirsin.",
+        "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
+        "adImagePath": "",
+        "eventId": "event_SerenFired",
+        "isDefault": false
       }
     ]
   },
@@ -1535,7 +1684,7 @@
       "ui.diagnosis": "Teşhis",
       "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
       "char.story_landlord": "Tahsildar Kazım",
-      "char.story_landlord.desc": "Köyün beyine çalışan, palankadaki kiraları toplayan ve borç affetmeyen kurallara bağlı devlet görevlisi.",
+      "char.story_landlord.desc": "",
       "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı",
       "plant.p_gumus_kok.name": "Gümüş Kök",
       "plant.p_isildak_otu.name": "Işıldak Otu",
@@ -1679,10 +1828,10 @@
       "node.node_fehim_8942.npcText": "Topraklara bereket getiren yüce ana.",
       "node.node_fehim_4917.npcText": "Palanka olmadan sen de güvende olmayacaksın. Seni canavar kapsın.",
       "node.node_d_shepherdNarin_9582.npcText": "Senin yüzünden köyün palankaları çöktü. Aç gözlüsün, seni canavar kapsın.",
-      "char.story_monsterSlayerCevat": "Canavar Avcısı Rize'li Cevat",
+      "char.story_monsterSlayerCevat": "Canavar Avcısı Rivze'li Cevat",
       "node.node_monsterSlayerCevat_1.npcText": "Merhaba.",
       "choice.node_monsterSlayerCevat_1.0": "Merhaba.",
-      "node.node_monsterSlayerCevat_6699.npcText": "Ben bir canavar avcısıyım, Rize'li Cevat.",
+      "node.node_monsterSlayerCevat_6699.npcText": "Ben bir canavar avcısıyım, Rivze'li Cevat.",
       "choice.node_monsterSlayerCevat_6699.0": "Peki",
       "node.node_monsterSlayerCevat_1995.npcText": "Dükkanında benim türümü istemeyebilirsin.",
       "choice.node_monsterSlayerCevat_1995.0": "Saçmalıyorsun. Canavar avcıları saygındır. İnsanları canavarlardan koruyorsunuz.",
@@ -1700,14 +1849,14 @@
       "choice.node_d_shepherdNarin_9582.1": "Ben bir şey yapmadım.",
       "choice.node_fehim_8942.0": "Anladım.",
       "char.story_farmerKalender": "Çiftçi Kalender",
-      "node.node_farmerKalender_1.npcText": "Işıldaklar kolumu çizdi şifacı. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. Ne olur bir iksir kaynat.",
-      "choice.node_farmerKalender_1.0": "Maalesef.",
-      "choice.node_farmerKalender_1.1": "Tabii, azıcık daha sık dişini, hemen bir büyülü kesikler için krem hazırlıyorum.",
+      "node.node_farmerKalender_1.npcText": "Burada canavar avcılarıyla ticaret yapılıyormuş. Sizin gibilerle işim olmaz ama ışıldaklar kolumu çizdi. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. ",
+      "choice.node_farmerKalender_1.0": "Tedavi et.",
+      "choice.node_farmerKalender_1.1": "Sana burada şifa yok, kesiği kendin tedavi et.",
       "char.story_blacksmithRüstem": "Demirci Rüstem",
       "node.node_blacksmithRüstem_1.npcText": "Şifacı ayağım fena yandı, bana bir şifa hazırla.",
       "choice.node_blacksmithRüstem_1.0": "Ayağın nasıl yandı?",
-      "node.node_blacksmithRüstem_3676.npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum.",
-      "choice.node_blacksmithRüstem_3676.0": "Yanık kremin hazır, 25 altın ver yeter. Bir daha nereye bastığına dikkat et.",
+      "node.node_blacksmithRüstem_3676.npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum. Ama paramız palanka tamiratlarına gidiyor ve ışıldaklar da köylünün tavuklarına saldırdı. Yani anlayacağın param yok. Sana eşimin kendi yetiştirdiği sarımsaklardan versem kabul eder misin?",
+      "choice.node_blacksmithRüstem_3676.0": "Yanık kremin hazır, peki sarımsakları kabul ediyorum.",
       "char.story_zenal": "Köylü Zenal",
       "node.node_zenal_1.npcText": "Kolay gelsin şifacı. Yemek yapacağım, baharat olarak kullanabileceğim bir şeylerin var mı?",
       "choice.node_zenal_1.0": "Kekiğim var, yemeğine tat katar. 13 altına senindir.",
@@ -1718,20 +1867,43 @@
       "choice.node_crazyMan_1.1": "Burası bir han değil, bedava aş da vermiyorum.",
       "node.node_crazyMan_4806.npcText": "Umay Ana seni korusun. ",
       "choice.node_crazyMan_4806.0": "Seni de.",
-      "node.node_crazyMan_4204.npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 33'ün katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
-      "choice.node_crazyMan_4204.0": "33 Altın.",
-      "choice.node_crazyMan_4204.1": "66 Altın.",
-      "choice.node_crazyMan_4204.2": "99 Altın.",
-      "node.node_crazyMan_6226.npcText": "Sana 66 Altın verdim.",
+      "node.node_crazyMan_4204.npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 7'nin katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
+      "choice.node_crazyMan_4204.0": "7 Altın.",
+      "choice.node_crazyMan_4204.1": "14 Altın.",
+      "choice.node_crazyMan_4204.2": "21 Altın.",
+      "node.node_crazyMan_6226.npcText": "Sana 14 Altın verdim.",
       "choice.node_crazyMan_6226.0": "Teşekkürler.",
-      "node.node_crazyMan_9938.npcText": "Sana 99 altın verdim.",
+      "node.node_crazyMan_9938.npcText": "Sana 21 altın verdim.",
       "choice.node_crazyMan_9938.0": "Teşekkürler.",
-      "node.node_crazyMan_0841.npcText": "Aç gözlülük etme, sana 33 altın verdim.",
+      "node.node_crazyMan_0841.npcText": "Aç gözlülük etme, sana 7 altın verdim.",
       "choice.node_crazyMan_0841.0": "Peki.",
       "potion.d_ironLeafBlock.name": "Demir Ardıç Blok",
       "node.node_fehim_2180.npcText": "Ustam köylülerden demir ardıç bloğunun parasını toplamayı başardı. Tamı tamına 74 altın.",
       "choice.node_fehim_2180.0": "Teşekkürler. Ustana selam söyle.",
-      "choice.node_landlord_thanks.0": "Teşekkürler, iyi günler Kazım Bey."
+      "choice.node_landlord_thanks.0": "...",
+      "node.node_landlord_demand.npcText": "Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını tahsil etmeye geldim.Gördüğüm kadarıyla iyi para kazanmışsın. 100 altına anlaşmıştık ama madem çok para kazandın senden 120 altın istiyorum.",
+      "choice.node_landlord_demand.0": "120 altın ödemeyi kabul et.",
+      "choice.node_landlord_demand.1": "100 altına anlaştık, 100 altını al ve defol.",
+      "node.node_landlord_angry.npcText": "Buralarda benim gözlerime bakabilen tek kişi Borakran'dı. O da yeni öldü. Artık buralarda istediğimi yapabilirim. Şimdi bana istediğim fazladan 20 altını vereceksin.",
+      "choice.node_landlord_angry.0": "...",
+      "char.story_Borakran": "Eski Paralı Asker Borakran",
+      "node.node_Borakran_1.npcText": "(Dükkanın kapısı açıldı. Bir asker hemen dükkanın girişine yıkıldı. Sayıklıyor. Görünmez canavarlar görüyor. Nerede olduğunun bilincinde değil.)",
+      "choice.node_Borakran_1.0": "Parayı sorun etmeden yardım et. ",
+      "choice.node_Borakran_1.1": "Para isteyebilmek için tedavi etmeden önce kendine gelmesini bekle.",
+      "node.node_Borakran_1272.npcText": "(Asker kendine geldi. Zorlanarak dışarı çıktı. Seninle konuşmadı.)",
+      "choice.node_Borakran_1272.0": "\"Bekle yardım etseydim...\"",
+      "choice.node_farmerKalender_1.2": "Kiminle ticaret yapıyorsam yapıyorum sanane, ışıldaklar seni daha fazla tırmalamasın istiyorsan kes sesini. (Fazladan 20 altın talep ediyorsun)",
+      "choice.node_blacksmithRüstem_3676.1": "Olmaz, ben de kira ödüyorum ve burası bir hayır kurumu değil.",
+      "char.story_Borakran.desc": "",
+      "node.node_Borakran_6494.npcText": "Sağol şifacı. Ama sana verecek param yok. Olduğunda getireceğim, ben Borakran, sözüm sözdür.",
+      "choice.node_Borakran_6494.0": "Peki öyle olsun.",
+      "char.story_druidSeren": "Druid Seren",
+      "node.node_druidSeren_1.npcText": "Ben Seren. Çok fazla konuşmam. Arkadaşım Cevat senin yüzünden öldü. Köylüler ışıldaklardan kurtulamadı. Bana bir naiad nefesi iksiri ver. Karşılığını ödemeyeceğim. ",
+      "choice.node_druidSeren_1.0": "Benim bir suçum yok, defol dükkanımdan.",
+      "choice.node_druidSeren_1.1": "Üzgünüm.",
+      "choice.node_landlord_demand.2": "Yeterli param yok.",
+      "choice.node_landlord_angry.1": "Yeterli param yok.",
+      "char.story_farmerKalender.desc": ""
     },
     "en": {
       "ui.gold": "Gold",
