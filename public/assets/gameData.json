@@ -664,7 +664,8 @@
           "choices": [
             {
               "text": "Teşekkürler, iyi günler Kazım Bey.",
-              "nextNodeId": null
+              "nextNodeId": null,
+              "reqGold": 2
             }
           ]
         },
@@ -1723,7 +1724,8 @@
       "choice.node_crazyMan_0841.0": "Peki.",
       "potion.d_ironLeafBlock.name": "Demir Ardıç Blok",
       "node.node_fehim_2180.npcText": "Ustam köylülerden demir ardıç bloğunun parasını toplamayı başardı. Tamı tamına 74 altın.",
-      "choice.node_fehim_2180.0": "Teşekkürler. Ustana selam söyle."
+      "choice.node_fehim_2180.0": "Teşekkürler. Ustana selam söyle.",
+      "choice.node_landlord_thanks.0": "Teşekkürler, iyi günler Kazım Bey."
     },
     "en": {
       "ui.gold": "Gold",
