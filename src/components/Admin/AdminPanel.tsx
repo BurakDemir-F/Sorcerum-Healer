@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
     GameData, GameState, Plant, Disease, Potion, Ingredient, 
     Storyline, StoryNode, Choice, IntroPage, Soundtrack, 
-    NewsItem, PlantProperty, StoryProgressItem, GameEvent 
+    NewsItem, PlantProperty, StoryProgressItem, GameEvent, GameEndPage
 } from '../../types';
 import { getHerbCuredSymptoms, getValidImageUrl } from '../../utils/helpers';
 import gameDataJSON from '../../assets/gameData.json';
@@ -98,7 +98,9 @@ export function AdminPanel({
     const [initPotionCount, setInitPotionCount] = useState<number>(1);
 
     const [newEvent, setNewEvent] = useState<GameEvent>({ id: '', text: '' });
-    const [gameEndSettings, setLocalGameEndSettings] = useState<GameEndSettings>(gameData.gameEndSettings || { endText: '', adLink: '', adImagePath: '' });
+    const [gameEndSettings, setLocalGameEndSettings] = useState<GameEndSettings>(gameData.gameEndSettings || { pages: [] });
+    const [newGameEndPage, setNewGameEndPage] = useState<GameEndPage>({ id: '', endText: '', adLink: '', adImagePath: '', eventId: '', isDefault: false });
+    const [editingGameEndPageId, setEditingGameEndPageId] = useState<string | null>(null);
 
     // Handlers (Original logic restored)
     const handleUpdateInitialGold = (gold: number) => {
@@ -560,7 +562,35 @@ export function AdminPanel({
 
     const handleUpdateGameEndSettings = () => {
         setGameData(prev => prev ? { ...prev, gameEndSettings: gameEndSettings } : prev);
-        alert('Oyun bitti ayarları güncellendi!');
+        alert('Oyun bitti ayarları genel veriye kaydedildi!');
+    };
+
+    const handleAddGameEndPage = () => {
+        if (!newGameEndPage.id || !newGameEndPage.endText) {
+            alert('Lütfen en azından ID ve Bitiş Metni giriniz!');
+            return;
+        }
+
+        const updatedPages = editingGameEndPageId 
+            ? gameEndSettings.pages.map(p => p.id === editingGameEndPageId ? newGameEndPage : p)
+            : [...gameEndSettings.pages, newGameEndPage];
+
+        // Eğer yeni sayfa default ise diğerlerini default olmaktan çıkar
+        if (newGameEndPage.isDefault) {
+            updatedPages.forEach(p => {
+                if (p.id !== newGameEndPage.id) p.isDefault = false;
+            });
+        }
+
+        setLocalGameEndSettings({ pages: updatedPages });
+        setNewGameEndPage({ id: '', endText: '', adLink: '', adImagePath: '', eventId: '', isDefault: false });
+        setEditingGameEndPageId(null);
+    };
+
+    const handleRemoveGameEndPage = (id: string) => {
+        setLocalGameEndSettings(prev => ({
+            pages: prev.pages.filter(p => p.id !== id)
+        }));
     };
 
     const handleRemoveIntroPage = (id: string): void => { setGameData(prev => prev ? { ...prev, introPages: (prev.introPages || []).filter(page => page.id !== id) } : prev); };
@@ -1346,58 +1376,147 @@ export function AdminPanel({
 
             {activeTab === 'gameEndEditor' && (
                 <div className="bg-[#f3e8d2] p-8 rounded-2xl border-4 border-slate-900 space-y-8 font-parchment">
-                    <h2 className="text-3xl font-magic font-bold text-indigo-900 border-b-4 border-indigo-100 pb-2">🏁 Oyun Bitti Ekranı Ayarları</h2>
-                    <div className="max-w-2xl mx-auto space-y-6">
-                        <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
-                            <div className="space-y-2">
-                                <label className="block font-bold text-lg font-magic">Bitiş Metni</label>
-                                <textarea 
-                                    className="w-full p-4 border-2 border-slate-900 rounded-xl h-32 font-bold italic bg-amber-50" 
-                                    placeholder="Oyun bittiğinde gösterilecek açıklama..." 
-                                    value={gameEndSettings.endText} 
-                                    onChange={e => setLocalGameEndSettings({...gameEndSettings, endText: e.target.value})}
-                                />
+                    <h2 className="text-3xl font-magic font-bold text-indigo-900 border-b-4 border-indigo-100 pb-2">🏁 Oyun Bitti Ekranları Yönetimi</h2>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        {/* Sol Kolon: Sayfa Ekleme/Düzenleme Formu */}
+                        <div className="space-y-6">
+                            <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
+                                <h3 className="text-xl font-bold font-magic">{editingGameEndPageId ? 'Sayfayı Düzenle' : 'Yeni Bitiş Sayfası Ekle'}</h3>
+                                
+                                <div className="space-y-3">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-1">
+                                            <label className="text-sm font-bold">Sayfa ID</label>
+                                            <input 
+                                                className="w-full p-2 border-2 border-slate-900 rounded-xl font-bold" 
+                                                placeholder="end_success" 
+                                                value={newGameEndPage.id}
+                                                onChange={e => setNewGameEndPage({...newGameEndPage, id: e.target.value})}
+                                                disabled={!!editingGameEndPageId}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-sm font-bold">Bağlı Olay (Opsiyonel)</label>
+                                            <select 
+                                                className="w-full p-2 border-2 border-slate-900 rounded-xl font-bold"
+                                                value={newGameEndPage.eventId || ''}
+                                                onChange={e => setNewGameEndPage({...newGameEndPage, eventId: e.target.value})}
+                                            >
+                                                <option value="">Olay Yok (Boş)</option>
+                                                {gameData.events.map(ev => (
+                                                    <option key={ev.id} value={ev.id}>{ev.id} - {ev.text.slice(0, 20)}...</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-bold">Bitiş Metni</label>
+                                        <textarea 
+                                            className="w-full p-3 border-2 border-slate-900 rounded-xl h-24 font-bold bg-amber-50" 
+                                            placeholder="Oyun sonunda ne yazacak?" 
+                                            value={newGameEndPage.endText}
+                                            onChange={e => setNewGameEndPage({...newGameEndPage, endText: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-bold">Reklam Linki</label>
+                                        <input 
+                                            className="w-full p-2 border-2 border-slate-900 rounded-xl font-bold" 
+                                            placeholder="https://store.steampowered.com/..." 
+                                            value={newGameEndPage.adLink}
+                                            onChange={e => setNewGameEndPage({...newGameEndPage, adLink: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-bold">Reklam Görsel Yolu</label>
+                                        <input 
+                                            className="w-full p-2 border-2 border-slate-900 rounded-xl font-bold" 
+                                            placeholder="assets/GameEndAd.png" 
+                                            value={newGameEndPage.adImagePath}
+                                            onChange={e => setNewGameEndPage({...newGameEndPage, adImagePath: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center gap-3 p-2 bg-indigo-50 rounded-xl border-2 border-indigo-200">
+                                        <input 
+                                            type="checkbox" 
+                                            id="isDefaultCheck"
+                                            className="w-5 h-5"
+                                            checked={newGameEndPage.isDefault}
+                                            onChange={e => setNewGameEndPage({...newGameEndPage, isDefault: e.target.checked})}
+                                        />
+                                        <label htmlFor="isDefaultCheck" className="font-bold cursor-pointer">Bu sayfa varsayılan (Default) olsun</label>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <button 
+                                            onClick={handleAddGameEndPage}
+                                            className="flex-1 bg-indigo-800 text-white font-bold py-3 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-700"
+                                        >
+                                            {editingGameEndPageId ? 'Değişiklikleri Uygula' : 'Listeye Ekle'}
+                                        </button>
+                                        {editingGameEndPageId && (
+                                            <button 
+                                                onClick={() => { setEditingGameEndPageId(null); setNewGameEndPage({ id: '', endText: '', adLink: '', adImagePath: '', eventId: '', isDefault: false }); }}
+                                                className="bg-slate-500 text-white font-bold px-6 py-3 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-slate-400"
+                                            >
+                                                İptal
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="block font-bold text-lg font-magic">Reklam Linki (Yeni Sekmede Açılır)</label>
-                                <input 
-                                    className="w-full p-3 border-2 border-slate-900 rounded-xl font-bold" 
-                                    placeholder="https://..." 
-                                    value={gameEndSettings.adLink} 
-                                    onChange={e => setLocalGameEndSettings({...gameEndSettings, adLink: e.target.value})}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="block font-bold text-lg font-magic">Reklam Görsel Yolu</label>
-                                <input 
-                                    className="w-full p-3 border-2 border-slate-900 rounded-xl font-bold" 
-                                    placeholder="assets/GameEndAd.png" 
-                                    value={gameEndSettings.adImagePath} 
-                                    onChange={e => setLocalGameEndSettings({...gameEndSettings, adImagePath: e.target.value})}
-                                />
-                                <p className="text-xs text-slate-500 font-sans italic">* Görselin public/assets klasörü altında olması gerekir.</p>
-                            </div>
+
                             <button 
                                 onClick={handleUpdateGameEndSettings} 
-                                className="w-full bg-indigo-800 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-700 mt-4"
+                                className="w-full bg-emerald-600 text-white font-bold py-4 rounded-2xl border-4 border-black font-magic shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-emerald-500 text-xl"
                             >
-                                Ayarları Güncelle
+                                Tüm Değişiklikleri Ana Veriye Kaydet
                             </button>
                         </div>
 
-                        <div className="bg-white/40 p-6 rounded-2xl border-4 border-slate-900 space-y-4">
-                            <h3 className="text-xl font-bold font-magic">Önizleme (Kabataslak)</h3>
-                            <div className="border-4 border-dashed border-slate-400 p-6 rounded-xl flex flex-col items-center text-center space-y-4">
-                                <p className="text-xl font-bold italic">"{gameEndSettings.endText || '...'}"</p>
-                                {gameEndSettings.adImagePath && (
-                                    <div className="w-48 h-32 bg-slate-200 border-2 border-slate-900 rounded flex items-center justify-center relative overflow-hidden">
-                                        <img src={getValidImageUrl(gameEndSettings.adImagePath)} alt="Ad Preview" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                                        <span className="text-[10px] text-slate-500 font-bold">Görsel: {gameEndSettings.adImagePath}</span>
+                        {/* Sağ Kolon: Mevcut Sayfaların Listesi */}
+                        <div className="space-y-4">
+                            <h3 className="text-xl font-bold font-magic">Tanımlı Bitiş Sayfaları ({gameEndSettings.pages.length})</h3>
+                            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                                {gameEndSettings.pages.map(page => (
+                                    <div key={page.id} className={`p-4 rounded-2xl border-4 border-slate-900 space-y-3 relative ${page.isDefault ? 'bg-amber-100 border-amber-600' : 'bg-white/60'}`}>
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <span className="text-xs font-mono font-bold bg-slate-900 text-white px-2 py-0.5 rounded">ID: {page.id}</span>
+                                                {page.isDefault && <span className="ml-2 text-xs font-bold bg-amber-500 text-black px-2 py-0.5 rounded border border-black">VARSAYILAN</span>}
+                                                {page.eventId && <span className="ml-2 text-xs font-bold bg-indigo-500 text-white px-2 py-0.5 rounded border border-black">OLAY: {page.eventId}</span>}
+                                            </div>
+                                            <div className="flex gap-1">
+                                                <button 
+                                                    onClick={() => { setEditingGameEndPageId(page.id); setNewGameEndPage(page); }}
+                                                    className="bg-yellow-400 hover:bg-yellow-300 border-2 border-black p-1.5 rounded-lg shadow"
+                                                >✏️</button>
+                                                <button 
+                                                    onClick={() => handleRemoveGameEndPage(page.id)}
+                                                    className="bg-red-500 hover:bg-red-400 border-2 border-black p-1.5 rounded-lg shadow text-white"
+                                                >🗑️</button>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm font-bold italic line-clamp-2">"{page.endText}"</p>
+                                        <div className="flex items-center gap-4 text-xs font-bold">
+                                            {page.adImagePath && (
+                                                <div className="w-12 h-12 border-2 border-black rounded overflow-hidden flex-shrink-0">
+                                                    <img src={getValidImageUrl(page.adImagePath)} className="w-full h-full object-cover" />
+                                                </div>
+                                            )}
+                                            <div className="truncate">
+                                                <p className="text-slate-500">Link: {page.adLink || '-'}</p>
+                                                <p className="text-slate-500">Görsel: {page.adImagePath || '-'}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                )}
-                                {gameEndSettings.adLink && (
-                                    <span className="text-blue-600 underline font-bold">{gameEndSettings.adLink}</span>
-                                )}
+                                ))}
+                                {gameEndSettings.pages.length === 0 && <p className="italic text-slate-500 text-center py-10">Henüz bitiş sayfası tanımlanmadı.</p>}
                             </div>
                         </div>
                     </div>

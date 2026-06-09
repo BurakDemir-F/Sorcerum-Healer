@@ -117,10 +117,17 @@ export interface NewsItem {
     text: string;
 }
 
-export interface GameEndSettings {
+export interface GameEndPage {
+    id: string;
+    eventId?: string; // Boşsa varsayılan olabilir veya isDefault kullanılabilir
     endText: string;
     adLink: string;
     adImagePath: string;
+    isDefault?: boolean;
+}
+
+export interface GameEndSettings {
+    pages: GameEndPage[];
 }
 
 export interface InitialPlayerState {

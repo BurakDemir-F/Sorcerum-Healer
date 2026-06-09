@@ -41,6 +41,18 @@ export default function App(): React.JSX.Element {
         );
     }
 
+    const getActiveEndPage = () => {
+        if (!gameData.gameEndSettings?.pages) return null;
+        // Önce tetiklenen olaylarla eşleşen bir sayfa var mı bak
+        const triggeredPage = gameData.gameEndSettings.pages.find(p => 
+            p.eventId && (gameState.triggeredEvents || []).includes(p.eventId)
+        );
+        if (triggeredPage) return triggeredPage;
+        // Yoksa varsayılan sayfayı döndür
+        return gameData.gameEndSettings.pages.find(p => p.isDefault) || gameData.gameEndSettings.pages[0];
+    };
+    const activeEndPage = getActiveEndPage();
+
     return (
         <div className="min-h-screen bg-[#1c0f13] text-[#f3e8d2]">
             {appMode === 'portal' && (
@@ -148,14 +160,14 @@ export default function App(): React.JSX.Element {
                         </div>
                         
                         <p className="text-2xl italic leading-relaxed text-amber-100/90">
-                            "{gameData.gameEndSettings?.endText || 'Tebrikler, hikayen tamamlandı!'}"
+                            "{activeEndPage?.endText || 'Tebrikler, hikayen tamamlandı!'}"
                         </p>
 
-                        {gameData.gameEndSettings?.adImagePath && (
+                        {activeEndPage?.adImagePath && (
                             <div className="relative group mx-auto max-w-xs">
                                 <div className="absolute -inset-2 bg-gradient-to-r from-amber-900 to-yellow-900 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
                                 <img 
-                                    src={getValidImageUrl(gameData.gameEndSettings.adImagePath)} 
+                                    src={getValidImageUrl(activeEndPage.adImagePath)} 
                                     alt="Recommended Game" 
                                     className="relative rounded-xl border-4 border-amber-900 shadow-2xl w-full h-auto object-cover"
                                     onError={(e) => { (e.target as any).style.display = 'none' }}
@@ -164,9 +176,9 @@ export default function App(): React.JSX.Element {
                         )}
 
                         <div className="pt-4 flex flex-col gap-4 items-center">
-                            {gameData.gameEndSettings?.adLink && (
+                            {activeEndPage?.adLink && (
                                 <a 
-                                    href={gameData.gameEndSettings.adLink} 
+                                    href={activeEndPage.adLink} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="inline-block bg-amber-900 hover:bg-amber-800 text-amber-100 font-magic font-bold text-xl px-8 py-4 rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"

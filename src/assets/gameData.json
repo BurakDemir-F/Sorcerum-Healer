@@ -902,9 +902,15 @@
   "conditionalNews": [],
   "events": [],
   "gameEndSettings": {
-    "endText": "Tebrikler, tüm hastaları iyileştirdin ve hikayeni tamamladın! Köyün en saygın şifacısı oldun.",
-    "adLink": "https://example.com/my-other-game",
-    "adImagePath": "assets/GameEndAd.png"
+    "pages": [
+      {
+        "id": "default_end",
+        "endText": "Tebrikler, tüm hastaları iyileştirdin ve hikayeni tamamladın! Köyün en saygın şifacısı oldun.",
+        "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
+        "adImagePath": "assets/GameEndAd.png",
+        "isDefault": true
+      }
+    ]
   },
   "translations": {
     "tr": {
