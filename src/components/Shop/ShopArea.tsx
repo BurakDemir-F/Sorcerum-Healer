@@ -171,33 +171,33 @@ export function ShopArea({ gameState, playerState, gameData, language, t, handle
                                             <div className="flex gap-2 text-[11px] mt-2 flex-wrap">
                                                 {choice.reqGold ? (
                                                     <span className="text-red-900 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded font-bold font-sans">
-                                  Gereken: 💰 {choice.reqGold} Altın
+                                  Required: 💰 {choice.reqGold} Gold
                                 </span>
                                                 ) : null}
                                                 {choice.reqPlant ? (
                                                     <span className="text-red-900 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded font-bold font-sans">
-                                  Gereken: 🌿 {t(`plant.${choice.reqPlant}.name`, choice.reqPlant)} (x{choice.reqPlantCount || 1})
+                                  Required: 🌿 {t(`plant.${choice.reqPlant}.name`, choice.reqPlant)} (x{choice.reqPlantCount || 1})
                                 </span>
                                                 ) : null}
                                                 {choice.reqPotion ? (
                                                     <span className="text-red-900 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded font-bold font-sans">
-                                  Gereken: 🧪 {t(`potion.${choice.reqPotion}.name`, choice.reqPotion)} (x{choice.reqPotionCount || 1})
+                                  Required: 🧪 {t(`potion.${choice.reqPotion}.name`, choice.reqPotion)} (x{choice.reqPotionCount || 1})
                                 </span>
                                                 ) : null}
 
                                                 {choice.rewardGold ? (
                                                     <span className="text-emerald-900 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded font-bold font-sans">
-                                  Ödül: 💰 {choice.rewardGold} Altın
+                                  Reward: 💰 {choice.rewardGold} Gold
                                 </span>
                                                 ) : null}
                                                 {choice.rewardPlantId ? (
                                                     <span className="text-emerald-900 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded font-bold font-sans">
-                                  Ödül: 🌿 {t(`plant.${choice.rewardPlantId}.name`, choice.rewardPlantId)} (x{choice.rewardPlantCount || 1})
+                                  Reward: 🌿 {t(`plant.${choice.rewardPlantId}.name`, choice.rewardPlantId)} (x{choice.rewardPlantCount || 1})
                                 </span>
                                                 ) : null}
                                                 {choice.rewardPotionId ? (
                                                     <span className="text-emerald-900 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded font-bold font-sans">
-                                  Ödül: 🧪 {t(`potion.${choice.rewardPotionId}.name`, choice.rewardPotionId)} (x{choice.rewardPotionCount || 1})
+                                  Reward: 🧪 {t(`potion.${choice.rewardPotionId}.name`, choice.rewardPotionId)} (x{choice.rewardPotionCount || 1})
                                 </span>
                                                 ) : null}
                                             </div>

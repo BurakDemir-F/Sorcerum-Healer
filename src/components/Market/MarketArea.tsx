@@ -73,7 +73,7 @@ export function MarketArea({ gameData, t, handlers, currentDay, playerState }: M
                                     <div className="flex items-center gap-3">
                                         <span className="text-3xl">📜</span>
                                         <div>
-                                            <h3 className="text-xl font-bold text-slate-955">{potionName} Formülü</h3>
+                                            <h3 className="text-xl font-bold text-slate-955">{potionName}</h3>
                                             <p className="text-sm font-bold text-red-900 font-magic">{mr.cost} {t('ui.gold')}</p>
                                         </div>
                                     </div>

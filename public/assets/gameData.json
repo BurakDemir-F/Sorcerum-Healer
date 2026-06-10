@@ -1,247 +1,247 @@
 {
   "plantProperties": [
     {
-      "name": "Uykusuzluk Şifası",
+      "name": "Insomnia Cure",
       "curesSymptoms": [
-        "Uykusuzluk"
+        "Insomnia"
       ]
     },
     {
-      "name": "Halisünasyon Şifası",
+      "name": "Hallucination Cure",
       "curesSymptoms": [
-        "Halüsinasyon"
+        "Hallucination"
       ]
     },
     {
-      "name": "Ateş Düşürücü",
+      "name": "Fever Reducer",
       "curesSymptoms": [
-        "Ateş"
+        "Fever"
       ]
     },
     {
-      "name": "Canlandırıcı",
+      "name": "Invigorator",
       "curesSymptoms": [
-        "Halsizlik"
+        "Fatigue"
       ]
     },
     {
-      "name": "Körlüğe Deva",
+      "name": "Blindness Remedy",
       "curesSymptoms": [
-        "Körlük"
+        "Blindness"
       ]
     },
     {
-      "name": "Ferah Nefes",
+      "name": "Fresh Breath",
       "curesSymptoms": [
-        "Kötü Kokulu Nefes"
+        "Foul Breath"
       ]
     },
     {
-      "name": "Bulantı Şifası",
+      "name": "Nausea Cure",
       "curesSymptoms": [
-        "Bulantı"
+        "Nausea"
       ]
     },
     {
-      "name": "Kan Durdurucu",
+      "name": "Blood Stopper",
       "curesSymptoms": [
-        "Kanama"
+        "Bleeding"
       ]
     },
     {
-      "name": "Ağrı Kesici",
+      "name": "Painkiller",
       "curesSymptoms": [
-        "Ağrı"
+        "Pain"
       ]
     },
     {
-      "name": "Öksürük Sökücü",
+      "name": "Cough Reliever",
       "curesSymptoms": [
-        "Öksürük"
+        "Cough"
       ]
     },
     {
-      "name": "Denge Şifası",
+      "name": "Balance Cure",
       "curesSymptoms": [
-        "Baş Dönmesi"
+        "Dizziness"
       ]
     },
     {
-      "name": "Zehir Sökücü",
+      "name": "Antidote",
       "curesSymptoms": [
-        "Zehirlenme"
+        "Poisoning"
       ]
     }
   ],
   "diseaseSymptoms": [
-    "Alkarısı Karabasanı",
-    "Kirli Büyü Zehirlenmesi",
-    "Bataklık Çürümesi",
-    "Işıldak Çırmığı",
-    "Ateş",
-    "Kanama",
-    "Halsizlik",
-    "Baş Dönmesi",
-    "Titreme",
-    "Zehirlenme",
-    "Kötü Kokulu Nefes",
-    "Ağrı",
-    "Öksürük",
-    "Körlük",
-    "Uykusuzluk",
-    "Halüsinasyon",
-    "İmkansız Aşk",
-    "Yemek Yiyememe",
-    "Sivilce",
-    "Bulantı"
+    "Alkarisi Nightmare",
+    "Foul Magic Poisoning",
+    "Swamp Rot",
+    "Ligtling Rash",
+    "Fever",
+    "Bleeding",
+    "Fatigue",
+    "Dizziness",
+    "Shivering",
+    "Poisoning",
+    "Foul Breath",
+    "Pain",
+    "Cough",
+    "Blindness",
+    "Insomnia",
+    "Hallucination",
+    "Impossible Love",
+    "Inability to Eat",
+    "Acne",
+    "Nausea"
   ],
   "plants": [
     {
       "id": "d_ironJuniperLeaf",
-      "name": "Demir Ardıç Yaprağı",
-      "rarity": "Efsanevi",
+      "name": "Iron Juniper Leaf",
+      "rarity": "Legendary",
       "cost": 16,
       "properties": [
-        "Halisünasyon Şifası"
+        "Hallucination Cure"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_ironJuniperShell",
-      "name": "Demir Ardıç Kabuğu",
-      "rarity": "Efsanevi",
+      "name": "Iron Juniper Bark",
+      "rarity": "Legendary",
       "cost": 18,
       "properties": [
-        "Uykusuzluk Şifası"
+        "Insomnia Cure"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_willowShell",
-      "name": "Söğüt Kabuğu",
-      "rarity": "Yaygın",
+      "name": "Willow Bark",
+      "rarity": "Common",
       "cost": 4,
       "properties": [
-        "Ateş Düşürücü"
+        "Fever Reducer"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_honey",
-      "name": "Bal",
+      "name": "Honey",
       "rarity": "Normal",
       "cost": 7,
       "properties": [
-        "Canlandırıcı"
+        "Invigorator"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_rosehit",
-      "name": "Kuşburnu",
-      "rarity": "Yaygın",
+      "name": "Rosehip",
+      "rarity": "Common",
       "cost": 2,
       "properties": [],
       "imageUrl": ""
     },
     {
       "id": "d_blackberry",
-      "name": "Böğürtlen",
-      "rarity": "Yaygın",
+      "name": "Blackberry",
+      "rarity": "Common",
       "cost": 3,
       "properties": [],
       "imageUrl": ""
     },
     {
       "id": "d_riverAlgea",
-      "name": "Irmak Yosunu",
-      "rarity": "Efsanevi",
+      "name": "River Moss",
+      "rarity": "Legendary",
       "cost": 18,
       "properties": [
-        "Körlüğe Deva"
+        "Blindness Remedy"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_mint",
-      "name": "Nane",
+      "name": "Mint",
       "rarity": "Normal",
       "cost": 4,
       "properties": [
-        "Ferah Nefes",
-        "Bulantı Şifası"
+        "Fresh Breath",
+        "Nausea Cure"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_yarrow",
-      "name": "Civanperçemi",
-      "rarity": "Nadir",
+      "name": "Yarrow",
+      "rarity": "Rare",
       "cost": 9,
       "properties": [
-        "Kan Durdurucu"
+        "Blood Stopper"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_nettle",
-      "name": "Isırgan Otu",
+      "name": "Nettle",
       "rarity": "Normal",
       "cost": 6,
       "properties": [
-        "Ağrı Kesici"
+        "Painkiller"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_calendula",
-      "name": "Aynısefa Otu",
-      "rarity": "Nadir",
+      "name": "Calendula",
+      "rarity": "Rare",
       "cost": 9,
       "properties": [],
       "imageUrl": ""
     },
     {
       "id": "d_thyme",
-      "name": "Kekik",
-      "rarity": "Nadir",
+      "name": "Thyme",
+      "rarity": "Rare",
       "cost": 8,
       "properties": [
-        "Öksürük Sökücü"
+        "Cough Reliever"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_sage",
-      "name": "Adaçayı Otu",
-      "rarity": "Nadir",
+      "name": "Sage",
+      "rarity": "Rare",
       "cost": 9,
       "properties": [
-        "Denge Şifası"
+        "Balance Cure"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_hotWater",
-      "name": "Sıcak Su",
-      "rarity": "Yaygın",
+      "name": "Hot Water",
+      "rarity": "Common",
       "cost": 1,
       "properties": [],
       "imageUrl": ""
     },
     {
       "id": "d_carlic",
-      "name": "Sarımsak",
+      "name": "Garlic",
       "rarity": "Normal",
       "cost": 7,
       "properties": [
-        "Zehir Sökücü"
+        "Antidote"
       ],
       "imageUrl": ""
     },
     {
       "id": "d_honeyWax",
-      "name": "Balmumu",
+      "name": "Beeswax",
       "rarity": "Normal",
       "cost": 5,
       "properties": [],
@@ -251,118 +251,118 @@
   "diseases": [
     {
       "id": "d_badBreath",
-      "name": "Ağız Kokusu",
+      "name": "Bad Breath",
       "symptoms": [
-        "Kötü Kokulu Nefes"
+        "Foul Breath"
       ]
     },
     {
       "id": "d_starve",
-      "name": "Açlık",
+      "name": "Hunger",
       "symptoms": [
-        "Halsizlik"
+        "Fatigue"
       ]
     },
     {
       "id": "d_freezing",
-      "name": "Üşüme",
+      "name": "Chills",
       "symptoms": [
-        "Titreme"
+        "Shivering"
       ]
     },
     {
       "id": "d_wound",
-      "name": "Kesik",
+      "name": "Cut",
       "symptoms": [
-        "Kanama",
-        "Titreme",
-        "Halsizlik",
-        "Ağrı"
+        "Bleeding",
+        "Shivering",
+        "Fatigue",
+        "Pain"
       ]
     },
     {
       "id": "d_flu",
-      "name": "Nezle",
+      "name": "Cold",
       "symptoms": [
-        "Halsizlik",
-        "Titreme",
-        "Öksürük"
+        "Fatigue",
+        "Shivering",
+        "Cough"
       ]
     },
     {
       "id": "d_magicalWound",
-      "name": "Işıldak Kesiği",
+      "name": "Ligtling Cut",
       "symptoms": [
-        "Kanama",
-        "Titreme",
-        "Halsizlik",
-        "Zehirlenme",
-        "Körlük"
+        "Bleeding",
+        "Shivering",
+        "Fatigue",
+        "Poisoning",
+        "Blindness"
       ]
     },
     {
       "id": "d_magicalFlu",
-      "name": "Su Perisi Nezlesi",
+      "name": "Naiad Cold",
       "symptoms": [
-        "Titreme",
-        "Baş Dönmesi",
-        "Uykusuzluk",
-        "İmkansız Aşk",
-        "Sivilce",
-        "Halüsinasyon"
+        "Shivering",
+        "Dizziness",
+        "Insomnia",
+        "Impossible Love",
+        "Acne",
+        "Hallucination"
       ]
     },
     {
       "id": "d_magicalPossess",
-      "name": "Al Karısı Musallatı",
+      "name": "Al Karisi Haunting",
       "symptoms": [
-        "Titreme",
-        "Yemek Yiyememe",
-        "Baş Dönmesi",
-        "Uykusuzluk",
-        "Halüsinasyon",
-        "Bulantı"
+        "Shivering",
+        "Inability to Eat",
+        "Dizziness",
+        "Insomnia",
+        "Hallucination",
+        "Nausea"
       ]
     },
     {
       "id": "d_blindFog",
-      "name": "Sis Körlüğü",
+      "name": "Fog Blindness",
       "symptoms": [
-        "Körlük",
-        "Halüsinasyon",
-        "Uykusuzluk",
-        "Baş Dönmesi"
+        "Blindness",
+        "Hallucination",
+        "Insomnia",
+        "Dizziness"
       ]
     },
     {
       "id": "d_acne",
-      "name": "Kabarcık",
+      "name": "Blister",
       "symptoms": [
-        "Sivilce",
-        "Bulantı",
-        "Baş Dönmesi"
+        "Acne",
+        "Nausea",
+        "Dizziness"
       ]
     },
     {
       "id": "d_burn",
-      "name": "Yanık",
+      "name": "Burn",
       "symptoms": [
-        "Zehirlenme",
-        "Ağrı",
-        "Ateş",
-        "Halsizlik"
+        "Poisoning",
+        "Pain",
+        "Fever",
+        "Fatigue"
       ]
     },
     {
       "id": "d_monsterTrap",
-      "name": "Canavar Tuzağı Ağ",
+      "name": "Monster Trap Web",
       "symptoms": []
     }
   ],
   "potions": [
     {
       "id": "d_monsterTrapElixir",
-      "name": "Canavar Ağı",
+      "name": "Monster Web",
       "sellPrice": 90,
       "curesDiseaseIds": [
         "d_monsterTrap"
@@ -382,7 +382,7 @@
     },
     {
       "id": "d_freezingElixir",
-      "name": "Kış Çayı",
+      "name": "Winter Tea",
       "sellPrice": 18,
       "curesDiseaseIds": [
         "d_freezing"
@@ -412,7 +412,7 @@
     },
     {
       "id": "d_woundSerum",
-      "name": "Kesik Merhemi",
+      "name": "Cut Salve",
       "sellPrice": 19,
       "curesDiseaseIds": [
         "d_wound"
@@ -432,7 +432,7 @@
     },
     {
       "id": "d_FluElixir",
-      "name": "Nezle Sökücü Şurup",
+      "name": "Cold Relief Syrup",
       "sellPrice": 19,
       "curesDiseaseIds": [
         "d_flu"
@@ -457,7 +457,7 @@
     },
     {
       "id": "d_magicalWoundSerum",
-      "name": "Büyülü Kesik Kremi",
+      "name": "Magical Cut Cream",
       "sellPrice": 52,
       "curesDiseaseIds": [
         "d_magicalWound"
@@ -482,7 +482,7 @@
     },
     {
       "id": "d_naiadBreath",
-      "name": "Naiad Nefesi",
+      "name": "Naiad Breath",
       "sellPrice": 62,
       "curesDiseaseIds": [
         "d_magicalFlu"
@@ -507,7 +507,7 @@
     },
     {
       "id": "d_possessElixir",
-      "name": "Karabüyü Defetme İksiri",
+      "name": "Dark Magic Banishing Potion",
       "sellPrice": 64,
       "curesDiseaseIds": [
         "d_magicalPossess"
@@ -537,7 +537,7 @@
     },
     {
       "id": "d_seeingElixir",
-      "name": "Göz İksiri",
+      "name": "Eye Potion",
       "sellPrice": 55,
       "curesDiseaseIds": [
         "d_blindFog"
@@ -562,7 +562,7 @@
     },
     {
       "id": "d_acneElixir",
-      "name": "Kabarcık Patlatan İksir",
+      "name": "Blister Popping Potion",
       "sellPrice": 26,
       "curesDiseaseIds": [
         "d_acne"
@@ -592,7 +592,7 @@
     },
     {
       "id": "d_burnElixir",
-      "name": "Yanık Merhemi",
+      "name": "Burn Salve",
       "sellPrice": 25,
       "curesDiseaseIds": [
         "d_burn"
@@ -617,7 +617,7 @@
     },
     {
       "id": "d_ironLeafBlock",
-      "name": "Demir Ardıç Blok",
+      "name": "Iron Juniper Block",
       "sellPrice": 74,
       "curesDiseaseIds": [],
       "ingredients": [
@@ -632,28 +632,28 @@
   "storylines": [
     {
       "id": "story_landlord",
-      "characterName": "Tahsildar Kazım",
+      "characterName": "Tax Collector Kazim",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_landlord_demand",
-          "npcText": "Selam şifacı! Köyün beyinin tahsildarıyım ben. Palankanın içindeki dükkan kirasını tahsil etmeye geldim.Gördüğüm kadarıyla iyi para kazanmışsın. 100 altına anlaşmıştık ama madem çok para kazandın senden 120 altın istiyorum.",
+          "npcText": "Greetings healer! I am the tax collector of the village lord. I've come to collect the rent for the shop inside the palanka. From what I see, you've made good money. We agreed on 100 gold, but since you earned a lot, I want 120 gold from you.",
           "day": 7,
           "choices": [
             {
-              "text": "120 altın ödemeyi kabul et.",
+              "text": "Accept to pay 120 gold.",
               "nextNodeId": "node_landlord_thanks",
               "reqGold": 120,
               "triggeredEventId": "event_kazimVillain"
             },
             {
-              "text": "100 altına anlaştık, 100 altını al ve defol.",
+              "text": "We agreed on 100, take the 100 gold and get out.",
               "nextNodeId": "node_landlord_angry",
               "reqGold": 100
             },
             {
-              "text": "Yeterli param yok.",
+              "text": "I don't have enough gold.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -661,7 +661,7 @@
         },
         {
           "id": "node_landlord_thanks",
-          "npcText": "Güzel, akıllı bir şifacı. Palankamızın kapısı sana her zaman açık kalacaktır. İyi çalışmalar.",
+          "npcText": "Good, a smart healer. The gates of our palanka will always be open to you. Good luck with your work.",
           "day": 7,
           "choices": [
             {
@@ -673,7 +673,7 @@
         },
         {
           "id": "node_landlord_angry",
-          "npcText": "Buralarda benim gözlerime bakabilen tek kişi Borakran'dı. O da yeni öldü. Artık buralarda istediğimi yapabilirim. Şimdi bana istediğim fazladan 20 altını vereceksin.",
+          "npcText": "The only person around here who could look into my eyes was Borakran. And he just died. Now I can do whatever I want around here. Now you will give me the extra 20 gold I want.",
           "day": 7,
           "choices": [
             {
@@ -683,7 +683,7 @@
               "triggeredEventId": "event_kazimVillain"
             },
             {
-              "text": "Yeterli param yok.",
+              "text": "I don't have enough gold.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -694,21 +694,21 @@
     },
     {
       "id": "story_d_shepherdNarin",
-      "characterName": "Çoban Kız Narin",
+      "characterName": "Narin the Shepherd Girl",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_d_shepherdNarin_1",
-          "npcText": "Merhaba, ben Narin. Köyün koyunlarını güderim. Dükkanın hayırlı olsun.",
+          "npcText": "Hello, I am Narin. I herd the village sheep. Congratulations on your new shop.",
           "day": 1,
           "choices": [
             {
-              "text": "Peki. İsimleri pek hatırlamam.",
+              "text": "Okay. I don't remember names well.",
               "nextNodeId": "node_d_shepherdNarin_9582"
             },
             {
-              "text": "Merhaba, seninle tanıştığıma memnun oldum Narin. Nasılsın?",
+              "text": "Hello, I'm glad to meet you, Narin. How are you?",
               "nextNodeId": "node_d_shepherdNarin_2300",
               "triggeredEventId": "d_testEVent"
             }
@@ -716,14 +716,14 @@
         },
         {
           "id": "node_d_shepherdNarin_2300",
-          "npcText": "Bugün bir kuzu doğdu. Üşümesin diye yavruyu sırtımda taşıyıp eve götürdüm. Biraz üşüttüm. Bana iyi gelecek bir içeceğin var mı?",
+          "npcText": "A lamb was born today. I carried the little one on my back to the house so it wouldn't freeze. I caught a bit of a chill. Do you have a drink that would be good for me?",
           "diseaseId": "d_freezing",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 1,
           "choices": [
             {
-              "text": "Tabii, sana güzel bir kış çayı demleyeyim, fiyatı 18 altın.",
+              "text": "Sure, let me brew you a nice winter tea, the price is 18 gold.",
               "nextNodeId": null,
               "reqPotion": "d_freezingElixir",
               "reqPotionCount": 1,
@@ -731,27 +731,27 @@
               "triggeredNewsId": "test"
             },
             {
-              "text": "Madem bugün bir kuzu doğdu ve sen onu sırtında taşıdın o zaman bir kış çayını hakettin. Zaten ilk müşterim de sensin.",
+              "text": "Since a lamb was born today and you carried it on your back, you've earned a winter tea. Besides, you are my first customer.",
               "nextNodeId": "node_d_shepherdNarin_8642",
               "reqPotion": "d_freezingElixir",
               "reqPotionCount": 1
             },
             {
-              "text": "Elimde böyle bir içecek yok.",
+              "text": "I don't have such a drink on hand.",
               "nextNodeId": null
             }
           ]
         },
         {
           "id": "node_d_shepherdNarin_8642",
-          "npcText": "Geçen günki kış çayını çok beğendim. Koyun güderken senin için biraz söğüt kabuğu çıkardım.",
+          "npcText": "I really liked the winter tea from the other day. I gathered some willow bark for you while herding the sheep.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 3,
           "choices": [
             {
-              "text": "Teşekkür ederim.",
+              "text": "Thank you.",
               "nextNodeId": null,
               "rewardPlantId": "d_willowShell",
               "rewardPlantCount": 2
@@ -760,7 +760,7 @@
         },
         {
           "id": "node_d_shepherdNarin_9582",
-          "npcText": "Senin yüzünden köyün palankaları çöktü. Aç gözlüsün, seni canavar kapsın.",
+          "npcText": "Because of you, the village palankas collapsed. You are greedy, may a monster take you.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
@@ -768,12 +768,12 @@
           "requiredEventId": "event_notBorrowIronLeafBlock",
           "choices": [
             {
-              "text": "Sen git koyunlarını otlat.",
+              "text": "Go tend to your sheep.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             },
             {
-              "text": "Ben bir şey yapmadım.",
+              "text": "I didn't do anything.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -783,40 +783,40 @@
     },
     {
       "id": "story_d_carpenterDursun",
-      "characterName": "Marangoz Usta Dursun",
+      "characterName": "Master Carpenter Dursun",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_d_carpenterDursun_1",
-          "npcText": "Selam olsun. Ben köyün marangozu Dursun. Bir haftanın iki günü palanka'nın tamiratıyla geçiyor. Eski bir palanka bir tarafı tamir etsen bir tarafı çöküyor.",
+          "npcText": "Greetings. I am Dursun, the village carpenter. Two days of my week are spent repairing the palanka. It's an old palanka; you repair one side, and another side collapses.",
           "day": 1,
           "choices": [
             {
-              "text": "Palanka nedir usta?",
+              "text": "What is a palanka, master?",
               "nextNodeId": "node_d_carpenterDursun_5531"
             },
             {
-              "text": "Nasıl yardımcı olabilirim usta?",
+              "text": "How can I help you, master?",
               "nextNodeId": "node_d_carpenterDursun_1056"
             }
           ]
         },
         {
           "id": "node_d_carpenterDursun_1056",
-          "npcText": "Palankayı tamir ederken elimi kestim, elinde biraz kesik merhemi ya da kanı durduracak bir şeyler var mı?",
+          "npcText": "I cut my hand while repairing the palanka, do you have any cut salve or something to stop the bleeding?",
           "diseaseId": "d_wound",
           "day": 1,
           "choices": [
             {
-              "text": "Kesik merhemim var usta, 19 altındır.",
+              "text": "I have cut salve, master, it is 19 gold.",
               "nextNodeId": null,
               "reqPotion": "d_woundSerum",
               "reqPotionCount": 1,
               "rewardGold": 19
             },
             {
-              "text": "Maalesef elimde kesik kremi yok usta.",
+              "text": "Unfortunately, I don't have cut cream, master.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -824,21 +824,21 @@
         },
         {
           "id": "node_d_carpenterDursun_5531",
-          "npcText": "Palanka köyün etrafını saran ahşap tahkimattır. Yani bir nevi köy suru. Demir ardıç dediğimiz büyülü ağaçtan yapılmıştır. Ama çok eski, babamın babası zamanında yapılmış, o yüzden şimdi dökülüyor. Ben de onu tamir ederken elimi kestim. Kesik merhemin var mı?",
+          "npcText": "A palanka is the wooden fortification surrounding the village. A village wall of sorts. It's made of a magical wood called iron juniper. But it's very old, built in my grandfather's grandfather's time, so now it's falling apart. And I cut my hand while repairing it. Do you have any cut salve?",
           "diseaseId": "d_wound",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 1,
           "choices": [
             {
-              "text": "Kesik merhemim var usta, fiyatı 19 altın.",
+              "text": "I have cut salve, master, the price is 19 gold.",
               "nextNodeId": null,
               "reqPotion": "d_woundSerum",
               "reqPotionCount": 1,
               "rewardGold": 19
             },
             {
-              "text": "Maalesef elimde kesik kremi yok usta.",
+              "text": "Unfortunately, I don't have cut cream, master.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -848,17 +848,17 @@
     },
     {
       "id": "story_fehim",
-      "characterName": "Marangoz Çırağı Fehim",
+      "characterName": "Fehim the Carpenter's Apprentice",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_fehim_1",
-          "npcText": "Selam Şifacı. Ben marangoz Dursun'un çırağı Fehim. Beni ustam gönderdi. Malzeme yetersizliğinden palankayı onaramıyoruz. Demir Ardıç bloklarına ihtiyacımız var. Elinde bulunursa bize biraz ödünç vermen mümkün mü? Şimdi paramız yok ama palanka köy için çok önemli. Ustam köylülerden para toplayıp paranı sonra ödeyecek.",
+          "npcText": "Greetings Healer. I am Fehim, Master Carpenter Dursun's apprentice. My master sent me. We can't repair the palanka due to a lack of materials. We need iron juniper blocks. If you have any, could you lend us some? We don't have money right now, but the palanka is vital for the village. My master will collect gold from the villagers and pay you later.",
           "day": 2,
           "choices": [
             {
-              "text": "Olur. Madem köy için çok önemli size biraz demir ardıç bloğu ödünç vereceğim, umarım ustan sözünde durur.",
+              "text": "Sure. Since it's vital for the village, I will lend you some iron juniper blocks, I hope your master keeps his word.",
               "nextNodeId": "node_fehim_6756",
               "reqPotion": "d_ironLeafBlock",
               "reqPotionCount": 1,
@@ -866,7 +866,7 @@
               "triggeredEventId": "event_gameChoice_fehimWelcomed"
             },
             {
-              "text": "Olmaz, herkese ödünç verirsem dükkan batar.",
+              "text": "No, if I lend to everyone, the shop will go bankrupt.",
               "nextNodeId": "node_fehim_4917",
               "triggeredNewsId": "news_palankaBroken",
               "triggeredEventId": "event_notBorrowIronLeafBlock"
@@ -875,39 +875,39 @@
         },
         {
           "id": "node_fehim_6756",
-          "npcText": "Umay Ana seni korusun şifacı.",
+          "npcText": "May Mother Umay protect you, healer.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 2,
           "choices": [
             {
-              "text": "Umay Ana kimdir?",
+              "text": "Who is Mother Umay?",
               "nextNodeId": "node_fehim_8942"
             }
           ]
         },
         {
           "id": "node_fehim_8942",
-          "npcText": "Topraklara bereket getiren yüce ana.",
+          "npcText": "The great mother who brings abundance to the lands.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 2,
           "choices": [
             {
-              "text": "Anladım.",
+              "text": "I see.",
               "nextNodeId": "node_fehim_2180"
             }
           ]
         },
         {
           "id": "node_fehim_4917",
-          "npcText": "Palanka olmadan sen de güvende olmayacaksın. Seni canavar kapsın.",
+          "npcText": "Without the palanka, you won't be safe either. May a monster take you.",
           "day": 2,
           "choices": [
             {
-              "text": "Sana da iyi günler!",
+              "text": "Good day to you too!",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -915,11 +915,11 @@
         },
         {
           "id": "node_fehim_2180",
-          "npcText": "Ustam köylülerden demir ardıç bloğunun parasını toplamayı başardı. Tamı tamına 74 altın.",
+          "npcText": "My master managed to collect the gold for the iron juniper block from the villagers. Exactly 74 gold.",
           "day": 3,
           "choices": [
             {
-              "text": "Teşekkürler. Ustana selam söyle.",
+              "text": "Thanks. Say hello to your master.",
               "nextNodeId": null,
               "rewardGold": 74,
               "isTreatmentChoice": false
@@ -930,28 +930,28 @@
     },
     {
       "id": "story_monsterSlayerCevat",
-      "characterName": "Canavar Avcısı Rivze'li Cevat",
+      "characterName": "Cevat of Rivze the Monster Slayer",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_monsterSlayerCevat_1",
-          "npcText": "Merhaba.",
+          "npcText": "Hello.",
           "day": 3,
           "choices": [
             {
-              "text": "Merhaba.",
+              "text": "Hello.",
               "nextNodeId": "node_monsterSlayerCevat_6699"
             }
           ]
         },
         {
           "id": "node_monsterSlayerCevat_6699",
-          "npcText": "Ben bir canavar avcısıyım, Rivze'li Cevat.",
+          "npcText": "I am a monster slayer, Cevat of Rivze.",
           "day": 3,
           "choices": [
             {
-              "text": "Peki",
+              "text": "Okay",
               "nextNodeId": "node_monsterSlayerCevat_1995",
               "isTreatmentChoice": false
             }
@@ -959,16 +959,16 @@
         },
         {
           "id": "node_monsterSlayerCevat_1995",
-          "npcText": "Dükkanında benim türümü istemeyebilirsin.",
+          "npcText": "You might not want my kind in your shop.",
           "day": 3,
           "choices": [
             {
-              "text": "Saçmalıyorsun. Canavar avcıları saygındır. İnsanları canavarlardan koruyorsunuz.",
+              "text": "You're talking nonsense. Monster slayers are respectable. You protect people from monsters.",
               "nextNodeId": "node_monsterSlayerCevat_2193",
               "triggeredEventId": "event_cevatWelcomed"
             },
             {
-              "text": "Saygın olmayan kişileri dükkanımda istemiyorum.",
+              "text": "I don't want disreputable people in my shop.",
               "nextNodeId": null,
               "triggeredNewsId": "news_cevatDead",
               "triggeredEventId": "event_cevatFired"
@@ -977,14 +977,14 @@
         },
         {
           "id": "node_monsterSlayerCevat_2193",
-          "npcText": "Hımm.",
+          "npcText": "Hmm.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 3,
           "choices": [
             {
-              "text": "Sana nasıl yardımcı olabilirim Cevat?",
+              "text": "How can I help you, Cevat?",
               "nextNodeId": "node_monsterSlayerCevat_6518",
               "isTreatmentChoice": false
             }
@@ -992,17 +992,17 @@
         },
         {
           "id": "node_monsterSlayerCevat_6518",
-          "npcText": "Tahsildar Kazım'dan bir kontrat aldım. Işıldaklar için canavar ağına ihtiyacım var, elinde var mı ya da bir tane hazırlayabilir misin? Demir ardıçtan yapılması gerekiyor. Karşılığını tamı tamına öderim.",
+          "npcText": "I took a contract from Tax Collector Kazim. I need a monster web for the ligtlings, do you have one or can you prepare one? It needs to be made of iron juniper. I'll pay for it in full.",
           "day": 3,
           "choices": [
             {
-              "text": "Maalesef.",
+              "text": "Unfortunately no.",
               "nextNodeId": null,
               "triggeredNewsId": "news_cevatDead",
               "triggeredEventId": "event_cevatFired"
             },
             {
-              "text": "Tabii, demir ardıç canavar ağı hazır, 90 altına senin olabilir. Işıldak nedir?",
+              "text": "Sure, the iron juniper monster web is ready, it can be yours for 90 gold. What is a ligtling?",
               "nextNodeId": "node_monsterSlayerCevat_6561",
               "reqPotion": "d_monsterTrapElixir",
               "reqPotionCount": 1,
@@ -1014,14 +1014,14 @@
         },
         {
           "id": "node_monsterSlayerCevat_6561",
-          "npcText": "Işıldaklar ışınlanabilen orman kedileridir. Bir köyde ortaya çıktıklarında köyün kümes hayvanlarını ve ufak kuzuları yerler. Yolun açık olsun şifacı.",
+          "npcText": "Ligtlings are forest cats that can teleport. When they appear in a village, they eat the village poultry and small lambs. Safe travels, healer.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 3,
           "choices": [
             {
-              "text": "Senin de Cevat, hoşçakal.",
+              "text": "You too, Cevat, goodbye.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1031,28 +1031,28 @@
     },
     {
       "id": "story_farmerKalender",
-      "characterName": "Çiftçi Kalender",
+      "characterName": "Kalender the Farmer",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_farmerKalender_1",
-          "npcText": "Burada canavar avcılarıyla ticaret yapılıyormuş. Sizin gibilerle işim olmaz ama ışıldaklar kolumu çizdi. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. ",
+          "npcText": "They say people trade with monster slayers here. I don't deal with your kind, but ligtlings scratched my arm. It doesn't look like a normal cut. I feel like I've swallowed poison.",
           "day": 4,
           "choices": [
             {
-              "text": "Tedavi et.",
+              "text": "Treat him.",
               "nextNodeId": null,
               "reqPotion": "d_magicalWoundSerum",
               "reqPotionCount": 1,
               "rewardGold": 52
             },
             {
-              "text": "Sana burada şifa yok, kesiği kendin tedavi et.",
+              "text": "There is no remedy for you here, treat the cut yourself.",
               "nextNodeId": null
             },
             {
-              "text": "Kiminle ticaret yapıyorsam yapıyorum sanane, ışıldaklar seni daha fazla tırmalamasın istiyorsan kes sesini. (Fazladan 20 altın talep ediyorsun)",
+              "text": "It's none of your business who I trade with, shut your mouth if you don't want the ligtlings to scratch you more. (You demand an extra 20 gold)",
               "nextNodeId": null,
               "reqPotion": "d_magicalWoundSerum",
               "reqPotionCount": 1,
@@ -1065,17 +1065,17 @@
     },
     {
       "id": "story_blacksmithRüstem",
-      "characterName": "Demirci Rüstem",
+      "characterName": "Rustem the Blacksmith",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_blacksmithRüstem_1",
-          "npcText": "Şifacı ayağım fena yandı, bana bir şifa hazırla.",
+          "npcText": "Healer, my foot is badly burned, prepare a remedy for me.",
           "day": 4,
           "choices": [
             {
-              "text": "Ayağın nasıl yandı?",
+              "text": "How did your foot get burned?",
               "nextNodeId": "node_blacksmithRüstem_3676",
               "isTreatmentChoice": false
             }
@@ -1083,12 +1083,12 @@
         },
         {
           "id": "node_blacksmithRüstem_3676",
-          "npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum. Ama paramız palanka tamiratlarına gidiyor ve ışıldaklar da köylünün tavuklarına saldırdı. Yani anlayacağın param yok. Sana eşimin kendi yetiştirdiği sarımsaklardan versem kabul eder misin?",
+          "npcText": "Ligtlings raided the blacksmith forge. While escaping from them, I stuck my foot into the forge hearth. But our money goes to palanka repairs and the ligtlings also attacked the villagers' chickens. So, as you understand, I have no money. Would you accept some garlic grown by my wife instead?",
           "diseaseId": "d_burn",
           "day": 4,
           "choices": [
             {
-              "text": "Yanık kremin hazır, peki sarımsakları kabul ediyorum.",
+              "text": "Your burn salve is ready, alright I accept the garlic.",
               "nextNodeId": null,
               "reqPotion": "d_burnElixir",
               "reqPotionCount": 1,
@@ -1096,7 +1096,7 @@
               "rewardPlantCount": 2
             },
             {
-              "text": "Olmaz, ben de kira ödüyorum ve burası bir hayır kurumu değil.",
+              "text": "No way, I pay rent too and this place is not a charity.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1106,17 +1106,17 @@
     },
     {
       "id": "story_zenal",
-      "characterName": "Köylü Zenal",
+      "characterName": "Zenal the Villager",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_zenal_1",
-          "npcText": "Kolay gelsin şifacı. Yemek yapacağım, baharat olarak kullanabileceğim bir şeylerin var mı?",
+          "npcText": "Easy days, healer. I'm going to cook, do you have anything I can use as a spice?",
           "day": 2,
           "choices": [
             {
-              "text": "Kekiğim var, yemeğine tat katar. 13 altına senindir.",
+              "text": "I have thyme, it adds flavor to your food. It's yours for 13 gold.",
               "nextNodeId": null,
               "reqPlant": "d_thyme",
               "reqPlantCount": 1,
@@ -1124,7 +1124,7 @@
               "isTreatmentChoice": false
             },
             {
-              "text": "Burası bir han değil. Ben de bir aşçı değilim.",
+              "text": "This is not an inn. And I am not a chef.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1134,24 +1134,24 @@
     },
     {
       "id": "story_crazyMan",
-      "characterName": "Köyün Delisi",
+      "characterName": "The Village Idiot",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_crazyMan_1",
-          "npcText": "Şifacı karnım çok aç. Karnımı doyurabilecek bir şeyin var mı?",
+          "npcText": "Healer, I am very hungry. Do you have anything to fill my stomach?",
           "day": 4,
           "choices": [
             {
-              "text": "Biraz bal verebilirim.",
+              "text": "I can give you some honey.",
               "nextNodeId": "node_crazyMan_4806",
               "reqPlant": "d_honey",
               "reqPlantCount": 1,
               "isTreatmentChoice": false
             },
             {
-              "text": "Burası bir han değil, bedava aş da vermiyorum.",
+              "text": "This is not an inn, and I don't give out free food.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1159,11 +1159,11 @@
         },
         {
           "id": "node_crazyMan_4806",
-          "npcText": "Umay Ana seni korusun. ",
+          "npcText": "May Mother Umay protect you.",
           "day": 4,
           "choices": [
             {
-              "text": "Seni de.",
+              "text": "You too.",
               "nextNodeId": "node_crazyMan_4204",
               "isTreatmentChoice": false
             }
@@ -1171,23 +1171,23 @@
         },
         {
           "id": "node_crazyMan_4204",
-          "npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 7'nin katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
+          "npcText": "Easy days, healer. I am actually very rich. But I can only spend my money in multiples of 7. How much gold do you want in return for the honey you gave the other day?",
           "day": 6,
           "choices": [
             {
-              "text": "7 Altın.",
+              "text": "7 Gold.",
               "nextNodeId": "node_crazyMan_6226",
               "reqPlant": "d_honey",
               "reqPlantCount": 1,
               "rewardGold": 14
             },
             {
-              "text": "14 Altın.",
+              "text": "14 Gold.",
               "nextNodeId": "node_crazyMan_9938",
               "rewardGold": 21
             },
             {
-              "text": "21 Altın.",
+              "text": "21 Gold.",
               "nextNodeId": "node_crazyMan_0841",
               "rewardGold": 7
             }
@@ -1195,11 +1195,11 @@
         },
         {
           "id": "node_crazyMan_6226",
-          "npcText": "Sana 14 Altın verdim.",
+          "npcText": "I gave you 14 Gold.",
           "day": 6,
           "choices": [
             {
-              "text": "Teşekkürler.",
+              "text": "Thank you.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1207,11 +1207,11 @@
         },
         {
           "id": "node_crazyMan_9938",
-          "npcText": "Sana 21 altın verdim.",
+          "npcText": "I gave you 21 gold.",
           "day": 6,
           "choices": [
             {
-              "text": "Teşekkürler.",
+              "text": "Thank you.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1219,11 +1219,11 @@
         },
         {
           "id": "node_crazyMan_0841",
-          "npcText": "Aç gözlülük etme, sana 7 altın verdim.",
+          "npcText": "Don't be greedy, I gave you 7 gold.",
           "day": 6,
           "choices": [
             {
-              "text": "Peki.",
+              "text": "Okay.",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1233,24 +1233,24 @@
     },
     {
       "id": "story_Borakran",
-      "characterName": "Eski Paralı Asker Borakran",
+      "characterName": "Borakran the Former Mercenary",
       "description": "",
       "avatarUrl": "👤",
       "nodes": [
         {
           "id": "node_Borakran_1",
-          "npcText": "(Dükkanın kapısı açıldı. Bir asker hemen dükkanın girişine yıkıldı. Sayıklıyor. Görünmez canavarlar görüyor. Nerede olduğunun bilincinde değil.)",
+          "npcText": "(The shop door opened. A soldier collapsed right at the entrance of the shop. He is delirious. He sees invisible monsters. He is not aware of where he is.)",
           "day": 6,
           "choices": [
             {
-              "text": "Parayı sorun etmeden yardım et. ",
+              "text": "Help him without worrying about the gold.",
               "nextNodeId": "node_Borakran_6494",
               "reqPotion": "d_possessElixir",
               "reqPotionCount": 1,
               "triggeredEventId": "event_BorakranWelcomed"
             },
             {
-              "text": "Para isteyebilmek için tedavi etmeden önce kendine gelmesini bekle.",
+              "text": "Wait for him to come to his senses before treating him so you can ask for gold.",
               "nextNodeId": "node_Borakran_1272",
               "triggeredNewsId": "news_BorakranDead",
               "triggeredEventId": "event_BorakranFired"
@@ -1260,14 +1260,14 @@
         },
         {
           "id": "node_Borakran_1272",
-          "npcText": "(Asker kendine geldi. Zorlanarak dışarı çıktı. Seninle konuşmadı.)",
+          "npcText": "(The soldier came to his senses. He went outside with difficulty. He didn't speak to you.)",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
           "day": 6,
           "choices": [
             {
-              "text": "\"Bekle yardım etseydim...\"",
+              "text": "\"Wait, what if I had helped...\"",
               "nextNodeId": null,
               "isTreatmentChoice": false
             }
@@ -1275,7 +1275,7 @@
         },
         {
           "id": "node_Borakran_6494",
-          "npcText": "Sağol şifacı. Ama sana verecek param yok. Olduğunda getireceğim, ben Borakran, sözüm sözdür.",
+          "npcText": "Thanks, healer. But I don't have any gold to give you. When I have it, I'll bring it, I am Borakran, my word is my bond.",
           "diseaseId": "",
           "dynamicSuccessNodeId": "",
           "dynamicFailNodeId": "",
@@ -1283,10 +1283,8 @@
           "requiredEventId": "event_gameChoice_fehimWelcomed",
           "choices": [
             {
-              "text": "Peki öyle olsun.",
+              "text": "Alright, so be it.",
               "nextNodeId": null,
-              "reqPotion": "d_possessElixir",
-              "reqPotionCount": 1,
               "triggeredEventId": "event_bestGameEnd"
             }
           ]
@@ -1301,16 +1299,16 @@
       "nodes": [
         {
           "id": "node_druidSeren_1",
-          "npcText": "Ben Seren. Çok fazla konuşmam. Arkadaşım Cevat senin yüzünden öldü. Köylüler ışıldaklardan kurtulamadı. Bana bir naiad nefesi iksiri ver. Karşılığını ödemeyeceğim. ",
+          "npcText": "I am Seren. I don't talk much. My friend Cevat died because of you. The villagers couldn't get rid of the ligtlings. Give me a naiad breath potion. I won't pay for it.",
           "day": 6,
           "choices": [
             {
-              "text": "Benim bir suçum yok, defol dükkanımdan.",
+              "text": "It's not my fault, get out of my shop.",
               "nextNodeId": null,
               "triggeredEventId": "event_SerenFired"
             },
             {
-              "text": "Üzgünüm.",
+              "text": "I'm sorry.",
               "nextNodeId": null,
               "reqPotion": "d_naiadBreath",
               "reqPotionCount": 1,
@@ -1323,20 +1321,6 @@
     }
   ],
   "marketPlants": [
-    {
-      "plantId": "d_ironJuniperShell",
-      "cost": 18,
-      "stock": 5,
-      "maxStock": 5,
-      "availableDay": 3
-    },
-    {
-      "plantId": "d_ironJuniperLeaf",
-      "cost": 16,
-      "stock": 5,
-      "maxStock": 5,
-      "availableDay": 3
-    },
     {
       "plantId": "d_willowShell",
       "cost": 4,
@@ -1434,6 +1418,20 @@
       "stock": 6,
       "maxStock": 6,
       "availableDay": 1
+    },
+    {
+      "plantId": "d_ironJuniperShell",
+      "cost": 18,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 1
+    },
+    {
+      "plantId": "d_ironJuniperLeaf",
+      "cost": 16,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 1
     }
   ],
   "marketRecipes": [
@@ -1518,43 +1516,43 @@
   "introPages": [
     {
       "id": "intro_welcome_1",
-      "title": "Sınır Söğüt Köyüne Hoş Geldin",
-      "text": "Hoş geldin şifacı. Uzun zamandır köyümüze bir şifacı bulunmadı. Köyün sınırında bir druid bulunur ama o bizle çok ilgilenmez. Sınır Söğüt eski bir palanka tahkimatı içinde ufak bir köydür. Çoğunlukla hayvancılıkla uğraşır ve tahıl yetiştiririz. ",
+      "title": "Welcome to Border Willow Village",
+      "text": "Welcome healer. No healer has been found in our village for a long time. There is a druid at the edge of the village, but they don't care much about us. Border Willow is a small village inside an old palanka fortification. We are mostly engaged in animal husbandry and grow grain.",
       "imageUrl": "assets/intro_1.png"
     },
     {
       "id": "intro_welcome_2",
-      "title": "Canavarlar",
-      "text": "Hayvan otlakları palanka dışında kaldığı için hayvanlarımızı otlatmaya çıkardığımızda çok sayıda canavar saldırır. Bu sebeple senin şifacı yeteneklerin ve iksirlerin bize merhem olacak.",
+      "title": "Monsters",
+      "text": "Since the animal pastures remain outside the palanka, numerous monsters attack when we take our animals out to graze. For this reason, your healer skills and potions will be a remedy for us.",
       "imageUrl": ""
     },
     {
       "id": "intro_welcome_3",
       "title": "Druid Seren",
-      "text": "Köyümüzün kıyısında ufak bir kulübede yaşayan Seren adında bir druid vardır. Köye hiç girmez ama eğer onu görürsen saygılı olmanda yarar var. ",
+      "text": "There is a druid named Seren who lives in a small cabin on the edge of our village. They never enter the village, but if you see them, it is useful to be respectful.",
       "imageUrl": ""
     },
     {
       "id": "intro_welcome_4",
-      "title": "Kulübe Kirası",
-      "text": "Her haftanın 7. günü 100 altınlık kulübe kirasını almak için biri gelecek. Parayı hazırlamayı ve kirayı ödemeyi unutma. ",
+      "title": "Cabin Rent",
+      "text": "Every 7th day of the week, someone will come to collect the cabin rent of 100 gold. Don't forget to prepare the gold and pay the rent.",
       "imageUrl": ""
     }
   ],
   "soundtracks": [
     {
       "id": "track_1",
-      "title": "Kadim Kulübe Melodisi",
+      "title": "Ancient Cabin Melody",
       "path": "Assets/tavernTrack.mp3"
     },
     {
       "id": "track_2",
-      "title": "Fısıldayan Gölgeler",
+      "title": "Whispering Shadows",
       "path": "Assets/forestTrack.mp3"
     },
     {
       "id": "track_3",
-      "title": "Simya Ateşi Sesi",
+      "title": "Alchemy Fire Soundtrack",
       "path": "Assets/alchemyTrack.mp3"
     }
   ],
@@ -1562,86 +1560,86 @@
     {
       "id": "news_druidSeen.",
       "day": 5,
-      "text": "Yıllardır köyde görülmeyen druid kulubesinden çıktı ve köy meydanında görüldü. "
+      "text": "The druid, who hadn't been seen in the village for years, left their cabin and was spotted in the village square."
     }
   ],
   "conditionalNews": [
     {
       "id": "news_palankaBroken",
       "day": 3,
-      "text": "Malzeme yetersizliğinden ötürü Marangoz Dursun ve Çırağı Fehim palankayı tamir edemedi. Palanka bir çok yerden çöktü. Köy canavarlara karşı korunmasız kaldı."
+      "text": "Due to a lack of materials, Carpenter Dursun and Apprentice Fehim could not repair the palanka. The palanka collapsed in several places. The village was left defenseless against monsters."
     },
     {
       "id": "news_ligtlingsAppeared",
       "day": 3,
-      "text": "Palanka Marangoz Dursun ve çırağı Fehim tarafından tamir edildi. Köyümüz büyük canavarlarndan korundu ama tamir sırasında ışıldaklar köye sızdı. Tavuklarımız ve ufak kuzularımıza saldırıyorlar."
+      "text": "The palanka was repaired by Carpenter Dursun and his apprentice Fehim. Our village was protected from large monsters, but ligtlings slipped into the village during the repairs. They are attacking our chickens and small lambs."
     },
     {
       "id": "news_cevatDead",
       "day": 4,
-      "text": "Ak saçlı canavar avcısı ölü bulundu."
+      "text": "The white-haired monster slayer was found dead."
     },
     {
       "id": "news_cevatContractSucceded",
       "day": 5,
-      "text": "Cevat köyün ışıldak problemini çözdü."
+      "text": "Cevat solved the village's ligtling problem."
     },
     {
       "id": "news_BorakranDead",
       "day": 7,
-      "text": "Köyümüzün eski gazisi Borakran öldü. Adına bir cenaze düzenlenecek."
+      "text": "Our village's old veteran Borakran died. A funeral will be held for him."
     }
   ],
   "events": [
     {
       "id": "event_notBorrowIronLeafBlock",
-      "text": "Marangoz'un çırağına ödünç demir ardıç blok verilmedi."
+      "text": "No iron juniper blocks were lent to the carpenter's apprentice."
     },
     {
       "id": "event_cevatFired",
-      "text": "Cevat şifacı dükkanından kovuldu."
+      "text": "Cevat was kicked out of the healer shop."
     },
     {
       "id": "event_cevatWelcomed",
-      "text": "Cevat saygı gördü."
+      "text": "Cevat was treated with respect."
     },
     {
       "id": "event_BorakranWelcomed",
-      "text": "Borakran'dan para istenmeden yardım edildi."
+      "text": "Borakran was helped without asking for gold."
     },
     {
       "id": "event_BorakranFired",
-      "text": "Borakran şifacı dükkanında tedavi edilmedi."
+      "text": "Borakran was not treated in the healer shop."
     },
     {
       "id": "event_kazimVillain",
-      "text": "Borakran ölünce Kazım köyün yeni zorbası haline geldi. Artık kimse karşısında duramıyor."
+      "text": "When Borakran died, Kazim became the new bully of the village. Now no one can stand against him."
     },
     {
       "id": "event_gameChoice_fehimWelcomed",
-      "text": "Marangozlara yardım edildi."
+      "text": "The carpenters were helped."
     },
     {
       "id": "event_bestGameEnd",
-      "text": "Borakran kurtarıldı ve palanka için para harcandı."
+      "text": "Borakran was saved and gold was spent on the palanka."
     },
     {
       "id": "event_SerenFired",
-      "text": "Seren dükkandan kovuld."
+      "text": "Seren was kicked out of the shop."
     }
   ],
   "gameEndSettings": {
     "pages": [
       {
         "id": "default_end",
-        "endText": "Demo burada bitiyor. Farklı bir son için yeni baştan oynayabilir ya da Sorcerum dünyasında geçen daha fazla oyun istersen steam sayfamıza göz atabilirsin.",
+        "endText": "The demo ends here. You can play again from scratch for a different ending, or check out our Steam page if you want more games set in the world of Sorcerum.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "assets/GameEndAd.png",
         "isDefault": true
       },
       {
         "id": "end_BorakranDead",
-        "endText": "Borakran'ın ölümü köyde büyük bir üzüntüyle karşılandı. Senin ona yardım etmediğin köylü tarafından biliniyor ve sana kötü gözle bakıyorlar. Borakran'ın ölümü tahsildar Kazım'ı köyün zorbası haline getirdi.\n\nDemo burada bitti, istersen yeniden oynayabilir ve başka bir son elde etmeye çalışabilirsin. Sorcerum evreninde geçen diğer oyunlarımızı görmek için aşağıdaki butona tıklayabilirsin. ",
+        "endText": "Borakran's death was met with great sadness in the village. The villagers know that you didn't help him and they look at you with spite. Borakran's death turned Tax Collector Kazim into the village bully.\n\nThe demo ends here, you can play again if you want and try to get another ending. You can click the button below to see our other games set in the Sorcerum universe.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "",
         "eventId": "event_BorakranFired",
@@ -1649,7 +1647,7 @@
       },
       {
         "id": "end_death",
-        "endText": "Seren kendisine saygısızlık ettiğin ve Cevat ölümüne sebep olduğu için seni bir kaktüse çevirdi. Farklı bir son için yeni baştan oynamayı deneyeyebilirsin. Sorcerum evreninde geçen diğer oyunları görmek için steam sayfamızı ziyaret edebilirsin.",
+        "endText": "Seren turned you into a cactus because you were disrespectful to them and caused Cevat's death. The demo ends here, you can play again if you want and try to get another ending.You can visit our Steam page to see other games set in the Sorcerum universe.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "",
         "eventId": "event_SerenFired",
@@ -1683,6 +1681,9 @@
       "ui.fill_bench": "Tezgahı Doldur (Envanterinden Seç):",
       "ui.diagnosis": "Teşhis",
       "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
+      "ui.customer_approaching" : "Bir müşteri yaklaşmakta...",
+      "ui.door_quiet" : "Kapı Sakin",
+      "ui.boiling" : "Kaynıyor...",
       "char.story_landlord": "Tahsildar Kazım",
       "char.story_landlord.desc": "",
       "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı",
@@ -1896,7 +1897,7 @@
       "choice.node_blacksmithRüstem_3676.1": "Olmaz, ben de kira ödüyorum ve burası bir hayır kurumu değil.",
       "char.story_Borakran.desc": "",
       "node.node_Borakran_6494.npcText": "Sağol şifacı. Ama sana verecek param yok. Olduğunda getireceğim, ben Borakran, sözüm sözdür.",
-      "choice.node_Borakran_6494.0": "Peki öyle olsun.",
+      "choice.node_Borakran_6494.0": "Alright, so be it.",
       "char.story_druidSeren": "Druid Seren",
       "node.node_druidSeren_1.npcText": "Ben Seren. Çok fazla konuşmam. Arkadaşım Cevat senin yüzünden öldü. Köylüler ışıldaklardan kurtulamadı. Bana bir naiad nefesi iksiri ver. Karşılığını ödemeyeceğim. ",
       "choice.node_druidSeren_1.0": "Benim bir suçum yok, defol dükkanımdan.",
@@ -1930,11 +1931,37 @@
       "ui.fill_bench": "Fill Desk (Select from Inventory):",
       "ui.diagnosis": "Diagnosis",
       "ui.market_title": "City Market",
+      "ui.customer_approaching" : "A Customer Approaching...",
+      "ui.door_quiet" : "Door Quiet",
+      "ui.boiling" : "Boiling...",
       "char.story_landlord": "Tax Collector Kazim",
       "char.story_landlord.desc": "The local lord's strict bailiff who extracts rent weekly without mercy.",
       "plant.p_demir_ardic.name": "Iron-Juniper Leaf",
       "plant.p_gumus_kok.name": "Silver Root",
+      "plant.p_isildak_otu.name": "Ligtling Herb",
+      "plant.p_sihirli_bugday.name": "Magical Wheat",
       "potion.pot_alkarisi_savar.name": "Alkarisi Ward Potion",
+      "potion.pot_arindirici.name": "Purifying Elixir",
+      "potion.pot_naiad_nefesi.name": "Naiad Breath Potion",
+      "symptom.Alkarısı Karabasanı": "Alkarisi Nightmare",
+      "symptom.Kirli Büyü Zehirlenmesi": "Foul Magic Poisoning",
+      "symptom.Bataklık Çürümesi": "Swamp Rot",
+      "symptom.Işıldak Çırmığı": "Ligtling Rash",
+      "symptom.Ateş": "Fever",
+      "symptom.Kanama": "Bleeding",
+      "symptom.Halsizlik": "Fatigue",
+      "symptom.Baş Dönmesi": "Dizziness",
+      "symptom.Titreme": "Shivering",
+      "symptom.Zehirlenme": "Poisoning",
+      "disease.d_alkarisi.name": "Alkarisi Haunting",
+      "disease.d_kirli_buyu.name": "Foul Magic Rot",
+      "disease.d_isildak_isirigi.name": "Ligtling Scratch",
+      "disease.d_bataklik_vebasi.name": "Swamp Rot",
+      "prop.Demir Özlü": "Iron-Infused",
+      "prop.Gümüşlü": "Silvered",
+      "prop.Sihirli": "Magical",
+      "prop.Tuzlu": "Saline",
+      "prop.Sakinleştirici": "Calming",
       "intro.title.intro_1": "Beginning of the Legacy",
       "intro.text.intro_1": "You open the door of the old, dusty cabin left by your grandfather. The scent of dried herbs and the faint steam rising from the cauldron take you back to your childhood. You are the last hope in this valley now.",
       "intro.title.intro_2": "Whispers of the Wildwood",
@@ -1953,29 +1980,181 @@
       "ui.news_id": "News ID",
       "ui.news_text": "News Text",
       "ui.news_day": "Display Day",
-      "symptom.Kötü Kokulu Nefes": "Kötü Kokulu Nefes",
-      "symptom.Ağrı": "Ağrı",
-      "symptom.Öksürük": "Öksürük",
-      "symptom.Körlük": "Körlük",
-      "symptom.Uykusuzluk": "Uykusuzluk",
-      "symptom.Halüsinasyon": "Halüsinasyon",
-      "symptom.İmkansız Aşk": "İmkansız Aşk",
-      "symptom.Yemek Yiyememe": "Yemek Yiyememe",
-      "symptom.Sivilce": "Sivilce",
-      "symptom.Bulantı": "Bulantı",
-      "prop.Halisünasyon Giderici": "Halisünasyon Giderici",
-      "prop.Uykusuzluk Şifası": "Uykusuzluk Şifası",
-      "prop.Halisünasyon Şifası": "Halisünasyon Şifası",
-      "prop.Ateş Düşürücü": "Ateş Düşürücü",
-      "prop.Canlandırıcı": "Canlandırıcı",
-      "prop.Körlüğe Deva": "Körlüğe Deva",
-      "prop.Ferah Nefes": "Ferah Nefes",
-      "prop.Bulantı Şifası": "Bulantı Şifası",
-      "prop.Kan Durdurucu": "Kan Durdurucu",
-      "prop.Ağrı Kesici": "Ağrı Kesici",
-      "prop.Öksürük Sökücü": "Öksürük Sökücü",
-      "prop.Denge Şifası": "Denge Şifası",
-      "prop.Zehir Sökücü": "Zehir Sökücü"
+      "intro.title.intro_welcome_1": "Welcome to Border Willow Village",
+      "intro.text.intro_welcome_1": "Welcome healer. No healer has been found in our village for a long time. There is a druid at the edge of the village, but they don't care much about us. Border Willow is a small village inside an old palanka fortification. We are mostly engaged in animal husbandry and grow grain.",
+      "intro.title.intro_welcome_2": "Monsters",
+      "intro.text.intro_welcome_2": "Since the animal pastures remain outside the palanka, numerous monsters attack when we take our animals out to graze. For this reason, your healer skills and potions will be a remedy for us.",
+      "intro.title.intro_welcome_3": "Druid Seren",
+      "intro.text.intro_welcome_3": "There is a druid named Seren who lives in a small cabin on the edge of our village. They never enter the village, but if you see them, it is useful to be respectful.",
+      "intro.title.intro_welcome_4": "Cabin Rent",
+      "intro.text.intro_welcome_4": "Every 7th day of the week, someone will come to collect the cabin rent of 100 gold. Don't forget to prepare the gold and pay the rent.",
+      "symptom.Kötü Kokulu Nefes": "Foul Breath",
+      "symptom.Ağrı": "Pain",
+      "symptom.Öksürük": "Cough",
+      "symptom.Körlük": "Blindness",
+      "symptom.Uykusuzluk": "Insomnia",
+      "symptom.Halüsinasyon": "Hallucination",
+      "symptom.İmkansız Aşk": "Impossible Love",
+      "symptom.Yemek Yiyememe": "Inability to Eat",
+      "symptom.Sivilce": "Acne",
+      "symptom.Bulantı": "Nausea",
+      "disease.d_badBreath.name": "Bad Breath",
+      "disease.d_starve.name": "Hunger",
+      "disease.d_freezing.name": "Chills",
+      "disease.d_wound.name": "Cut",
+      "disease.d_flu.name": "Cold",
+      "disease.d_magicalWound.name": "Ligtling Cut",
+      "disease.d_magicalFlu.name": "Naiad Cold",
+      "disease.d_magicalPossess.name": "Al Karisi Haunting",
+      "disease.d_blindFog.name": "Fog Blindness",
+      "disease.d_acne.name": "Blister",
+      "disease.d_burn.name": "Burn",
+      "prop.Halisünasyon Giderici": "Hallucination Reliever",
+      "prop.Uykusuzluk Şifası": "Insomnia Cure",
+      "prop.Halisünasyon Şifası": "Hallucination Cure",
+      "prop.Ateş Düşürücü": "Fever Reducer",
+      "prop.Canlandırıcı": "Invigorator",
+      "prop.Körlüğe Deva": "Blindness Remedy",
+      "prop.Ferah Nefes": "Fresh Breath",
+      "prop.Bulantı Şifası": "Nausea Cure",
+      "prop.Kan Durdurucu": "Blood Stopper",
+      "prop.Ağrı Kesici": "Painkiller",
+      "prop.Öksürük Sökücü": "Cough Reliever",
+      "prop.Denge Şifası": "Balance Cure",
+      "plant.d_ironJuniperLeaf.name": "Iron Juniper Leaf",
+      "plant.d_ironJuniperShell.name": "Iron Juniper Bark",
+      "plant.d_willowShell.name": "Willow Bark",
+      "plant.d_honey.name": "Honey",
+      "plant.d_rosehit.name": "Rosehip",
+      "plant.d_blackberry.name": "Blackberry",
+      "plant.d_riverAlgea.name": "River Moss",
+      "plant.d_mint.name": "Mint",
+      "plant.d_yarrow.name": "Yarrow",
+      "plant.d_nettle.name": "Nettle",
+      "plant.d_calendula.name": "Calendula",
+      "plant.d_thyme.name": "Thyme",
+      "plant.d_sage.name": "Sage",
+      "plant.d_hotWater.name": "Hot Water",
+      "prop.Zehir Sökücü": "Antidote",
+      "plant.d_carlic.name": "Garlic",
+      "disease.d_monsterTrap.name": "Monster Trap Web",
+      "potion.d_monsterTrapElixir.name": "Monster Web",
+      "potion.d_freezingElixir.name": "Winter Tea",
+      "plant.d_honeyWax.name": "Beeswax",
+      "potion.d_woundSerum.name": "Cut Salve",
+      "potion.d_FluElixir.name": "Cold Relief Syrup",
+      "potion.d_magicalWoundSerum.name": "Magical Cut Cream",
+      "potion.d_naiadBreath.name": "Naiad Breath",
+      "potion.d_possessElixir.name": "Dark Magic Banishing Potion",
+      "potion.d_seeingElixir.name": "Eye Potion",
+      "potion.d_acneElixir.name": "Blister Popping Potion",
+      "potion.d_burnElixir.name": "Burn Salve",
+      "char.story_d_shepherdNarin": "Narin the Shepherd Girl",
+      "node.node_d_shepherdNarin_1.npcText": "Hello, I am Narin. I herd the village sheep. Congratulations on your new shop.",
+      "choice.node_d_shepherdNarin_1.0": "Okay. I don't remember names well.",
+      "choice.node_d_shepherdNarin_1.1": "Hello, I'm glad to meet you, Narin. How are you?",
+      "node.node_d_shepherdNarin_2300.npcText": "A lamb was born today. I carried the little one on my back to the house so it wouldn't freeze. I caught a bit of a chill. Do you have a drink that would be good for me?",
+      "choice.node_d_shepherdNarin_2300.0": "Sure, let me brew you a nice winter tea, the price is 18 gold.",
+      "choice.node_d_shepherdNarin_2300.1": "Since a lamb was born today and you carried it on your back, you've earned a winter tea. Besides, you are my first customer.",
+      "choice.node_d_shepherdNarin_2300.2": "I don't have such a drink on hand.",
+      "node.node_d_shepherdNarin_8642.npcText": "I really liked the winter tea from the other day. I gathered some willow bark for you while herding the sheep.",
+      "choice.node_d_shepherdNarin_8642.0": "Thank you.",
+      "char.story_d_carpenterDursun": "Master Carpenter Dursun",
+      "node.node_d_carpenterDursun_1.npcText": "Greetings. I am Dursun, the village carpenter. Two days of my week are spent repairing the palanka. It's an old palanka; you repair one side, and another side collapses.",
+      "choice.node_d_carpenterDursun_1.0": "What is a palanka, master?",
+      "choice.node_d_carpenterDursun_1.1": "How can I help you, master?",
+      "node.node_d_carpenterDursun_1056.npcText": "I cut my hand while repairing the palanka, do you have any cut salve or something to stop the bleeding?",
+      "choice.node_d_carpenterDursun_1056.0": "I have cut salve, master, it is 19 gold.",
+      "node.node_d_carpenterDursun_5531.npcText": "A palanka is the wooden fortification surrounding the village. A village wall of sorts. It's made of a magical wood called iron juniper. But it's very old, built in my grandfather's grandfather's time, so now it's falling apart. And I cut my hand while repairing it. Do you have any cut salve?",
+      "choice.node_d_carpenterDursun_5531.0": "I have cut salve, master, the price is 19 gold.",
+      "char.story_d_shepherdNarin.desc": "",
+      "choice.node_d_carpenterDursun_5531.1": "Unfortunately, I don't have cut cream, master.",
+      "choice.node_d_carpenterDursun_1056.1": "Unfortunately, I don't have cut cream, master.",
+      "char.story_fehim": "Fehim the Carpenter's Apprentice",
+      "node.node_fehim_1.npcText": "Greetings Healer. I am Fehim, Master Carpenter Dursun's apprentice. My master sent me. We can't repair the palanka due to a lack of materials. We need iron juniper blocks. If you have any, could you lend us some? We don't have money right now, but the palanka is vital for the village. My master will collect gold from the villagers and pay you later.",
+      "choice.node_fehim_1.0": "Sure. Since it's vital for the village, I will lend you some iron juniper blocks, I hope your master keeps his word.",
+      "choice.node_fehim_1.1": "No, if I lend to everyone, the shop will go bankrupt.",
+      "node.node_fehim_6756.npcText": "May Mother Umay protect you, healer.",
+      "choice.node_fehim_6756.0": "Who is Mother Umay?",
+      "node.node_fehim_8942.npcText": "The great mother who brings abundance to the lands.",
+      "node.node_fehim_4917.npcText": "Without the palanka, you won't be safe either. May a monster take you.",
+      "node.node_d_shepherdNarin_9582.npcText": "Because of you, the village palankas collapsed. You are greedy, may a monster take you.",
+      "char.story_monsterSlayerCevat": "Cevat of Rivze the Monster Slayer",
+      "node.node_monsterSlayerCevat_1.npcText": "Hello.",
+      "choice.node_monsterSlayerCevat_1.0": "Hello.",
+      "node.node_monsterSlayerCevat_6699.npcText": "I am a monster slayer, Cevat of Rivze.",
+      "choice.node_monsterSlayerCevat_6699.0": "Okay",
+      "node.node_monsterSlayerCevat_1995.npcText": "You might not want my kind in your shop.",
+      "choice.node_monsterSlayerCevat_1995.0": "You're talking nonsense. Monster slayers are respectable. You protect people from monsters.",
+      "choice.node_monsterSlayerCevat_1995.1": "I don't want disreputable people in my shop.",
+      "node.node_monsterSlayerCevat_2193.npcText": "Hmm.",
+      "char.story_monsterSlayerCevat.desc": "",
+      "choice.node_monsterSlayerCevat_2193.0": "How can I help you, Cevat?",
+      "node.node_monsterSlayerCevat_6518.npcText": "I took a contract from Tax Collector Kazim. I need a monster web for the ligtlings, do you have one or can you prepare one? It needs to be made of iron juniper. I'll pay for it in full.",
+      "choice.node_monsterSlayerCevat_6518.0": "Unfortunately no.",
+      "choice.node_monsterSlayerCevat_6518.1": "Sure, the iron juniper monster web is ready, it can be yours for 90 gold. What is a ligtling?",
+      "node.node_monsterSlayerCevat_6561.npcText": "Ligtlings are forest cats that can teleport. When they appear in a village, they eat the village poultry and small lambs. Safe travels, healer.",
+      "choice.node_monsterSlayerCevat_6561.0": "You too, Cevat, goodbye.",
+      "choice.node_fehim_4917.0": "Good day to you too!",
+      "choice.node_d_shepherdNarin_9582.0": "Go tend to your sheep.",
+      "choice.node_d_shepherdNarin_9582.1": "I didn't do anything.",
+      "choice.node_fehim_8942.0": "I see.",
+      "char.story_farmerKalender": "Kalender the Farmer",
+      "node.node_farmerKalender_1.npcText": "They say people trade with monster slayers here. I don't deal with your kind, but ligtlings scratched my arm. It doesn't look like a normal cut. I feel like I've swallowed poison.",
+      "choice.node_farmerKalender_1.0": "Treat him.",
+      "choice.node_farmerKalender_1.1": "There is no remedy for you here, treat the cut yourself.",
+      "char.story_blacksmithRüstem": "Rustem the Blacksmith",
+      "node.node_blacksmithRüstem_1.npcText": "Healer, my foot is badly burned, prepare a remedy for me.",
+      "choice.node_blacksmithRüstem_1.0": "How did your foot get burned?",
+      "node.node_blacksmithRüstem_3676.npcText": "Ligtlings raided the blacksmith forge. While escaping from them, I stuck my foot into the forge hearth. But our money goes to palanka repairs and the ligtlings also attacked the villagers' chickens. So, as you understand, I have no money. Would you accept some garlic grown by my wife instead?",
+      "choice.node_blacksmithRüstem_3676.0": "Your burn salve is ready, alright I accept the garlic.",
+      "char.story_zenal": "Zenal the Villager",
+      "node.node_zenal_1.npcText": "Easy days, healer. I'm going to cook, do you have anything I can use as a spice?",
+      "choice.node_zenal_1.0": "I have thyme, it adds flavor to your food. It's yours for 13 gold.",
+      "choice.node_zenal_1.1": "This is not an inn. And I am not a chef.",
+      "char.story_crazyMan": "The Village Idiot",
+      "node.node_crazyMan_1.npcText": "Healer, I am very hungry. Do you have anything to fill my stomach?",
+      "choice.node_crazyMan_1.0": "I can give you some honey.",
+      "choice.node_crazyMan_1.1": "This is not an inn, and I don't give out free food.",
+      "node.node_crazyMan_4806.npcText": "May Mother Umay protect you.",
+      "choice.node_crazyMan_4806.0": "You too.",
+      "node.node_crazyMan_4204.npcText": "Easy days, healer. I am actually very rich. But I can only spend my money in multiples of 7. How much gold do you want in return for the honey you gave the other day?",
+      "choice.node_crazyMan_4204.0": "7 Gold.",
+      "choice.node_crazyMan_4204.1": "14 Gold.",
+      "choice.node_crazyMan_4204.2": "21 Gold.",
+      "node.node_crazyMan_6226.npcText": "I gave you 14 Gold.",
+      "choice.node_crazyMan_6226.0": "Thank you.",
+      "node.node_crazyMan_9938.npcText": "I gave you 21 gold.",
+      "choice.node_crazyMan_9938.0": "Thank you.",
+      "node.node_crazyMan_0841.npcText": "Don't be greedy, I gave you 7 gold.",
+      "choice.node_crazyMan_0841.0": "Okay.",
+      "potion.d_ironLeafBlock.name": "Iron Juniper Block",
+      "node.node_fehim_2180.npcText": "My master managed to collect the gold for the iron juniper block from the villagers. Exactly 74 gold.",
+      "choice.node_fehim_2180.0": "Thanks. Say hello to your master.",
+      "choice.node_landlord_thanks.0": "...",
+      "node.node_landlord_demand.npcText": "Greetings healer! I am the tax collector of the village lord. I've come to collect the rent for the shop inside the palanka. From what I see, you've made good money. We agreed on 100 gold, but since you earned a lot, I want 120 gold from you.",
+      "choice.node_landlord_demand.0": "Accept to pay 120 gold.",
+      "choice.node_landlord_demand.1": "We agreed on 100, take the 100 gold and get out.",
+      "node.node_landlord_angry.npcText": "The only person around here who could look into my eyes was Borakran. And he just died. Now I can do whatever I want around here. Now you will give me the extra 20 gold I want.",
+      "choice.node_landlord_angry.0": "...",
+      "char.story_Borakran": "Borakran the Former Mercenary",
+      "node.node_Borakran_1.npcText": "(The shop door opened. A soldier collapsed right at the entrance of the shop. He is delirious. He sees invisible monsters. He is not aware of where he is.)",
+      "choice.node_Borakran_1.0": "Help him without worrying about the gold.",
+      "choice.node_Borakran_1.1": "Wait for him to come to his senses before treating him so you can ask for gold.",
+      "node.node_Borakran_1272.npcText": "(The soldier came to his senses. He went outside with difficulty. He didn't speak to you.)",
+      "choice.node_Borakran_1272.0": "\"Wait, what if I had helped...\"",
+      "choice.node_farmerKalender_1.2": "It's none of your business who I trade with, shut your mouth if you don't want the ligtlings to scratch you more. (You demand an extra 20 gold)",
+      "choice.node_blacksmithRüstem_3676.1": "No way, I pay rent too and this place is not a charity.",
+      "char.story_Borakran.desc": "",
+      "node.node_Borakran_6494.npcText": "Thanks, healer. But I don't have any gold to give you. When I have it, I'll bring it, I am Borakran, my word is my bond.",
+      "choice.node_Borakran_6494.0": "Alright, so be it.",
+      "char.story_druidSeren": "Druid Seren",
+      "node.node_druidSeren_1.npcText": "I am Seren. I don't talk much. My friend Cevat died because of you. The villagers couldn't get rid of the ligtlings. Give me a naiad breath potion. I won't pay for it.",
+      "choice.node_druidSeren_1.0": "It's not my fault, get out of my shop.",
+      "choice.node_druidSeren_1.1": "I'm sorry.",
+      "choice.node_landlord_demand.2": "I don't have enough gold.",
+      "choice.node_landlord_angry.1": "I don't have enough gold.",
+      "char.story_farmerKalender.desc": ""
     }
   },
   "initialPlayerState": {

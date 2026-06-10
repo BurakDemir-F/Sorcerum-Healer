@@ -662,9 +662,9 @@ export function useAlchemyGame() {
             const pot = gameData.potions.find(p => p.ingredients.length === Object.keys(counts).length && p.ingredients.every(ing => counts[`${ing.type}_${ing.id}`] === ing.count));
             if (pot) {
                 setPlayerState(p => ({ ...p, inventory: { ...p.inventory, potions: { ...p.inventory.potions, [pot.id]: (p.inventory.potions[pot.id] || 0) + 1 } } }));
-                setBrewState({ status: 'success', message: `Mükemmel! ${pot.name} hazır.` });
+                setBrewState({ status: 'success', message: `Perfect! ${pot.name} is ready.` });
             } else {
-                setBrewState({ status: 'fail', message: 'Hata! Karışım ziyan oldu.' });
+                setBrewState({ status: 'fail', message: 'Unknown potion, ingredients were wasted.' });
             }
             setCauldron([]);
         }, 1500);
@@ -681,7 +681,7 @@ export function useAlchemyGame() {
         if (playerState.knownPotions.includes(potionId)) return;
         setPlayerState(p => ({ ...p, gold: p.gold - cost, knownPotions: [...p.knownPotions, potionId] }));
         setGameData(d => d ? { ...d, marketRecipes: (d.marketRecipes || []).map(mr => mr.potionId === potionId ? { ...mr, stock: mr.stock - 1 } : mr) } : d);
-        addLog(`🛒 ${t(`potion.${potionId}.name`)} satın alındı.`);
+        addLog(`🛒 ${t(`potion.${potionId}.name`)} recipe purchased.`);
     };
 
     const handlers: GameHandlers = { handleEndDay, handleCallCustomer, handleCustomerChoice, handleAddToTreatmentBench, handleRemoveFromTreatmentBench, handleApplyTreatment, handleAddToCauldron, handleRemoveFromCauldron, handleBrew, handleBuyPlant, handleBuyRecipe };
