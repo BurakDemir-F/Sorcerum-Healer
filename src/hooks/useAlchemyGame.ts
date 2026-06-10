@@ -561,8 +561,23 @@ export function useAlchemyGame() {
             const calculatedAvailableDay = Math.max(gameState.day + (choice.delayDays || 0), nextNodeDay);
             updProgress[storyId] = { currentNodeId: choice.nextNodeId, availableDay: calculatedAvailableDay };
 
-            const shouldDismissCustomer = (choice.delayDays || 0) > 0 || nextNodeDay > gameState.day;
-            setGameState(prev => ({ 
+            let shouldDismissCustomer = (choice.delayDays || 0) > 0 || nextNodeDay > gameState.day;
+
+
+            //todo::check here...
+            if(nextNode){
+                const reqEvent = nextNode.requiredEventId;
+
+                if(reqEvent){
+                    var foundEvent = gameState.triggeredEvents.find(event => event == reqEvent);
+
+                    if(!foundEvent){
+                        shouldDismissCustomer = true;
+                    }
+                }
+            }
+
+            setGameState(prev => ({
                 ...prev, 
                 storyProgress: updProgress, 
                 currentCustomer: shouldDismissCustomer ? null : { storyId, nodeId: choice.nextNodeId as string }, 

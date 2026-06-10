@@ -155,7 +155,7 @@ export default function App(): React.JSX.Element {
                 <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-[60] flex items-center justify-center font-parchment text-[#f3e8d2] p-4">
                     <div className="bg-[#1c0f13] border-8 border-amber-900 rounded-[3rem] p-10 max-w-2xl w-full shadow-[0_0_50px_rgba(120,50,20,0.5)] text-center space-y-8 animate-idle-float border-double">
                         <div className="space-y-2">
-                            <h2 className="text-5xl font-magic text-amber-500 tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">OYUN BİTTİ</h2>
+                            <h2 className="text-5xl font-magic text-amber-500 tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">GAME END</h2>
                             <div className="h-1 w-48 bg-gradient-to-r from-transparent via-amber-700 to-transparent mx-auto"></div>
                         </div>
                         

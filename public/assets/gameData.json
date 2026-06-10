@@ -634,7 +634,7 @@
       "id": "story_landlord",
       "characterName": "Tax Collector Kazim",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/kazim.png",
       "nodes": [
         {
           "id": "node_landlord_demand",
@@ -655,7 +655,7 @@
             {
               "text": "I don't have enough gold.",
               "nextNodeId": null,
-              "isTreatmentChoice": false
+              "triggeredEventId": "event_rentNotPaid"
             }
           ]
         },
@@ -696,7 +696,7 @@
       "id": "story_d_shepherdNarin",
       "characterName": "Narin the Shepherd Girl",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/narin.png",
       "nodes": [
         {
           "id": "node_d_shepherdNarin_1",
@@ -731,7 +731,7 @@
               "triggeredNewsId": "test"
             },
             {
-              "text": "Since a lamb was born today and you carried it on your back, you've earned a winter tea. Besides, you are my first customer.",
+              "text": "Since a lamb was born today and you carried it on your back, you've earned a winter tea.",
               "nextNodeId": "node_d_shepherdNarin_8642",
               "reqPotion": "d_freezingElixir",
               "reqPotionCount": 1
@@ -785,7 +785,7 @@
       "id": "story_d_carpenterDursun",
       "characterName": "Master Carpenter Dursun",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/dursun.png",
       "nodes": [
         {
           "id": "node_d_carpenterDursun_1",
@@ -850,7 +850,7 @@
       "id": "story_fehim",
       "characterName": "Fehim the Carpenter's Apprentice",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/fehim.png",
       "nodes": [
         {
           "id": "node_fehim_1",
@@ -932,7 +932,7 @@
       "id": "story_monsterSlayerCevat",
       "characterName": "Cevat of Rivze the Monster Slayer",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/cevat.png",
       "nodes": [
         {
           "id": "node_monsterSlayerCevat_1",
@@ -1002,7 +1002,7 @@
               "triggeredEventId": "event_cevatFired"
             },
             {
-              "text": "Sure, the iron juniper monster web is ready, it can be yours for 90 gold. What is a ligtling?",
+              "text": "Sure, the iron juniper monster web is ready, you can have it for 90 gold. What is a ligtling?",
               "nextNodeId": "node_monsterSlayerCevat_6561",
               "reqPotion": "d_monsterTrapElixir",
               "reqPotionCount": 1,
@@ -1033,7 +1033,7 @@
       "id": "story_farmerKalender",
       "characterName": "Kalender the Farmer",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/kalender.png",
       "nodes": [
         {
           "id": "node_farmerKalender_1",
@@ -1067,7 +1067,7 @@
       "id": "story_blacksmithRüstem",
       "characterName": "Rustem the Blacksmith",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/rüstem.png",
       "nodes": [
         {
           "id": "node_blacksmithRüstem_1",
@@ -1108,7 +1108,7 @@
       "id": "story_zenal",
       "characterName": "Zenal the Villager",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/Zenal.png",
       "nodes": [
         {
           "id": "node_zenal_1",
@@ -1136,7 +1136,7 @@
       "id": "story_crazyMan",
       "characterName": "The Village Idiot",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/oldCrazyVillager.png",
       "nodes": [
         {
           "id": "node_crazyMan_1",
@@ -1235,7 +1235,7 @@
       "id": "story_Borakran",
       "characterName": "Borakran the Former Mercenary",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/borakran.png",
       "nodes": [
         {
           "id": "node_Borakran_1",
@@ -1295,11 +1295,11 @@
       "id": "story_druidSeren",
       "characterName": "Druid Seren",
       "description": "",
-      "avatarUrl": "👤",
+      "avatarUrl": "assets/seren.png",
       "nodes": [
         {
           "id": "node_druidSeren_1",
-          "npcText": "I am Seren. I don't talk much. My friend Cevat died because of you. The villagers couldn't get rid of the ligtlings. Give me a naiad breath potion. I won't pay for it.",
+          "npcText": "I am Seren. I don't talk much. My friend Cevat died because of you. He was a monster slayer, he'd seen dragons and cursed creatures... But because of you, he became food for those filthy cats that that can teleport! Give me a naiad breath potion. I won't pay for it.",
           "day": 6,
           "choices": [
             {
@@ -1321,13 +1321,6 @@
     }
   ],
   "marketPlants": [
-    {
-      "plantId": "d_willowShell",
-      "cost": 4,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
     {
       "plantId": "d_honey",
       "cost": 7,
@@ -1357,45 +1350,10 @@
       "availableDay": 2
     },
     {
-      "plantId": "d_mint",
-      "cost": 4,
-      "stock": 4,
-      "maxStock": 4,
-      "availableDay": 1
-    },
-    {
       "plantId": "d_yarrow",
       "cost": 9,
       "stock": 4,
       "maxStock": 4,
-      "availableDay": 1
-    },
-    {
-      "plantId": "d_nettle",
-      "cost": 6,
-      "stock": 4,
-      "maxStock": 4,
-      "availableDay": 1
-    },
-    {
-      "plantId": "d_calendula",
-      "cost": 9,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "plantId": "d_thyme",
-      "cost": 8,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "plantId": "d_sage",
-      "cost": 9,
-      "stock": 1,
-      "maxStock": 1,
       "availableDay": 1
     },
     {
@@ -1406,13 +1364,6 @@
       "availableDay": 1
     },
     {
-      "plantId": "d_carlic",
-      "cost": 7,
-      "stock": 4,
-      "maxStock": 4,
-      "availableDay": 1
-    },
-    {
       "plantId": "d_honeyWax",
       "cost": 5,
       "stock": 6,
@@ -1420,97 +1371,146 @@
       "availableDay": 1
     },
     {
+      "plantId": "d_willowShell",
+      "cost": 4,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_mint",
+      "cost": 4,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_nettle",
+      "cost": 6,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_calendula",
+      "cost": 9,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_thyme",
+      "cost": 8,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_sage",
+      "cost": 9,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
+      "plantId": "d_carlic",
+      "cost": 7,
+      "stock": 5,
+      "maxStock": 5,
+      "availableDay": 2
+    },
+    {
       "plantId": "d_ironJuniperShell",
       "cost": 18,
       "stock": 5,
       "maxStock": 5,
-      "availableDay": 1
+      "availableDay": 2
     },
     {
       "plantId": "d_ironJuniperLeaf",
       "cost": 16,
       "stock": 5,
       "maxStock": 5,
-      "availableDay": 1
+      "availableDay": 2
     }
   ],
   "marketRecipes": [
     {
-      "potionId": "d_monsterTrapElixir",
-      "cost": 90,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
       "potionId": "d_freezingElixir",
-      "cost": 18,
+      "cost": 4,
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
     },
     {
       "potionId": "d_woundSerum",
-      "cost": 19,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "potionId": "d_FluElixir",
-      "cost": 19,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "potionId": "d_magicalWoundSerum",
-      "cost": 52,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "potionId": "d_naiadBreath",
-      "cost": 62,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "potionId": "d_possessElixir",
-      "cost": 64,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "potionId": "d_seeingElixir",
-      "cost": 55,
-      "stock": 1,
-      "maxStock": 1,
-      "availableDay": 1
-    },
-    {
-      "potionId": "d_acneElixir",
-      "cost": 26,
+      "cost": 4,
       "stock": 1,
       "maxStock": 1,
       "availableDay": 1
     },
     {
       "potionId": "d_burnElixir",
-      "cost": 25,
+      "cost": 4,
       "stock": 1,
       "maxStock": 1,
-      "availableDay": 1
+      "availableDay": 2
     },
     {
       "potionId": "d_ironLeafBlock",
-      "cost": 28,
+      "cost": 19,
       "stock": 1,
       "maxStock": 1,
-      "availableDay": 1
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_naiadBreath",
+      "cost": 19,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_acneElixir",
+      "cost": 4,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_seeingElixir",
+      "cost": 17,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_possessElixir",
+      "cost": 19,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_magicalWoundSerum",
+      "cost": 18,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_FluElixir",
+      "cost": 4,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
+    },
+    {
+      "potionId": "d_monsterTrapElixir",
+      "cost": 19,
+      "stock": 1,
+      "maxStock": 1,
+      "availableDay": 2
     }
   ],
   "introPages": [
@@ -1626,13 +1626,17 @@
     {
       "id": "event_SerenFired",
       "text": "Seren was kicked out of the shop."
+    },
+    {
+      "id": "event_rentNotPaid",
+      "text": "Kira ödenemedi."
     }
   ],
   "gameEndSettings": {
     "pages": [
       {
         "id": "default_end",
-        "endText": "The demo ends here. You can play again from scratch for a different ending, or check out our Steam page if you want more games set in the world of Sorcerum.",
+        "endText": "The demo ends here. You can play again for a different ending, or check out our Steam page if you want more games set in the world of Sorcerum.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "assets/GameEndAd.png",
         "isDefault": true
@@ -1651,6 +1655,14 @@
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "",
         "eventId": "event_SerenFired",
+        "isDefault": false
+      },
+      {
+        "id": "end_rentNotPaid",
+        "endText": "You couldn't pay the rent, so you were evicted. The demo ends here. You can play again for a different ending, or check out our Steam page if you want more games set in the world of Sorcerum.",
+        "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
+        "adImagePath": "",
+        "eventId": "event_rentNotPaid",
         "isDefault": false
       }
     ]
@@ -1681,10 +1693,10 @@
       "ui.fill_bench": "Tezgahı Doldur (Envanterinden Seç):",
       "ui.diagnosis": "Teşhis",
       "ui.market_title": "Şehir Pazarı (Tahsildar Kazım)",
-      "ui.customer_approaching" : "Bir müşteri yaklaşmakta...",
-      "ui.door_quiet" : "Kapı Sakin",
-      "ui.boiling" : "Kaynıyor...",
-      "char.story_landlord": "Tahsildar Kazım",
+      "ui.customer_approaching": "Bir müşteri yaklaşmakta...",
+      "ui.door_quiet": "Kapı Sakin",
+      "ui.boiling": "Kaynıyor...",
+      "char.story_landlord": "Tax Collector Kazim",
       "char.story_landlord.desc": "",
       "plant.p_demir_ardic.name": "Demir-Ardıç Yaprağı",
       "plant.p_gumus_kok.name": "Gümüş Kök",
@@ -1788,7 +1800,7 @@
       "prop.Zehir Sökücü": "Zehir Sökücü",
       "plant.d_carlic.name": "Sarımsak",
       "disease.d_monsterTrap.name": "Canavar Tuzağı Ağ",
-      "potion.d_monsterTrapElixir.name": "Canavar Ağı",
+      "potion.d_monsterTrapElixir.name": "Monster Web",
       "potion.d_freezingElixir.name": "Kış Çayı",
       "plant.d_honeyWax.name": "Balmumu",
       "potion.d_woundSerum.name": "Kesik Merhemi",
@@ -1799,17 +1811,17 @@
       "potion.d_seeingElixir.name": "Göz İksiri",
       "potion.d_acneElixir.name": "Kabarcık Patlatan İksir",
       "potion.d_burnElixir.name": "Yanık Merhemi",
-      "char.story_d_shepherdNarin": "Çoban Kız Narin",
+      "char.story_d_shepherdNarin": "Narin the Shepherd Girl",
       "node.node_d_shepherdNarin_1.npcText": "Merhaba, ben Narin. Köyün koyunlarını güderim. Dükkanın hayırlı olsun.",
       "choice.node_d_shepherdNarin_1.0": "Peki. İsimleri pek hatırlamam.",
       "choice.node_d_shepherdNarin_1.1": "Merhaba, seninle tanıştığıma memnun oldum Narin. Nasılsın?",
       "node.node_d_shepherdNarin_2300.npcText": "Bugün bir kuzu doğdu. Üşümesin diye yavruyu sırtımda taşıyıp eve götürdüm. Biraz üşüttüm. Bana iyi gelecek bir içeceğin var mı?",
       "choice.node_d_shepherdNarin_2300.0": "Tabii, sana güzel bir kış çayı demleyeyim, fiyatı 18 altın.",
-      "choice.node_d_shepherdNarin_2300.1": "Madem bugün bir kuzu doğdu ve sen onu sırtında taşıdın o zaman bir kış çayını hakettin. Zaten ilk müşterim de sensin.",
+      "choice.node_d_shepherdNarin_2300.1": "Since a lamb was born today and you carried it on your back, you've earned a winter tea.",
       "choice.node_d_shepherdNarin_2300.2": "Elimde böyle bir içecek yok.",
       "node.node_d_shepherdNarin_8642.npcText": "Geçen günki kış çayını çok beğendim. Koyun güderken senin için biraz söğüt kabuğu çıkardım.",
       "choice.node_d_shepherdNarin_8642.0": "Teşekkür ederim.",
-      "char.story_d_carpenterDursun": "Marangoz Usta Dursun",
+      "char.story_d_carpenterDursun": "Master Carpenter Dursun",
       "node.node_d_carpenterDursun_1.npcText": "Selam olsun. Ben köyün marangozu Dursun. Bir haftanın iki günü palanka'nın tamiratıyla geçiyor. Eski bir palanka bir tarafı tamir etsen bir tarafı çöküyor.",
       "choice.node_d_carpenterDursun_1.0": "Palanka nedir usta?",
       "choice.node_d_carpenterDursun_1.1": "Nasıl yardımcı olabilirim usta?",
@@ -1820,7 +1832,7 @@
       "char.story_d_shepherdNarin.desc": "",
       "choice.node_d_carpenterDursun_5531.1": "Maalesef elimde kesik kremi yok usta.",
       "choice.node_d_carpenterDursun_1056.1": "Maalesef elimde kesik kremi yok usta.",
-      "char.story_fehim": "Marangoz Çırağı Fehim",
+      "char.story_fehim": "Fehim the Carpenter's Apprentice",
       "node.node_fehim_1.npcText": "Selam Şifacı. Ben marangoz Dursun'un çırağı Fehim. Beni ustam gönderdi. Malzeme yetersizliğinden palankayı onaramıyoruz. Demir Ardıç bloklarına ihtiyacımız var. Elinde bulunursa bize biraz ödünç vermen mümkün mü? Şimdi paramız yok ama palanka köy için çok önemli. Ustam köylülerden para toplayıp paranı sonra ödeyecek.",
       "choice.node_fehim_1.0": "Olur. Madem köy için çok önemli size biraz demir ardıç bloğu ödünç vereceğim, umarım ustan sözünde durur.",
       "choice.node_fehim_1.1": "Olmaz, herkese ödünç verirsem dükkan batar.",
@@ -1829,7 +1841,7 @@
       "node.node_fehim_8942.npcText": "Topraklara bereket getiren yüce ana.",
       "node.node_fehim_4917.npcText": "Palanka olmadan sen de güvende olmayacaksın. Seni canavar kapsın.",
       "node.node_d_shepherdNarin_9582.npcText": "Senin yüzünden köyün palankaları çöktü. Aç gözlüsün, seni canavar kapsın.",
-      "char.story_monsterSlayerCevat": "Canavar Avcısı Rivze'li Cevat",
+      "char.story_monsterSlayerCevat": "Cevat of Rivze the Monster Slayer",
       "node.node_monsterSlayerCevat_1.npcText": "Merhaba.",
       "choice.node_monsterSlayerCevat_1.0": "Merhaba.",
       "node.node_monsterSlayerCevat_6699.npcText": "Ben bir canavar avcısıyım, Rivze'li Cevat.",
@@ -1842,27 +1854,27 @@
       "choice.node_monsterSlayerCevat_2193.0": "Sana nasıl yardımcı olabilirim Cevat?",
       "node.node_monsterSlayerCevat_6518.npcText": "Tahsildar Kazım'dan bir kontrat aldım. Işıldaklar için canavar ağına ihtiyacım var, elinde var mı ya da bir tane hazırlayabilir misin? Demir ardıçtan yapılması gerekiyor. Karşılığını tamı tamına öderim.",
       "choice.node_monsterSlayerCevat_6518.0": "Maalesef.",
-      "choice.node_monsterSlayerCevat_6518.1": "Tabii, demir ardıç canavar ağı hazır, 90 altına senin olabilir. Işıldak nedir?",
+      "choice.node_monsterSlayerCevat_6518.1": "Sure, the iron juniper monster web is ready, you can have it for 90 gold. What is a ligtling?",
       "node.node_monsterSlayerCevat_6561.npcText": "Işıldaklar ışınlanabilen orman kedileridir. Bir köyde ortaya çıktıklarında köyün kümes hayvanlarını ve ufak kuzuları yerler. Yolun açık olsun şifacı.",
       "choice.node_monsterSlayerCevat_6561.0": "Senin de Cevat, hoşçakal.",
       "choice.node_fehim_4917.0": "Sana da iyi günler!",
       "choice.node_d_shepherdNarin_9582.0": "Sen git koyunlarını otlat.",
       "choice.node_d_shepherdNarin_9582.1": "Ben bir şey yapmadım.",
       "choice.node_fehim_8942.0": "Anladım.",
-      "char.story_farmerKalender": "Çiftçi Kalender",
+      "char.story_farmerKalender": "Kalender the Farmer",
       "node.node_farmerKalender_1.npcText": "Burada canavar avcılarıyla ticaret yapılıyormuş. Sizin gibilerle işim olmaz ama ışıldaklar kolumu çizdi. Normal bir kesiğe benzemiyor. Zehir yutmuş gibi hissediyorum. ",
       "choice.node_farmerKalender_1.0": "Tedavi et.",
       "choice.node_farmerKalender_1.1": "Sana burada şifa yok, kesiği kendin tedavi et.",
-      "char.story_blacksmithRüstem": "Demirci Rüstem",
+      "char.story_blacksmithRüstem": "Rustem the Blacksmith",
       "node.node_blacksmithRüstem_1.npcText": "Şifacı ayağım fena yandı, bana bir şifa hazırla.",
       "choice.node_blacksmithRüstem_1.0": "Ayağın nasıl yandı?",
       "node.node_blacksmithRüstem_3676.npcText": "Demircihaneyi ışıldaklar bastı. Onlardan kaçarken ayağımı demirci ocağına soktum. Ama paramız palanka tamiratlarına gidiyor ve ışıldaklar da köylünün tavuklarına saldırdı. Yani anlayacağın param yok. Sana eşimin kendi yetiştirdiği sarımsaklardan versem kabul eder misin?",
       "choice.node_blacksmithRüstem_3676.0": "Yanık kremin hazır, peki sarımsakları kabul ediyorum.",
-      "char.story_zenal": "Köylü Zenal",
+      "char.story_zenal": "Zenal the Villager",
       "node.node_zenal_1.npcText": "Kolay gelsin şifacı. Yemek yapacağım, baharat olarak kullanabileceğim bir şeylerin var mı?",
       "choice.node_zenal_1.0": "Kekiğim var, yemeğine tat katar. 13 altına senindir.",
       "choice.node_zenal_1.1": "Burası bir han değil. Ben de bir aşçı değilim.",
-      "char.story_crazyMan": "Köyün Delisi",
+      "char.story_crazyMan": "The Village Idiot",
       "node.node_crazyMan_1.npcText": "Şifacı karnım çok aç. Karnımı doyurabilecek bir şeyin var mı?",
       "choice.node_crazyMan_1.0": "Biraz bal verebilirim.",
       "choice.node_crazyMan_1.1": "Burası bir han değil, bedava aş da vermiyorum.",
@@ -1887,7 +1899,7 @@
       "choice.node_landlord_demand.1": "100 altına anlaştık, 100 altını al ve defol.",
       "node.node_landlord_angry.npcText": "Buralarda benim gözlerime bakabilen tek kişi Borakran'dı. O da yeni öldü. Artık buralarda istediğimi yapabilirim. Şimdi bana istediğim fazladan 20 altını vereceksin.",
       "choice.node_landlord_angry.0": "...",
-      "char.story_Borakran": "Eski Paralı Asker Borakran",
+      "char.story_Borakran": "Borakran the Former Mercenary",
       "node.node_Borakran_1.npcText": "(Dükkanın kapısı açıldı. Bir asker hemen dükkanın girişine yıkıldı. Sayıklıyor. Görünmez canavarlar görüyor. Nerede olduğunun bilincinde değil.)",
       "choice.node_Borakran_1.0": "Parayı sorun etmeden yardım et. ",
       "choice.node_Borakran_1.1": "Para isteyebilmek için tedavi etmeden önce kendine gelmesini bekle.",
@@ -1899,12 +1911,18 @@
       "node.node_Borakran_6494.npcText": "Sağol şifacı. Ama sana verecek param yok. Olduğunda getireceğim, ben Borakran, sözüm sözdür.",
       "choice.node_Borakran_6494.0": "Alright, so be it.",
       "char.story_druidSeren": "Druid Seren",
-      "node.node_druidSeren_1.npcText": "Ben Seren. Çok fazla konuşmam. Arkadaşım Cevat senin yüzünden öldü. Köylüler ışıldaklardan kurtulamadı. Bana bir naiad nefesi iksiri ver. Karşılığını ödemeyeceğim. ",
+      "node.node_druidSeren_1.npcText": "I am Seren. I don't talk much. My friend Cevat died because of you. He was a monster slayer, he'd seen dragons and cursed creatures... But because of you, he became food for those filthy cats that that can teleport! Give me a naiad breath potion. I won't pay for it.",
       "choice.node_druidSeren_1.0": "Benim bir suçum yok, defol dükkanımdan.",
       "choice.node_druidSeren_1.1": "Üzgünüm.",
-      "choice.node_landlord_demand.2": "Yeterli param yok.",
+      "choice.node_landlord_demand.2": "I don't have enough gold.",
       "choice.node_landlord_angry.1": "Yeterli param yok.",
-      "char.story_farmerKalender.desc": ""
+      "char.story_farmerKalender.desc": "",
+      "char.story_d_carpenterDursun.desc": "",
+      "char.story_fehim.desc": "",
+      "char.story_blacksmithRüstem.desc": "",
+      "char.story_zenal.desc": "",
+      "char.story_crazyMan.desc": "",
+      "char.story_druidSeren.desc": ""
     },
     "en": {
       "ui.gold": "Gold",
@@ -1931,9 +1949,9 @@
       "ui.fill_bench": "Fill Desk (Select from Inventory):",
       "ui.diagnosis": "Diagnosis",
       "ui.market_title": "City Market",
-      "ui.customer_approaching" : "A Customer Approaching...",
-      "ui.door_quiet" : "Door Quiet",
-      "ui.boiling" : "Boiling...",
+      "ui.customer_approaching": "A Customer Approaching...",
+      "ui.door_quiet": "Door Quiet",
+      "ui.boiling": "Boiling...",
       "char.story_landlord": "Tax Collector Kazim",
       "char.story_landlord.desc": "The local lord's strict bailiff who extracts rent weekly without mercy.",
       "plant.p_demir_ardic.name": "Iron-Juniper Leaf",

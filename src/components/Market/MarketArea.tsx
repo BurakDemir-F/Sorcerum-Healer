@@ -27,7 +27,7 @@ export function MarketArea({ gameData, t, handlers, currentDay, playerState }: M
         <div className="max-w-4xl mx-auto space-y-8">
             {/* Şifalı Bitkiler Bölümü */}
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
-                <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌾 {t('ui.market_title')} (Bitkiler)</h2>
+                <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">🌾{t('ui.market_title')} (Plants)</h2>
                 {availablePlants.length === 0 ? (
                     <p className="italic text-slate-600 font-bold">Bugün pazar tezgahlarında satılık bitki yok...</p>
                 ) : (
@@ -58,7 +58,7 @@ export function MarketArea({ gameData, t, handlers, currentDay, playerState }: M
 
             {/* Formül & Reçete Satış Bölümü */}
             <div className="bg-[#f3e8d2] p-6 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-6">
-                <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📜 Parşömen Satıcısı (İksir Formülleri)</h2>
+                <h2 className="text-3xl font-magic text-slate-900 border-b-2 border-slate-900/20 pb-2">📜 The Recipe Seller (Potion Formulas)</h2>
                 {availableRecipes.length === 0 ? (
                     <p className="italic text-slate-600 font-bold">Bugün pazar tezgahlarında satılık parşömen yok...</p>
                 ) : (
@@ -82,7 +82,7 @@ export function MarketArea({ gameData, t, handlers, currentDay, playerState }: M
                                         disabled={mr.stock <= 0 || alreadyKnown || !potion}
                                         className="bg-purple-500 text-white font-bold border-2 border-black px-4 py-1.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50"
                                     >
-                                        {!potion ? "Hata" : (alreadyKnown ? "Biliyorsun" : `${t('ui.buy')}`)}
+                                        {!potion ? "Hata" : (alreadyKnown ? "Purchased" : `${t('ui.buy')}`)}
                                     </button>
                                     {potion && <TooltipPotion potionId={mr.potionId} gameData={gameData} t={t} />}
                                 </div>
