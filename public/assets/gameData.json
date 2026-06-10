@@ -1134,7 +1134,7 @@
     },
     {
       "id": "story_crazyMan",
-      "characterName": "The Village Idiot",
+      "characterName": "Crazy Old Man",
       "description": "",
       "avatarUrl": "assets/oldCrazyVillager.png",
       "nodes": [
@@ -1177,8 +1177,6 @@
             {
               "text": "7 Gold.",
               "nextNodeId": "node_crazyMan_6226",
-              "reqPlant": "d_honey",
-              "reqPlantCount": 1,
               "rewardGold": 14
             },
             {
@@ -1517,43 +1515,43 @@
     {
       "id": "intro_welcome_1",
       "title": "Welcome to Border Willow Village",
-      "text": "Welcome healer. No healer has been found in our village for a long time. There is a druid at the edge of the village, but they don't care much about us. Border Willow is a small village inside an old palanka fortification. We are mostly engaged in animal husbandry and grow grain.",
+      "text": "Welcome healer. No healer has been found in our village for a long time. There is a druid at the edge of the village, but she does not care much about us. Border Willow is a small village inside an old palanka fortification. We are mostly engaged in animal husbandry and grow grain.",
       "imageUrl": "assets/intro_1.png"
     },
     {
       "id": "intro_welcome_2",
       "title": "Monsters",
       "text": "Since the animal pastures remain outside the palanka, numerous monsters attack when we take our animals out to graze. For this reason, your healer skills and potions will be a remedy for us.",
-      "imageUrl": ""
+      "imageUrl": "assets/intro_2.png"
     },
     {
       "id": "intro_welcome_3",
       "title": "Druid Seren",
-      "text": "There is a druid named Seren who lives in a small cabin on the edge of our village. They never enter the village, but if you see them, it is useful to be respectful.",
-      "imageUrl": ""
+      "text": "There is a druid named Seren who lives in a small cabin on the edge of our village. She never enters the village, but if you see her, it is useful to be respectful.",
+      "imageUrl": "assets/seren.png"
     },
     {
       "id": "intro_welcome_4",
       "title": "Cabin Rent",
       "text": "Every 7th day of the week, someone will come to collect the cabin rent of 100 gold. Don't forget to prepare the gold and pay the rent.",
-      "imageUrl": ""
+      "imageUrl": "assets/kazim.png"
     }
   ],
   "soundtracks": [
     {
-      "id": "track_1",
-      "title": "Ancient Cabin Melody",
-      "path": "Assets/tavernTrack.mp3"
+      "id": "track_adventuresOfTheBard",
+      "title": "Adventures Of The Bard",
+      "path": "assets/adventuresOfTheBard.mp3"
     },
     {
-      "id": "track_2",
-      "title": "Whispering Shadows",
-      "path": "Assets/forestTrack.mp3"
+      "id": "track_village",
+      "title": "Village",
+      "path": "assets/village.mp3"
     },
     {
-      "id": "track_3",
-      "title": "Alchemy Fire Soundtrack",
-      "path": "Assets/alchemyTrack.mp3"
+      "id": "track_villageHealer",
+      "title": "Village Healer",
+      "path": "assets/villageHealer.mp3"
     }
   ],
   "news": [
@@ -1636,14 +1634,14 @@
     "pages": [
       {
         "id": "default_end",
-        "endText": "The demo ends here. You can play again for a different ending, or check out our Steam page if you want more games set in the world of Sorcerum.",
+        "endText": "Ending: Not Bad\n\nYou continue to be the village healer. The demo ends here, you can play again if you want and try to get another ending.You can visit our Steam page to see other games set in the Sorcerum universe.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "assets/GameEndAd.png",
         "isDefault": true
       },
       {
         "id": "end_BorakranDead",
-        "endText": "Borakran's death was met with great sadness in the village. The villagers know that you didn't help him and they look at you with spite. Borakran's death turned Tax Collector Kazim into the village bully.\n\nThe demo ends here, you can play again if you want and try to get another ending. You can click the button below to see our other games set in the Sorcerum universe.",
+        "endText": "Ending: The village's unpopular healer\n\nBorakran's death was met with great sadness in the village. The villagers know that you didn't help him and they look at you with spite. Borakran's death turned Tax Collector Kazim into the village bully.\n\nThe demo ends here, you can play again if you want and try to get another ending. You can click the button below to see our other games set in the Sorcerum universe.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "",
         "eventId": "event_BorakranFired",
@@ -1651,7 +1649,7 @@
       },
       {
         "id": "end_death",
-        "endText": "Seren turned you into a cactus because you were disrespectful to them and caused Cevat's death. The demo ends here, you can play again if you want and try to get another ending.You can visit our Steam page to see other games set in the Sorcerum universe.",
+        "endText": "Ending: River Moss\n\nSeren turned you into a river moss because you were disrespectful to her and her friend Cevat is dead. The demo ends here, you can play again if you want and try to get another ending.You can visit our Steam page to see other games set in the Sorcerum universe.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "",
         "eventId": "event_SerenFired",
@@ -1659,7 +1657,7 @@
       },
       {
         "id": "end_rentNotPaid",
-        "endText": "You couldn't pay the rent, so you were evicted. The demo ends here. You can play again for a different ending, or check out our Steam page if you want more games set in the world of Sorcerum.",
+        "endText": "Ending: Bankrupt\n\nYou couldn't pay the rent, so you were evicted. The demo ends here, you can play again if you want and try to get another ending.You can visit our Steam page to see other games set in the Sorcerum universe.",
         "adLink": "https://store.steampowered.com/app/3977840/Sorcerum/",
         "adImagePath": "",
         "eventId": "event_rentNotPaid",
@@ -1742,14 +1740,14 @@
       "ui.news_id": "Haber ID",
       "ui.news_text": "Haber Metni",
       "ui.news_day": "Gösterilecek Gün",
-      "intro.title.intro_welcome_1": "Sınır Söğüt Köyüne Hoş Geldin",
-      "intro.text.intro_welcome_1": "Hoş geldin şifacı. Uzun zamandır köyümüze bir şifacı bulunmadı. Köyün sınırında bir druid bulunur ama o bizle çok ilgilenmez. Sınır Söğüt eski bir palanka tahkimatı içinde ufak bir köydür. Çoğunlukla hayvancılıkla uğraşır ve tahıl yetiştiririz. ",
-      "intro.title.intro_welcome_2": "Canavarlar",
-      "intro.text.intro_welcome_2": "Hayvan otlakları palanka dışında kaldığı için hayvanlarımızı otlatmaya çıkardığımızda çok sayıda canavar saldırır. Bu sebeple senin şifacı yeteneklerin ve iksirlerin bize merhem olacak.",
+      "intro.title.intro_welcome_1": "Welcome to Border Willow Village",
+      "intro.text.intro_welcome_1": "Welcome healer. No healer has been found in our village for a long time. There is a druid at the edge of the village, but she does not care much about us. Border Willow is a small village inside an old palanka fortification. We are mostly engaged in animal husbandry and grow grain.",
+      "intro.title.intro_welcome_2": "Monsters",
+      "intro.text.intro_welcome_2": "Since the animal pastures remain outside the palanka, numerous monsters attack when we take our animals out to graze. For this reason, your healer skills and potions will be a remedy for us.",
       "intro.title.intro_welcome_3": "Druid Seren",
-      "intro.text.intro_welcome_3": "Köyümüzün kıyısında ufak bir kulübede yaşayan Seren adında bir druid vardır. Köye hiç girmez ama eğer onu görürsen saygılı olmanda yarar var. ",
-      "intro.title.intro_welcome_4": "Kulübe Kirası",
-      "intro.text.intro_welcome_4": "Her haftanın 7. günü 100 altınlık kulübe kirasını almak için biri gelecek. Parayı hazırlamayı ve kirayı ödemeyi unutma. ",
+      "intro.text.intro_welcome_3": "There is a druid named Seren who lives in a small cabin on the edge of our village. She never enters the village, but if you see her, it is useful to be respectful.",
+      "intro.title.intro_welcome_4": "Cabin Rent",
+      "intro.text.intro_welcome_4": "Every 7th day of the week, someone will come to collect the cabin rent of 100 gold. Don't forget to prepare the gold and pay the rent.",
       "symptom.Kötü Kokulu Nefes": "Kötü Kokulu Nefes",
       "symptom.Ağrı": "Ağrı",
       "symptom.Öksürük": "Öksürük",
@@ -1874,14 +1872,14 @@
       "node.node_zenal_1.npcText": "Kolay gelsin şifacı. Yemek yapacağım, baharat olarak kullanabileceğim bir şeylerin var mı?",
       "choice.node_zenal_1.0": "Kekiğim var, yemeğine tat katar. 13 altına senindir.",
       "choice.node_zenal_1.1": "Burası bir han değil. Ben de bir aşçı değilim.",
-      "char.story_crazyMan": "The Village Idiot",
+      "char.story_crazyMan": "Crazy Old Man",
       "node.node_crazyMan_1.npcText": "Şifacı karnım çok aç. Karnımı doyurabilecek bir şeyin var mı?",
       "choice.node_crazyMan_1.0": "Biraz bal verebilirim.",
       "choice.node_crazyMan_1.1": "Burası bir han değil, bedava aş da vermiyorum.",
       "node.node_crazyMan_4806.npcText": "Umay Ana seni korusun. ",
       "choice.node_crazyMan_4806.0": "Seni de.",
       "node.node_crazyMan_4204.npcText": "Kolay gelsin şifacı. Ben aslında çok zenginim. Ama paramı 7'nin katları olarak harcayabilirim. Geçen gün verdiğin balın karşılığı olarak kaç altın istersin?",
-      "choice.node_crazyMan_4204.0": "7 Altın.",
+      "choice.node_crazyMan_4204.0": "7 Gold.",
       "choice.node_crazyMan_4204.1": "14 Altın.",
       "choice.node_crazyMan_4204.2": "21 Altın.",
       "node.node_crazyMan_6226.npcText": "Sana 14 Altın verdim.",
@@ -1922,7 +1920,10 @@
       "char.story_blacksmithRüstem.desc": "",
       "char.story_zenal.desc": "",
       "char.story_crazyMan.desc": "",
-      "char.story_druidSeren.desc": ""
+      "char.story_druidSeren.desc": "",
+      "soundtrack.track_adventuresOfTheBard.title": "Adventures Of The Bard",
+      "soundtrack.track_village.title": "Village",
+      "soundtrack.track_villageHealer.title": "Village Healer"
     },
     "en": {
       "ui.gold": "Gold",

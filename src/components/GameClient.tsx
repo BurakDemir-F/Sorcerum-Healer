@@ -86,9 +86,9 @@ export function GameClient({
 
             <div className="flex flex-wrap gap-2.5 bg-[#2a131b] p-3 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-magic">
                 {[
-                    { id: 'shopArea', label: `🏪 ${language === 'en' ? 'Counter Front' : 'Tezgah Önü'}`, color: 'bg-amber-500 text-slate-955' },
-                    { id: 'alchemyArea', label: `⚗️ ${language === 'en' ? 'Alchemist Lab' : 'Simya Atölyesi'}`, color: 'bg-purple-600 text-white' },
-                    { id: 'marketArea', label: `🛒 ${language === 'en' ? 'Market' : 'Şehir Pazarı'}`, color: 'bg-emerald-600 text-white' }
+                    { id: 'shopArea', label: ` ${language === 'en' ? 'Counter Front' : 'Tezgah Önü'}`, color: 'bg-amber-500 text-slate-955' },
+                    { id: 'alchemyArea', label: ` ${language === 'en' ? 'Alchemist Lab' : 'Simya Atölyesi'}`, color: 'bg-purple-600 text-white' },
+                    { id: 'marketArea', label: ` ${language === 'en' ? 'Market' : 'Şehir Pazarı'}`, color: 'bg-emerald-600 text-white' }
                 ].map(tab => (
                     <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-5 py-3 rounded-xl font-bold text-base transition-all flex-1 md:flex-none text-center border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none ${activeTab === tab.id ? `${tab.color} scale-105` : 'bg-slate-800 text-slate-400 border-slate-955'}`}>
                         {tab.label}

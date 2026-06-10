@@ -433,7 +433,7 @@ export function useAlchemyGame() {
                     currentCustomer: null, 
                     rentPaidThisWeek: false,
                     storyProgress: updatedProgress,
-                    logs: ['🧙‍♂️ Yeni bir miras başladı.'], 
+                    logs: ['🧙‍♂️ Just started.'],
                     waitingCustomers: [], 
                     queuedCustomers: [],
                     triggeredConditionalNews: [],
