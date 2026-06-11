@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { GameData, PlayerState, GameState, CauldronItem, BrewState, TreatmentBenchItem, TreatmentStatus, RentPopup, NewsItem, GameHandlers, Choice, StoryNode, Storyline, StoryProgressItem } from '../types';
 import { INITIAL_DATA } from '../constants/initialData';
 import gameDataJSON from '../assets/gameData.json';
+import { CrazyGamesService } from '../services/crazyGamesServices';
 
 export function useAlchemyGame() {
     const [appMode, setAppMode] = useState<string>('portal');
@@ -235,7 +236,8 @@ export function useAlchemyGame() {
             gameState.waitingCustomers.length === 0 && 
             gameState.queuedCustomers.length === 0 && 
             !gameState.currentCustomer) {
-            
+
+            CrazyGamesService.triggerHappyTime();
             setGameState(prev => ({ ...prev, isGameOver: true }));
         }
     }, [gameState.storyProgress, gameState.waitingCustomers, gameState.queuedCustomers, gameState.currentCustomer, gameData, isLoading, appMode]);

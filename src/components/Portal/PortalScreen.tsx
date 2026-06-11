@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {getValidImageUrl} from "../../utils/helpers.ts";
+import { CrazyGamesService } from '../../services/crazyGamesServices';
 
 interface PortalScreenProps {
     setAppMode: React.Dispatch<React.SetStateAction<string>>;
@@ -17,6 +18,9 @@ export function PortalScreen({
     const [showConfirmReset, setShowConfirmReset] = useState<boolean>(false);
 
     const handleNewGameClick = () => {
+
+        CrazyGamesService.startGameplay();
+
         if (hasSave) {
             // Kayıt varsa önce parchment stilinde onay modalı gösteriyoruz
             setShowConfirmReset(true);

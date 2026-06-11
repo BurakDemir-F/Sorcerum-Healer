@@ -5,6 +5,7 @@ import { IntroScreen } from './components/Intro/IntroScreen';
 import { GameClient } from './components/GameClient';
 import { AdminPanel } from './components/Admin/AdminPanel';
 import { getValidImageUrl } from './utils/helpers';
+import {CrazyGamesService} from "./services/crazyGamesServices";
 
 // Global Stiller
 const styleTag = document.createElement('style') as HTMLStyleElement;
