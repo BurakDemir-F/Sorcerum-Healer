@@ -60,7 +60,7 @@ export function useAlchemyGame() {
 
     // Müzik ve Soundtrack State/Ref Tanımlamaları
     const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
-    const [isMuted, setIsMuted] = useState<boolean>(true); 
+    const [isMuted, setIsMuted] = useState<boolean>(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const fadeIntervalRef = useRef<any>(null);
 

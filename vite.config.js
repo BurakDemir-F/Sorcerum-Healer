@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         react(),
         tailwindcss(), // Görsel motoru Vite'e bağladık
-        gameDataPlugin()
+        gameDataPlugin(),
     ],
     server: {
         sourcemap: true, // Geliştirme sunucusunda kaynak haritalarını zorunlu kılın
@@ -15,5 +15,6 @@ export default defineConfig({
     },
     build: {
         sourcemap: true  // Gerekirse build süreçleri için de aktif edin
-    }
+    },
+    base: './',
 })

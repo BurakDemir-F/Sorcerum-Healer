@@ -183,7 +183,7 @@ export default function App(): React.JSX.Element {
                                     rel="noopener noreferrer"
                                     className="inline-block bg-amber-900 hover:bg-amber-800 text-amber-100 font-magic font-bold text-xl px-8 py-4 rounded-2xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"
                                 >
-                                    Diğer Oyunlarımıza Göz At ➔
+                                    Sorcerum ➔
                                 </a>
                             )}
                             
@@ -194,7 +194,7 @@ export default function App(): React.JSX.Element {
                                 }}
                                 className="text-amber-500/60 hover:text-amber-500 font-magic transition-colors underline underline-offset-8"
                             >
-                                Ana Menüye Dön
+                                Main Menu
                             </button>
                         </div>
                     </div>
