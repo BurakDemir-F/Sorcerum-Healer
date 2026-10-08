@@ -3,4 +3,4 @@ Sorcerum Healer, alchemy shop simulator and dialogue and game editors created wi
 <img width="830" height="960" alt="vdenyQdNcA" src="https://github.com/user-attachments/assets/049eafde-abb4-4b89-9c2e-097ab851e993" />
 
 
-<a href = "https://burak-demir.itch.io/sorcerum-healer-demo"> Test here./>
+<a href = "https://burak-demir.itch.io/sorcerum-healer-demo" Test here./>
